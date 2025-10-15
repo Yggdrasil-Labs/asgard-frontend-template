@@ -1,0 +1,27 @@
+---
+globs: src/router/**,src/pages/**
+description: 文件系统路由（unplugin-vue-router）使用规范
+---
+### 自动路由
+
+- 本项目启用 `unplugin-vue-router`，在 `vite.config.ts` 中注册，声明生成到 `src/types/typed-router.d.ts`。
+- `src/router/index.ts` 通过 `vue-router/auto-routes` 获取 `routes`，无需手写路由表。
+
+### 页面与命名
+
+- 在 `src/pages` 下新增页面文件即自动生成路由：
+  - `src/pages/index.vue` → `/`
+  - `src/pages/users/index.vue` → `/users`
+  - `src/pages/users/[id].vue` → `/users/:id`
+- 使用约定式动态路由 `[param].vue`、可选路由 `[[param]].vue`（若启用）。
+
+### 路由类型增强
+
+- 已在 `tsconfig.app.json` 中包含 `unplugin-vue-router/client` 类型，获取更佳的导航与参数类型提示。
+- 通过 `import type { RouteNamedMap } from 'vue-router/auto-routes'` 可获取命名路由映射类型。
+
+### 导航与守卫
+
+- 使用组合式 API `useRouter`、`useRoute`（已由 AutoImport 自动导入）。
+- 全局或局部路由守卫请放在 `src/router`，并以模块化方式组织。
+

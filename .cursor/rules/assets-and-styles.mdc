@@ -1,0 +1,20 @@
+---
+globs: src/assets/**,public/**,src/types/**/*.d.ts
+description: 样式、资源与静态文件管理约定
+---
+### 全局样式
+
+- `src/main.ts` 引入 `assets/css/global.css`，用于全局基础样式与重置。
+- 可在 `assets/css/common.css` 放置通用工具类、变量及主题相关内容。
+
+### 资源引用
+
+- `public/` 下文件可通过根路径直接访问（如 `/vite.svg`）。
+- `src/assets/` 下资源建议通过 ESM 导入或相对路径引用，由 Vite 处理哈希与优化。
+- `src/types/global.d.ts` 已为 `*.css`、`*.svg` 提供模块声明，保障 TypeScript 识别。
+
+### 组织建议
+
+- 图片与图标按业务模块归档；SVG 图标建议收敛为组件或统一目录。
+- 第三方库样式在入口或各自组件内按需引入，避免全量污染。
+

@@ -1,0 +1,26 @@
+---
+globs: src/**,*.ts,*.vue
+description: 代码风格、ESLint 约定与常见规范
+---
+### 通用风格
+
+- 遵循 `@antfu/eslint-config` 默认规则集；尽量使用自动修复。
+- 允许使用 `console.log/warn/error`（项目已放宽），其他 `console` 仍警告。
+- 避免未使用的变量与导入；尽量启用解构与 const。
+
+### TypeScript
+
+- 启用严格模式与空检查（见 `tsconfig.app.json`）。
+- 禁止隐式 `any`；导出公共 API 明确类型注解。
+- 避免多余的 `try/catch`；不要吞掉异常。
+
+### Vue 模板
+
+- 使用 `vueTemplate: true` 的自动导入，在 `<template>` 可直接调用组合式 API。
+- 组件 `props`/`emits` 类型清晰；避免在模板中进行复杂逻辑，移至 `<script setup>`。
+
+### 提交前检查
+
+- `pnpm lint` 或 `pnpm lint:fix` 进行校验与修复。
+- 对于新增 linter 报错，优先修复而非禁用规则；如需例外，使用最小粒度的局部注释。
+

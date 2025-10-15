@@ -1,0 +1,42 @@
+---
+alwaysApply: true
+---
+### 项目结构与入口
+
+- **入口文件**: `index.html` 注入 `src/main.ts`；应用根组件为 `src/App.vue`。
+- **路由入口**: `src/router/index.ts` 使用 `vue-router` 与 `unplugin-vue-router` 自动路由。
+- **静态资源**: 使用 `public/` 直接通过根路径访问（例如 `/vite.svg`）。
+- **别名**: 在 Vite 中配置 `@`, `@components`, `@locales`，对应 `src/` 下路径。
+
+### 关键文件
+
+- `src/main.ts`: 创建应用实例、注册路由、加载全局样式 `assets/css/global.css`。
+- `src/App.vue`: 根组件，演示示例徽标与 `HelloWorld` 组件。
+- `src/router/index.ts`: 
+  - `createRouter(createWebHistory())`
+  - `routes` 来源于 `vue-router/auto-routes`（由 `unplugin-vue-router` 生成）
+- `vite.config.ts`: 注册核心插件与别名，参见《Vite 插件与别名》规则。
+- `tsconfig.app.json`: TypeScript 编译选项与路径映射，与 Vite 别名保持一致。
+
+### 采用的技术/库
+
+- **Vue 3**（`vue`）
+- **Vue Router 4**（`vue-router` + `unplugin-vue-router` 自动路由）
+- **Vite 7**，插件：`@vitejs/plugin-vue`, `unplugin-auto-import`, `unplugin-vue-components`, `unplugin-vue-router`
+- **ESLint**（`@antfu/eslint-config`）
+- **TypeScript 5.9**（配置继承 `@vue/tsconfig`）
+
+### 开发脚本（package.json）
+
+- `pnpm dev`：启动开发服务器（`vite --host`）。
+- `pnpm build`：打包构建。
+- `pnpm preview`：本地预览构建产物。
+- `pnpm type-check`：运行 `vue-tsc` 类型检查。
+- `pnpm lint` / `pnpm lint:fix`：ESLint 检查/修复。
+
+### 约定
+
+- 新页面请放置于 `src/pages`（由 `unplugin-vue-router` 扫描），组件放置于 `src/components`。
+- 静态公共资源优先置于 `public/`，打包时保持原路径。
+- 路由基于文件系统自动生成，避免手写路由表（除非有特殊需求）。
+

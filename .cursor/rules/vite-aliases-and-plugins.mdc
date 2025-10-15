@@ -1,0 +1,23 @@
+---
+description: Vite 插件、自动导入与路径别名规则
+globs: vite.config.ts,src/types/**/*.d.ts
+---
+### 插件约定
+
+- `@vitejs/plugin-vue`: 基础 Vue 支持。
+- `unplugin-vue-router`：启用文件系统路由；`dts: src/types/typed-router.d.ts`。
+- `unplugin-vue-components`：自动按需注册组件；`dts: src/types/components.d.ts`。
+- `unplugin-auto-import`：自动导入 `vue`、`vue-router` 组合式 API；`vueTemplate: true` 允许在 `<template>` 中使用。
+
+### 别名
+
+- `@` → `./src`
+- `@components` → `./src/components`
+- `@locales` → `./src/locales`
+
+在 `tsconfig.app.json` 中使用一致的 `compilerOptions.paths` 保证类型提示一致性。
+
+### 类型声明
+
+- 自动生成的类型文件位于 `src/types/*.d.ts`，请勿手动编辑；如需扩展全局类型，请在 `src/types/` 新建自定义 `.d.ts`。
+
