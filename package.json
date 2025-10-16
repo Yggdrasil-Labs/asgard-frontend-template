@@ -9,8 +9,11 @@
   },
   "scripts": {
     "dev": "vite --host",
+    "dev:test": "vite --host --mode test",
     "build": "vite build",
+    "build:test": "vite build --mode test",
     "preview": "vite preview",
+    "preview:test": "vite preview --mode test",
     "lint": "eslint . --ext .ts,.vue,.json",
     "lint:fix": "pnpm lint --fix",
     "type-check": "vue-tsc --noEmit",
@@ -22,6 +25,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "axios": "^1.12.2",
     "vue": "^3.5.22",
     "vue-router": "^4.6.0"
   },

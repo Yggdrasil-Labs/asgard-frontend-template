@@ -7,3 +7,5 @@ declare module '*.svg' {
   const svgUrl: string
   export default svgUrl
 }
+
+declare const __APP_VERSION__: string

@@ -27,3 +27,9 @@ dist-ssr
 src/types/auto-imports.d.ts
 src/types/components.d.ts
 src/types/typed-router.d.ts
+
+# 忽略所有实际环境文件
+.env
+.env.*
+# 例外：保留模板文件
+!.env.example
