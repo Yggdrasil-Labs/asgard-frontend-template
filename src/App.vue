@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import env from '@/config/env'
-
-document.title = `${env.APP_NAME}`
 </script>
 
 <template>
