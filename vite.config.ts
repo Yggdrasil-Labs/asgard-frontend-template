@@ -30,11 +30,20 @@ export default defineConfig({
       vueTemplate: true, // 允许在 <template> 直接使用自动导入的 API
     }),
   ],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // 全局导入 Sass 变量和混入
+        additionalData: `@use "@scss/base/variables" as *; @use "@scss/base/mixins" as *;`,
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './src/components'),
       '@locales': path.resolve(__dirname, './src/locales'),
+      '@scss': path.resolve(__dirname, './src/assets/scss'),
     },
   },
   define: {
