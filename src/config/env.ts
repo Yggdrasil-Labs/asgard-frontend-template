@@ -88,7 +88,7 @@ const API_BASE_URL = validateEnvVar(
 // 环境判断工具函数
 export const isDev = import.meta.env.DEV
 export const isProd = import.meta.env.PROD
-export const isTest = import.meta.env.TEST
+export const isTest = import.meta.env.MODE === 'test' || import.meta.env.VITE_ENV === 'test'
 
 // 环境配置对象
 export const env = {
