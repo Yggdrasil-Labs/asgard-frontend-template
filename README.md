@@ -36,6 +36,7 @@ asgard-frontend-template
 
 ## Core Dependencies
 
+- [@vueuse/core](https://vueuse.org/): 组合式函数工具库
 - [axios](https://axios-http.com/zh/docs/intro): 基于promise可以用于浏览器和node.js的网络请求库
 - [vue](https://cn.vuejs.org/): 渐进式Javascript框架
 - [vue-i18n](https://vue-i18n.intlify.dev/): Vue多语言插件

@@ -6,11 +6,14 @@ import env from '@/config/env'
  * 统一管理 HTML 属性设置
  */
 export function initAppSettings() {
-  // 设置应用标题
-  document.title = env.APP_NAME
+  useTitle(env.APP_NAME)
+
+  const isDocumentLangSupported = useSupported(() => 'lang' in document.documentElement)
 
   // 设置初始语言属性（会在 i18n 初始化后更新）
-  document.documentElement.lang = 'zh-CN'
+  if (isDocumentLangSupported.value) {
+    document.documentElement.lang = 'zh-CN'
+  }
 }
 
 /**
@@ -18,7 +21,11 @@ export function initAppSettings() {
  * 在语言切换时调用
  */
 export function updateLanguageAttribute(locale: Locale) {
-  document.documentElement.lang = locale
+  const isDocumentLangSupported = useSupported(() => 'lang' in document.documentElement)
+
+  if (isDocumentLangSupported.value) {
+    document.documentElement.lang = locale
+  }
 }
 
 /**
@@ -27,5 +34,6 @@ export function updateLanguageAttribute(locale: Locale) {
  */
 export function updatePageTitle(title?: string) {
   const baseTitle = env.APP_NAME
-  document.title = title ? `${title} - ${baseTitle}` : baseTitle
+  const documentTitle = useTitle()
+  documentTitle.value = title ? `${title} - ${baseTitle}` : baseTitle
 }

@@ -17,8 +17,6 @@ function handleLanguageChange(event: Event): void {
 
   if (newLocale !== currentLocale.value) {
     switchLocale(newLocale)
-
-    // 可以在这里添加其他逻辑，比如重新加载页面或更新其他状态
     console.log(`Language changed to: ${newLocale}`)
   }
 }

@@ -1,5 +1,6 @@
 import type { Locale } from './types'
 import { createI18n } from 'vue-i18n'
+import { STORAGE_KEYS } from '@/constants/storage'
 import { updateLanguageAttribute } from '@/utils/initApp'
 import { DEFAULT_LOCALE, LANGUAGE_CONFIGS, SUPPORTED_LOCALES } from './config'
 
@@ -61,7 +62,7 @@ function getBrowserLocale(): Locale {
 // 从本地存储获取语言设置
 function getStoredLocale(): Locale | null {
   try {
-    const stored = localStorage.getItem('locale')
+    const stored = localStorage.getItem(STORAGE_KEYS.LOCALE)
     return stored && SUPPORTED_LOCALES.includes(stored as Locale)
       ? (stored as Locale)
       : null
@@ -98,7 +99,7 @@ export async function setLocale(locale: Locale): Promise<void> {
       i18n.global.locale.value = locale
 
       // 保存到本地存储
-      localStorage.setItem('locale', locale)
+      localStorage.setItem(STORAGE_KEYS.LOCALE, locale)
 
       // 更新 HTML lang 属性
       updateLanguageAttribute(locale)

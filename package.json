@@ -25,6 +25,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@vueuse/core": "^13.9.0",
     "axios": "^1.12.2",
     "vue": "^3.5.22",
     "vue-i18n": "^11.1.12",

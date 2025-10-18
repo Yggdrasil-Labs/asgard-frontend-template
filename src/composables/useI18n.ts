@@ -3,6 +3,7 @@ import { getLanguageDisplayName } from '@locales/config'
 import { getCurrentLocale, setLocale, SUPPORTED_LOCALES } from '@locales/i18n'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { STORAGE_KEYS } from '@/constants/storage'
 import { updatePageTitle } from '@/utils/initApp'
 
 /**
@@ -12,16 +13,28 @@ import { updatePageTitle } from '@/utils/initApp'
 export function useI18nHelper() {
   const { t, locale } = useI18n()
 
-  // 当前语言
-  const currentLocale = computed(() => getCurrentLocale())
+  // useLocalStorage 持久化语言选择
+  const storedLocale = useLocalStorage<Locale>(STORAGE_KEYS.LOCALE, getCurrentLocale())
+
+  // 当前语言 - 使用 ref 而不是 computed，因为需要双向绑定
+  const currentLocale = ref<Locale>(storedLocale.value || getCurrentLocale())
+
+  // syncRef 简化双向同步
+  syncRef(currentLocale, storedLocale)
 
   // 语言检测
   const isChinese = computed(() => currentLocale.value === 'zh-CN')
   const isEnglish = computed(() => currentLocale.value === 'en-US')
 
+  // useCycleList 优化语言循环切换
+  const { next: nextLanguage } = useCycleList(SUPPORTED_LOCALES, {
+    initialValue: currentLocale.value,
+  })
+
   // 切换语言
   const switchLocale = (newLocale: Locale) => {
     setLocale(newLocale)
+    currentLocale.value = newLocale
   }
 
   // 切换中英文
@@ -32,12 +45,8 @@ export function useI18nHelper() {
 
   // 循环切换语言
   const cycleLanguage = () => {
-    const currentIndex = SUPPORTED_LOCALES.indexOf(currentLocale.value)
-    const nextIndex = (currentIndex + 1) % SUPPORTED_LOCALES.length
-    const nextLocale = SUPPORTED_LOCALES[nextIndex]
-    if (nextLocale) {
-      switchLocale(nextLocale)
-    }
+    const nextLocale = nextLanguage()
+    switchLocale(nextLocale)
   }
 
   // 便捷的翻译函数

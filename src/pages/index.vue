@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import env from '@/config/env'
+
+const { width, height } = useWindowSize()
+const { x, y } = useMouse()
+const isDark = useDark()
 </script>
 
 <template>
@@ -11,6 +15,23 @@ import env from '@/config/env'
     </div>
 
     <div class="env-info">
+      <h2 class="info-title">
+        VueUse 功能演示
+      </h2>
+      <div class="vueuse-demo">
+        <div class="demo-grid">
+          <div class="demo-item">
+            <strong>窗口尺寸:</strong> {{ width }} × {{ height }}
+          </div>
+          <div class="demo-item">
+            <strong>鼠标位置:</strong> ({{ x }}, {{ y }})
+          </div>
+          <div class="demo-item">
+            <strong>深色模式:</strong> {{ isDark ? '开启' : '关闭' }}
+          </div>
+        </div>
+      </div>
+
       <h2 class="info-title">
         环境信息
       </h2>
@@ -98,6 +119,62 @@ import env from '@/config/env'
   color: get-color(gray-800);
   margin-bottom: spacing(6);
   text-align: center;
+}
+
+.vueuse-demo {
+  margin-bottom: spacing(8);
+  padding: spacing(6);
+  background: get-color(gray-50);
+  border-radius: border-radius(lg);
+  border: 1px solid get-color(gray-200);
+
+  h3 {
+    font-size: font-size(lg);
+    font-weight: font-weight(semibold);
+    color: get-color(gray-700);
+    margin-bottom: spacing(4);
+    text-align: center;
+  }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: spacing(4);
+  }
+
+  .demo-item {
+    padding: spacing(3);
+    background: get-color(white);
+    border-radius: border-radius(md);
+    border: 1px solid get-color(gray-200);
+    text-align: center;
+
+    strong {
+      color: get-color(gray-700);
+      display: block;
+      margin-bottom: spacing(2);
+    }
+
+    button {
+      padding: spacing(2) spacing(4);
+      background: get-color(blue-500);
+      color: get-color(white);
+      border: none;
+      border-radius: border-radius(md);
+      cursor: pointer;
+      font-size: font-size(sm);
+      transition: background-color 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background: get-color(blue-600);
+      }
+
+      &:disabled {
+        background: get-color(gray-400);
+        cursor: not-allowed;
+      }
+    }
+  }
 }
 
 .info-table {
