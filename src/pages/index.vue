@@ -74,7 +74,7 @@ function goToLogin() {
       <div class="hero-content">
         <div class="hero-text">
           <h1 class="hero-title">
-            欢迎来到
+            <span class="hero-subtitle-small">欢迎来到</span>
             <span class="gradient-text">Asgard Frontend</span>
           </h1>
           <p class="hero-subtitle">
@@ -106,10 +106,38 @@ function goToLogin() {
           </div>
           <div class="floating-card">
             <div class="card-icon">
+              🧪
+            </div>
+            <h3>Vitest</h3>
+            <p>单元测试</p>
+          </div>
+          <div class="floating-card">
+            <div class="card-icon">
+              🔧
+            </div>
+            <h3>VueUse</h3>
+            <p>工具集</p>
+          </div>
+          <div class="floating-card">
+            <div class="card-icon">
+              🛣️
+            </div>
+            <h3>Router</h3>
+            <p>路由管理</p>
+          </div>
+          <div class="floating-card">
+            <div class="card-icon">
               🍍
             </div>
             <h3>Pinia</h3>
             <p>状态管理</p>
+          </div>
+          <div class="floating-card">
+            <div class="card-icon">
+              🌐
+            </div>
+            <h3>Vue-i18n</h3>
+            <p>国际化</p>
           </div>
         </div>
       </div>
@@ -375,7 +403,7 @@ function goToLogin() {
 
 // Hero 区域
 .hero-section {
-  padding: 8rem 2rem 4rem;
+  padding: 10rem 2rem 6rem;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -396,10 +424,22 @@ function goToLogin() {
 }
 
 .hero-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-size: 3.5rem;
   font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.hero-subtitle-small {
+  font-size: 2.5rem;
+  font-weight: 400;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+  color: white;
 }
 
 .gradient-text {
@@ -458,57 +498,81 @@ function goToLogin() {
 
 // Hero 视觉元素
 .hero-visual {
-  position: relative;
-  height: 400px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1.5rem;
+  height: 300px;
+  flex-wrap: wrap;
+  margin-top: 2rem;
 }
 
 .floating-card {
-  position: absolute;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
   color: white;
   animation: float 6s ease-in-out infinite;
+  width: 120px;
+  height: 100px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-sizing: border-box;
 
   &:nth-child(1) {
-    top: 0;
-    left: 0;
     animation-delay: 0s;
   }
 
   &:nth-child(2) {
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    animation-delay: 2s;
+    animation-delay: 1s;
   }
 
   &:nth-child(3) {
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    animation-delay: 2s;
+  }
+
+  &:nth-child(4) {
+    animation-delay: 3s;
+  }
+
+  &:nth-child(5) {
     animation-delay: 4s;
+  }
+
+  &:nth-child(6) {
+    animation-delay: 5s;
+  }
+
+  &:nth-child(7) {
+    animation-delay: 6s;
   }
 }
 
 .card-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
 }
 
 .floating-card h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1.25rem;
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
   font-weight: 600;
+  line-height: 1.2;
 }
 
 .floating-card p {
   margin: 0;
   opacity: 0.8;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
+  line-height: 1.1;
 }
 
 @keyframes float {
@@ -756,6 +820,10 @@ function goToLogin() {
 
 // 响应式设计
 @media (max-width: 768px) {
+  .hero-section {
+    padding: 8rem 2rem 4rem;
+  }
+
   .hero-content {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -764,29 +832,37 @@ function goToLogin() {
 
   .hero-title {
     font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-subtitle-small {
+    font-size: 1.2rem;
   }
 
   .hero-visual {
-    height: 300px;
+    height: 250px;
+    gap: 1rem;
+    margin-top: 1.5rem;
   }
 
   .floating-card {
-    padding: 1rem;
+    padding: 0.5rem;
+    width: 80px;
+    height: 70px;
+  }
 
-    &:nth-child(1) {
-      top: 20px;
-      left: 20px;
-    }
+  .card-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.25rem;
+  }
 
-    &:nth-child(2) {
-      top: 50%;
-      right: 20px;
-    }
+  .floating-card h3 {
+    font-size: 0.75rem;
+    margin-bottom: 0.125rem;
+  }
 
-    &:nth-child(3) {
-      bottom: 20px;
-      left: 50%;
-    }
+  .floating-card p {
+    font-size: 0.6rem;
   }
 
   .nav-container {
