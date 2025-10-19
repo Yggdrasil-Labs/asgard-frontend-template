@@ -58,6 +58,18 @@ pnpm run build
 # lint
 pnpm run lint
 
+# run tests
+pnpm test
+
+# run tests with coverage
+pnpm test:coverage
+
+# run tests in watch mode
+pnpm test:watch
+
+# open test UI
+pnpm test:ui
+
 # check dependencies
 pnpm run dep:check
 

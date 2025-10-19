@@ -14,6 +14,11 @@
     "build:test": "vite build --mode test",
     "preview": "vite preview",
     "preview:test": "vite preview --mode test",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
     "lint": "eslint . --ext .ts,.vue,.json",
     "lint:fix": "pnpm lint --fix",
     "type-check": "vue-tsc --noEmit",
@@ -40,11 +45,19 @@
     "@microsoft/eslint-formatter-sarif": "^3.1.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@testing-library/vue": "^8.1.0",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.37.0",
     "eslint-plugin-format": "^1.0.2",
+    "happy-dom": "^20.0.5",
     "husky": "^9.1.7",
+    "jsdom": "^27.0.1",
     "lint-staged": "^16.2.4",
     "modern-normalize": "^3.0.1",
     "sass": "^1.93.2",
@@ -54,10 +67,12 @@
     "unplugin-vue-components": "^29.1.0",
     "unplugin-vue-router": "^0.16.0",
     "vite": "^7.1.10",
+    "vitest": "^3.2.4",
     "vue-tsc": "^3.1.1"
   },
   "lint-staged": {
-    "*.{ts,tsx,vue,js,json,md,yml}": "eslint --fix"
+    "*.{ts,tsx,vue,js,json,md,yml}": "eslint --fix",
+    "*.{test,spec}.{ts,tsx,vue,js}": "eslint --fix"
   },
   "release": {
     "branches": [
