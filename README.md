@@ -41,6 +41,7 @@ asgard-frontend-template
 - [vue](https://cn.vuejs.org/): 渐进式Javascript框架
 - [vue-i18n](https://vue-i18n.intlify.dev/): Vue多语言插件
 - [vue-router](https://router.vuejs.org/zh/): Vue路由
+- [pinia](https://pinia.vuejs.org/zh/): Vue状态管理库
 
 ## Project Setup
 
