@@ -1,14 +1,7 @@
 import type { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import type { ApiResponse } from '@/types/api'
 import axios from 'axios'
 import { env } from '@/config/env'
-
-// 响应数据接口
-export interface ApiResponse<T = any> {
-  code: number
-  message: string
-  data: T
-  success: boolean
-}
 
 // 创建axios实例
 const request: AxiosInstance = axios.create({

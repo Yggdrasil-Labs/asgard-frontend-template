@@ -1,5 +1,5 @@
 import type { AxiosRequestConfig } from 'axios'
-import type { ApiResponse } from './request'
+import type { ApiResponse } from '@/types/api'
 import request from './request'
 
 // HTTP方法封装类

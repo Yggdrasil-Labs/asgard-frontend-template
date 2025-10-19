@@ -1,21 +1,27 @@
-// SCSS 模块类型声明
-declare module '*.scss' {
-  const content: string
-  export default content
-}
+/**
+ * 样式文件模块类型声明
+ */
 
-declare module '*.sass' {
-  const content: string
-  export default content
-}
-
+// CSS 模块声明（CSS Modules）
 declare module '*.css' {
-  const content: string
-  export default content
+  const classes: { readonly [key: string]: string }
+  export default classes
+}
+
+// SCSS 模块声明
+declare module '*.scss' {
+  const classes: { readonly [key: string]: string }
+  export default classes
+}
+
+// SASS 模块声明
+declare module '*.sass' {
+  const classes: { readonly [key: string]: string }
+  export default classes
 }
 
 // 为 @scss 别名路径提供类型支持
 declare module '@scss/*' {
-  const content: string
-  export default content
+  const classes: { readonly [key: string]: string }
+  export default classes
 }

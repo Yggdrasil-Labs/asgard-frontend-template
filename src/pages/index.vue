@@ -1,9 +1,41 @@
 <script setup lang="ts">
 import env from '@/config/env'
+import { useUserStore } from '@/stores'
 
+// VueUse 功能
 const { width, height } = useWindowSize()
 const { x, y } = useMouse()
 const isDark = useDark()
+
+// Pinia Stores
+const userStore = useUserStore()
+
+// 模拟登录功能
+async function handleLogin() {
+  const result = await userStore.login({
+    username: 'demo',
+    password: 'password',
+    remember: true,
+  })
+
+  if (result.success) {
+    console.log('登录成功:', result.data)
+  }
+  else {
+    console.error('登录失败:', result.message)
+  }
+}
+
+// 模拟登出功能
+async function handleLogout() {
+  const result = await userStore.logout()
+  if (result.success) {
+    console.log('登出成功')
+  }
+  else {
+    console.error('登出失败:', result.message)
+  }
+}
 </script>
 
 <template>
@@ -11,9 +43,47 @@ const isDark = useDark()
     <LanguageSwitcher />
 
     <div class="hero-section">
-      <HelloWorld msg="Vite + Vue + Sass" />
+      <HelloWorld msg="Vite + Vue + Pinia + Sass" />
     </div>
 
+    <!-- Pinia Store 演示 -->
+    <div class="pinia-demo">
+      <h2 class="info-title">
+        Pinia 状态管理演示
+      </h2>
+
+      <!-- 用户 Store -->
+      <div class="store-section">
+        <h3>用户管理 Store</h3>
+        <div class="demo-grid">
+          <div class="demo-item">
+            <strong>登录状态:</strong> {{ userStore.isLoggedIn ? '已登录' : '未登录' }}
+          </div>
+          <div class="demo-item">
+            <strong>用户名:</strong> {{ userStore.displayName }}
+          </div>
+          <div class="demo-item">
+            <strong>会话时长:</strong> {{ userStore.sessionDuration }} 分钟
+          </div>
+          <div class="demo-item">
+            <strong>是否长时间未活动:</strong> {{ userStore.isInactive ? '是' : '否' }}
+          </div>
+        </div>
+        <div class="action-buttons">
+          <button :disabled="userStore.loading || userStore.isLoggedIn" @click="handleLogin">
+            模拟登录
+          </button>
+          <button :disabled="userStore.loading || !userStore.isLoggedIn" class="danger" @click="handleLogout">
+            登出
+          </button>
+          <button @click="userStore.updateActivity()">
+            更新活动时间
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VueUse 功能演示 -->
     <div class="env-info">
       <h2 class="info-title">
         VueUse 功能演示
@@ -103,10 +173,20 @@ const isDark = useDark()
   max-width: 1200px;
 }
 
+.pinia-demo {
+  max-width: 1000px;
+  width: 100%;
+  margin: spacing(8) auto;
+  padding: spacing(8);
+  background: get-color(white);
+  border-radius: border-radius(xl);
+  box-shadow: shadow(md);
+}
+
 .env-info {
   max-width: 800px;
   width: 100%;
-  margin: spacing(12) auto;
+  margin: spacing(8) auto;
   padding: spacing(8);
   background: get-color(white);
   border-radius: border-radius(xl);
@@ -119,6 +199,78 @@ const isDark = useDark()
   color: get-color(gray-800);
   margin-bottom: spacing(6);
   text-align: center;
+}
+
+.store-section {
+  margin-bottom: spacing(8);
+  padding: spacing(6);
+  background: get-color(gray-50);
+  border-radius: border-radius(lg);
+  border: 1px solid get-color(gray-200);
+
+  h3 {
+    font-size: font-size(lg);
+    font-weight: font-weight(semibold);
+    color: get-color(gray-700);
+    margin-bottom: spacing(4);
+    text-align: center;
+  }
+
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: spacing(4);
+    margin-bottom: spacing(4);
+  }
+
+  .demo-item {
+    padding: spacing(3);
+    background: get-color(white);
+    border-radius: border-radius(md);
+    border: 1px solid get-color(gray-200);
+    text-align: center;
+
+    strong {
+      color: get-color(gray-700);
+      display: block;
+      margin-bottom: spacing(2);
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing(2);
+    justify-content: center;
+
+    button {
+      padding: spacing(2) spacing(4);
+      background: get-color(blue-500);
+      color: get-color(white);
+      border: none;
+      border-radius: border-radius(md);
+      cursor: pointer;
+      font-size: font-size(sm);
+      transition: background-color 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background: get-color(blue-600);
+      }
+
+      &:disabled {
+        background: get-color(gray-400);
+        cursor: not-allowed;
+      }
+
+      &.danger {
+        background: get-color(red-500);
+
+        &:hover:not(:disabled) {
+          background: get-color(red-600);
+        }
+      }
+    }
+  }
 }
 
 .vueuse-demo {
