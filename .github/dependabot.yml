@@ -146,41 +146,6 @@ updates:
     reviewers:
       - "Yggdrasil-Labs/reviewers"
 
-  # ===== Swift (CocoaPods) =====
-  - package-ecosystem: "bundler"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "04:05"
-      timezone: "Asia/Shanghai"
-    open-pull-requests-limit: 5
-    target-branch: "main"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    labels:
-      - "📦 deps"
-    reviewers:
-      - "Yggdrasil-Labs/reviewers"
-
-  # ===== Swift (SwiftPM) =====
-  - package-ecosystem: "swift"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "04:10"
-      timezone: "Asia/Shanghai"
-    open-pull-requests-limit: 5
-    target-branch: "main"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    labels:
-      - "📦 deps"
-    reviewers:
-      - "Yggdrasil-Labs/reviewers"
 
   # ===== Flutter/Dart (pub) =====
   - package-ecosystem: "pub"
@@ -218,23 +183,6 @@ updates:
     reviewers:
       - "Yggdrasil-Labs/reviewers"
 
-  # ===== Ruby (Bundler) =====
-  - package-ecosystem: "bundler"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "04:25"
-      timezone: "Asia/Shanghai"
-    open-pull-requests-limit: 5
-    target-branch: "main"
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    labels:
-      - "dependencies"
-    reviewers:
-      - "Yggdrasil-Labs/reviewers"
 
   # ===== GitHub Actions (repo-wide) =====
   - package-ecosystem: "github-actions"
