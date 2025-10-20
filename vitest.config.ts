@@ -92,7 +92,7 @@ export default defineConfig({
     },
 
     // 设置文件
-    setupFiles: ['./tests/setup/unit.ts'],
+    setupFiles: ['./tests/setup/shared.ts'],
 
     // 测试超时时间
     testTimeout: process.env.CI ? 30000 : 10000,

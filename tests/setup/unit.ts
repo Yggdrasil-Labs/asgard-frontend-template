@@ -9,9 +9,9 @@ import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest'
 import { createI18n } from 'vue-i18n'
 // 导入实际的语言包
 import enUSMessages from '@/locales/en-US/common.json'
-
 import zhCNMessages from '@/locales/zh-CN/common.json'
 import '@testing-library/jest-dom'
+import './shared'
 
 // 全局测试清理
 beforeEach(() => {
@@ -97,48 +97,6 @@ config.global.directives = {}
 
 // 导出测试用的插件实例，供测试工具使用
 export { i18n }
-
-// 模拟环境变量
-Object.defineProperty(import.meta, 'env', {
-  value: {
-    VITE_APP_TITLE: 'Asgard Frontend Template',
-    VITE_API_BASE_URL: 'http://localhost:3000/api',
-    DEV: true,
-    PROD: false,
-    SSR: false,
-    MODE: 'test',
-  },
-  writable: true,
-})
-
-// 模拟 window 对象
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: vi.fn().mockImplementation((query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(), // deprecated
-    removeListener: vi.fn(), // deprecated
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
-})
-
-// 模拟 IntersectionObserver
-globalThis.IntersectionObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}))
-
-// 模拟 ResizeObserver
-globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}))
 
 // 模拟 console 方法（测试时减少输出）
 if (import.meta.env.MODE === 'test') {
