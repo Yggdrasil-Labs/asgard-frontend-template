@@ -1,128 +1,92 @@
-/**
- * E2E 测试环境设置
- * 专门用于端到端测试的全局配置和环境设置
- */
+import process from 'node:process'
+import { expect, test } from '@playwright/test'
 
-import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
+// 配置常量
+const BASE_URL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:5173'
+const LOGIN_URL = `${BASE_URL}/login`
+const USERNAME = process.env.TEST_USERNAME || 'demo'
+const PASSWORD = process.env.TEST_PASSWORD || 'password'
+const STORAGE_STATE_PATH = process.env.STORAGE_STATE_PATH || 'storageState.json'
+const MAX_RETRIES = 3
+const RETRY_DELAY = 2000
 
-// E2E 测试全局设置
-beforeAll(async () => {
-  // 启动测试服务器
-  // 这里可以添加启动开发服务器或测试服务器的逻辑
-  console.log('🚀 Starting E2E test environment...')
-})
-
-afterAll(async () => {
-  // 清理测试服务器
-  // 这里可以添加关闭服务器的逻辑
-  console.log('🧹 Cleaning up E2E test environment...')
-})
-
-beforeEach(async () => {
-  // 每个测试前的设置
-  // 清理浏览器状态、重置数据库等
-})
-
-afterEach(async () => {
-  // 每个测试后的清理
-  // 清理浏览器状态、截图等
-})
-
-// E2E 测试专用配置
-export const e2eConfig = {
-  // 测试服务器配置
-  server: {
-    port: 3000,
-    host: 'localhost',
-    baseUrl: 'http://localhost:3000',
-  },
-
-  // 浏览器配置
-  browser: {
-    headless: true,
-    slowMo: 0,
-    devtools: false,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--disable-accelerated-2d-canvas',
-      '--no-first-run',
-      '--no-zygote',
-      '--disable-gpu',
-    ],
-  },
-
-  // 测试超时配置
-  timeouts: {
-    navigation: 30000,
-    action: 10000,
-    assertion: 5000,
-  },
-
-  // 截图配置
-  screenshots: {
-    enabled: true,
-    path: './tests/screenshots',
-    fullPage: true,
-  },
-
-  // 视频录制配置
-  video: {
-    enabled: false,
-    path: './tests/videos',
-  },
-}
-
-// 导出 E2E 测试工具函数
-export const e2eUtils = {
-  // 等待页面加载完成
-  waitForPageLoad: async () => {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-  },
-
-  // 等待元素可见
-  waitForElement: async (selector: string, timeout = 10000) => {
-    // 这里可以使用 Playwright 或 Cypress 的等待逻辑
-    return new Promise((resolve, reject) => {
-      const startTime = Date.now()
-      const check = () => {
-        const element = document.querySelector(selector)
-        if (element) {
-          resolve(element)
-        }
-        else if (Date.now() - startTime > timeout) {
-          reject(new Error(`Element ${selector} not found within ${timeout}ms`))
-        }
-        else {
-          setTimeout(check, 100)
-        }
+// 等待服务器就绪的辅助函数
+async function waitForServerReady(page: any, url: string, maxAttempts = 10) {
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 10000 })
+      if (response && response.status() < 500) {
+        return true
       }
-      check()
-    })
-  },
-
-  // 模拟用户输入
-  typeText: async (selector: string, text: string) => {
-    const element = document.querySelector(selector) as HTMLInputElement
-    if (element) {
-      element.value = text
-      element.dispatchEvent(new Event('input', { bubbles: true }))
-      element.dispatchEvent(new Event('change', { bubbles: true }))
     }
-  },
-
-  // 模拟点击
-  clickElement: async (selector: string) => {
-    const element = document.querySelector(selector) as HTMLElement
-    if (element) {
-      element.click()
+    catch (error: any) {
+      console.log(`服务器就绪检查 ${i + 1}/${maxAttempts} 失败:`, error.message)
     }
-  },
 
-  // 截图
-  takeScreenshot: async (name: string) => {
-    // 这里可以使用 Playwright 或 Cypress 的截图功能
-    console.log(`📸 Taking screenshot: ${name}`)
-  },
+    if (i < maxAttempts - 1) {
+      await page.waitForTimeout(1000)
+    }
+  }
+  return false
 }
+
+// 登录辅助函数
+async function performLogin(page: any) {
+  // 等待登录页面加载
+  await page.waitForLoadState('networkidle')
+
+  // 确保在登录页面
+  await expect(page).toHaveURL(/\/login/)
+
+  // 填写登录信息
+  await page.fill('#username', USERNAME)
+  await page.fill('#password', PASSWORD)
+
+  // 点击登录按钮
+  await page.click('.login-button')
+
+  // 等待登录处理完成
+  await page.waitForLoadState('networkidle')
+
+  // 验证登录成功
+  await expect(page).toHaveURL(/\/$/)
+
+  // 额外验证：检查是否真的登录成功
+  await expect(page.locator('.navbar')).toBeVisible()
+}
+
+test('auth setup', async ({ page }) => {
+  console.log('开始认证设置...')
+
+  // 重试机制
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      console.log(`认证尝试 ${attempt}/${MAX_RETRIES}`)
+
+      // 等待服务器就绪
+      const serverReady = await waitForServerReady(page, LOGIN_URL)
+      if (!serverReady) {
+        throw new Error('服务器未就绪')
+      }
+
+      // 执行登录
+      await performLogin(page)
+
+      // 保存登录状态
+      await page.context().storageState({ path: STORAGE_STATE_PATH })
+
+      console.log('认证设置成功')
+      return
+    }
+    catch (error: any) {
+      console.error(`认证尝试 ${attempt} 失败:`, error.message)
+
+      if (attempt === MAX_RETRIES) {
+        throw new Error(`认证设置失败，已重试 ${MAX_RETRIES} 次: ${error.message}`)
+      }
+
+      // 等待后重试
+      await page.waitForTimeout(RETRY_DELAY)
+    }
+  }
+})

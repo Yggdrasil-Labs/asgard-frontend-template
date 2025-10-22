@@ -15,6 +15,12 @@ dist-ssr
 # Test coverage
 coverage
 
+# Playwright test results
+test-results/
+playwright-report/
+playwright/.cache/
+storageState.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
