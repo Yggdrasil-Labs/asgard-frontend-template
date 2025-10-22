@@ -26,8 +26,8 @@ router.beforeEach(async (to, from, next) => {
       meta: to.meta,
     })
 
-    // 如果访问登录页面且已登录，重定向到首页
-    if (to.path === '/login' && isLoggedIn) {
+    // 如果访问登录页面且已登录，重定向到首页（但在开发环境中跳过，以便测试）
+    if (to.path === '/login' && isLoggedIn && import.meta.env.PROD) {
       console.log('Redirecting logged-in user from login to home')
       next('/')
       return

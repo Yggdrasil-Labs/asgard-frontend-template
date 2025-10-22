@@ -34,6 +34,8 @@ async function handleLogout() {
   const result = await userStore.logout()
   if (result.success) {
     console.log('登出成功')
+    // 登出成功后跳转到登录页面
+    await router.push('/login')
   }
   else {
     console.error('登出失败:', result.message)
