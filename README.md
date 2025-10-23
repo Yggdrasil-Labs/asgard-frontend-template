@@ -1,5 +1,8 @@
 # asgard-frontend-template
 
+[![CI](https://github.com/Yggdrasil-Labs/asgard-frontend-template/actions/workflows/ci.yml/badge.svg)](https://github.com/Yggdrasil-Labs/asgard-frontend-template/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/Yggdrasil-Labs/asgard-frontend-template/graph/badge.svg?token=8PGPHIE04N)](https://codecov.io/gh/Yggdrasil-Labs/asgard-frontend-template)
+
 General frontend template. Asgard——kingdom of gods.
 
 ## 📚 文档
