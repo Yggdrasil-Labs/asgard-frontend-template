@@ -6,6 +6,8 @@ export default antfu({
   ignores: [
     '.github/**',
     '.vscode/**',
+    'docs/**',
+    '.cursor/**',
   ],
   rules: {
     'no-console': ['warn', {
