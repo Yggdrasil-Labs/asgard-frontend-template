@@ -2,7 +2,7 @@
 import type { LoginInfo } from '@/types/store'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores'
 
 const router = useRouter()
 const userStore = useUserStore()

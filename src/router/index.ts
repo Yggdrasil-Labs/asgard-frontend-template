@@ -10,7 +10,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   try {
     // 更新用户活动时间
-    const { useUserStore } = await import('@/stores/user')
+    const { useUserStore } = await import('@/stores')
     const userStore = useUserStore()
     userStore.updateActivity()
 

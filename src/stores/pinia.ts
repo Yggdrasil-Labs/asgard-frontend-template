@@ -23,7 +23,7 @@ export function createAppPinia() {
  * 在应用重置时调用
  */
 export async function resetStores() {
-  const { useUserStore } = await import('./user')
+  const { useUserStore } = await import('./index')
 
   // 重置所有 Store
   await Promise.all([
