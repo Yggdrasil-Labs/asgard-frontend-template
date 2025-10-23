@@ -50,9 +50,6 @@ export default defineConfig({
       '**/*.config.*',
     ],
 
-    // 报告器配置
-    reporter: process.env.CI ? ['verbose', 'junit'] : ['verbose', 'html'],
-
     // 覆盖率配置
     coverage: {
       provider: 'v8',

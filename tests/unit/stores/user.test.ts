@@ -1,6 +1,6 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores'
 
 // 模拟 API 模块
 vi.mock('@/api/modules/user', () => ({
