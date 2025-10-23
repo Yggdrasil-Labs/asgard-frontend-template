@@ -8,8 +8,8 @@
     "node": ">=22.14.0"
   },
   "scripts": {
-    "dev": "vite --host",
-    "dev:test": "vite --host --mode test",
+    "dev": "vite",
+    "dev:test": "vite --mode test",
     "build": "vite build",
     "build:test": "vite build --mode test",
     "preview": "vite preview",
