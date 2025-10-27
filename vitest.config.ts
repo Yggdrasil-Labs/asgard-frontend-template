@@ -53,10 +53,8 @@ export default defineConfig({
     // 覆盖率配置
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json'],
+      reporter: ['text', 'json', 'html'],
       reportsDirectory: './coverage',
-      // 修复路径问题：使用绝对路径并避免特殊字符
-      tempDirectory: './coverage/.tmp',
       // 只包含 src 目录的文件进行覆盖率统计
       include: [
         'src/**/*.{ts,vue}',
