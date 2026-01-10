@@ -17,7 +17,6 @@
       ]
     },
     "types": [
-      "vitest/globals",
       "unplugin-vue-router/client"
     ]
   },
