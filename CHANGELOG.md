@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/Yggdrasil-Labs/asgard-frontend-template/compare/v1.1.0...v1.1.1) (2026-01-10)
+
+
+### 🔧 Miscellaneous Chores
+
+* update release-please configuration to exclude component in tag ([ecc3c41](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ecc3c416da282a45d3e85b637f3293d26da4a396))
+
 ## [1.1.0](https://github.com/Yggdrasil-Labs/asgard-frontend-template/compare/asgard-frontend-template-v1.0.0...asgard-frontend-template-v1.1.0) (2026-01-10)
 
 
