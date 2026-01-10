@@ -99,7 +99,7 @@ jobs:
         run: pnpm build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@ea165f2da73e87d24196f7f7c94dc4f3831cc9db # v4.5.0
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: dist-${{ steps.get_version.outputs.version }}
           path: dist/
