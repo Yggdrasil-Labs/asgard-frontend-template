@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@a3252b78832bf81838cf470a76a1c66775f7b0be
 
       - name: Get pnpm store directory
         shell: bash
