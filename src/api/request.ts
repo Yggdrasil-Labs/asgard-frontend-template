@@ -49,68 +49,104 @@ request.interceptors.response.use(
       data,
     })
 
-    // 统一处理响应数据
-    if (data.code === 200 || data.success === true) {
+    // cola5.0 统一处理响应数据
+    if (data.success === true) {
+      // 请求成功，直接返回响应
       return response
     }
     else {
       // 业务错误处理
-      const errorMessage = data.message || '请求失败'
-      console.error('业务错误:', errorMessage)
+      const errorMessage = data.errMessage || '请求失败'
+      const errorCode = data.errCode || 'UNKNOWN_ERROR'
+
+      console.error('业务错误:', {
+        errCode: errorCode,
+        errMessage: errorMessage,
+      })
 
       // 可以在这里添加全局错误提示
       // ElMessage.error(errorMessage)
 
-      return Promise.reject(new Error(errorMessage))
+      // 创建带错误码的错误对象
+      const error = new Error(errorMessage)
+      ;(error as any).code = errorCode
+      ;(error as any).response = response
+
+      return Promise.reject(error)
     }
   },
   (error: AxiosError) => {
     console.error('响应拦截器错误:', error)
 
     let errorMessage = '网络错误，请稍后重试'
+    let errorCode = 'NETWORK_ERROR'
 
     if (error.response) {
       const { status, data } = error.response
+      const apiData = data as ApiResponse
 
-      switch (status) {
-        case 401:
-          errorMessage = '未授权，请重新登录'
-          // 可以在这里添加跳转到登录页的逻辑
-          // router.push('/login')
-          break
-        case 403:
-          errorMessage = '拒绝访问'
-          break
-        case 404:
-          errorMessage = '请求的资源不存在'
-          break
-        case 500:
-          errorMessage = '服务器内部错误'
-          break
-        case 502:
-          errorMessage = '网关错误'
-          break
-        case 503:
-          errorMessage = '服务不可用'
-          break
-        case 504:
-          errorMessage = '网关超时'
-          break
-        default:
-          errorMessage = (data as any)?.message || `请求失败 (${status})`
+      // 优先使用后端返回的错误信息
+      if (apiData?.errMessage) {
+        errorMessage = apiData.errMessage
+        errorCode = apiData.errCode || 'UNKNOWN_ERROR'
+      }
+      else {
+        // HTTP 状态码错误处理
+        switch (status) {
+          case 401:
+            errorMessage = '未授权，请重新登录'
+            errorCode = 'UNAUTHORIZED'
+            // 可以在这里添加跳转到登录页的逻辑
+            // router.push('/login')
+            break
+          case 403:
+            errorMessage = '拒绝访问'
+            errorCode = 'FORBIDDEN'
+            break
+          case 404:
+            errorMessage = '请求的资源不存在'
+            errorCode = 'NOT_FOUND'
+            break
+          case 500:
+            errorMessage = '服务器内部错误'
+            errorCode = 'INTERNAL_SERVER_ERROR'
+            break
+          case 502:
+            errorMessage = '网关错误'
+            errorCode = 'BAD_GATEWAY'
+            break
+          case 503:
+            errorMessage = '服务不可用'
+            errorCode = 'SERVICE_UNAVAILABLE'
+            break
+          case 504:
+            errorMessage = '网关超时'
+            errorCode = 'GATEWAY_TIMEOUT'
+            break
+          default:
+            errorMessage = apiData?.errMessage || `请求失败 (${status})`
+            errorCode = 'HTTP_ERROR'
+        }
       }
     }
     else if (error.request) {
       errorMessage = '网络连接失败，请检查网络'
+      errorCode = 'NETWORK_ERROR'
     }
     else if (error.code === 'ECONNABORTED') {
       errorMessage = '请求超时'
+      errorCode = 'TIMEOUT'
     }
 
     // 可以在这里添加全局错误提示
     // ElMessage.error(errorMessage)
 
-    return Promise.reject(new Error(errorMessage))
+    // 创建带错误码的错误对象
+    const customError = new Error(errorMessage)
+    ;(customError as any).code = errorCode
+    ;(customError as any).originalError = error
+
+    return Promise.reject(customError)
   },
 )
 
