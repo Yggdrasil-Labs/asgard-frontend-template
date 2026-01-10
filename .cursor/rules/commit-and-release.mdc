@@ -106,63 +106,46 @@ npx --no -- commitlint --edit ${1}
 
 ## 版本管理
 
-### Semantic Release 配置
-项目使用 `semantic-release` 自动化版本管理，配置位于 [package.json](mdc:package.json)：
+### Release Please 配置
+项目使用 Google 的 `release-please` 进行版本管理，采用 **预发布 PR** 工作流：
 
+#### 核心配置文件
+- **.github/release-please-config.json**: Release Please 主配置
+- **.github/.release-please-manifest.json**: 当前版本追踪
+
+#### 配置示例
 ```json
+// release-please-config.json
 {
-  "release": {
-    "branches": ["main"],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      [
-        "@semantic-release/changelog",
-        {
-          "changelogFile": "CHANGELOG.md"
-        }
-      ],
-      [
-        "@semantic-release/npm",
-        {
-          "npmPublish": false
-        }
-      ],
-      "@semantic-release/github",
-      [
-        "@semantic-release/git",
-        {
-          "assets": ["CHANGELOG.md", "package.json"],
-          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}",
-          "gitOptions": {
-            "signed": true
-          }
-        }
-      ]
-    ]
-  }
+  "release-type": "node",
+  "packages": {
+    ".": {
+      "changelog-path": "CHANGELOG.md",
+      "release-type": "node"
+    }
+  },
+  "changelog-sections": [
+    { "type": "feat", "section": "✨ Features" },
+    { "type": "fix", "section": "🐛 Bug Fixes" },
+    { "type": "perf", "section": "⚡ Performance Improvements" },
+    { "type": "docs", "section": "📝 Documentation" },
+    { "type": "refactor", "section": "♻️ Code Refactoring" }
+  ]
 }
 ```
 
 ### 版本发布流程
-1. **提交代码**: 使用 Conventional Commits 格式
-2. **自动分析**: `semantic-release` 分析提交信息
-3. **生成版本**: 根据提交类型自动生成版本号
-4. **更新文档**: 自动更新 `CHANGELOG.md`
-5. **创建标签**: 自动创建 Git 标签
-6. **发布**: 自动发布到 GitHub
+1. **提交代码**: 使用 Conventional Commits 格式推送到 `main` 分支
+2. **自动创建 Release PR**: `release-please` 分析提交信息，自动创建/更新 Release PR
+3. **预览变更**: Release PR 中包含版本号、CHANGELOG 预览
+4. **合入发布**: 当准备好发布时，合入 Release PR
+5. **自动发布**: 合入后自动创建 Git Tag 和 GitHub Release
 
-### 发布命令
-```bash
-# 本地预览发布流程（不实际发布）
-pnpm release:dry-run
-
-# CI 环境发布
-pnpm release:ci
-
-# 手动发布
-pnpm release
-```
+### 工作流特点
+- ✅ **可控发布**: 版本发布由开发者决定，通过合入 PR 触发
+- ✅ **变更预览**: Release PR 中可预览所有即将发布的变更
+- ✅ **自动 CHANGELOG**: 自动根据提交信息生成变更日志
+- ✅ **语义化版本**: 自动根据 `feat`/`fix` 等类型计算版本号
 
 ## Git 工作流
 
@@ -254,7 +237,8 @@ git branch -d feature/user-profile
 4. **创建 PR**: 创建 Pull Request
 5. **代码审查**: 团队成员审查代码
 6. **合并代码**: 审查通过后合并到 `main`
-7. **自动发布**: `semantic-release` 自动发布
+7. **Release PR 更新**: `release-please` 自动创建/更新 Release PR
+8. **版本发布**: 准备好发布时，合入 Release PR 触发正式发布
 
 ### 发布检查清单
 - [ ] 所有测试通过
