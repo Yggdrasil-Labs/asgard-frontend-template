@@ -1,7 +1,9 @@
-<script setup lang="ts">
+<script setup>
 import { useI18nHelper } from '@/composables/useI18n'
 
-defineProps<{ msg: string }>()
+defineProps({
+  msg: String,
+})
 
 const { t } = useI18nHelper()
 

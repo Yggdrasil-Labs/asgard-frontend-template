@@ -1,8 +1,6 @@
-<script setup lang="ts">
-import type { Locale } from '@locales/types'
+<script setup>
 import { useI18nHelper } from '@/composables/useI18n'
 
-// 使用 i18n 组合函数
 const {
   currentLocale,
   switchLocale,
@@ -10,10 +8,9 @@ const {
   supportedLocales,
 } = useI18nHelper()
 
-// 处理语言切换
-function handleLanguageChange(event: Event): void {
-  const target = event.target as HTMLSelectElement
-  const newLocale = target.value as Locale
+function handleLanguageChange(event) {
+  const target = event.target
+  const newLocale = target.value
 
   if (newLocale !== currentLocale.value) {
     switchLocale(newLocale)

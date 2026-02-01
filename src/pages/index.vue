@@ -1,51 +1,10 @@
-<script setup lang="ts">
-import { useRouter } from 'vue-router'
+<script setup>
 import env from '@/config/env'
-import { useUserStore } from '@/stores'
-
-const router = useRouter()
 
 // VueUse 功能
 const { width, height } = useWindowSize()
 const { x, y } = useMouse()
 const isDark = useDark()
-
-// Pinia Stores
-const userStore = useUserStore()
-
-// 模拟登录功能
-async function handleLogin() {
-  const result = await userStore.login({
-    username: 'demo',
-    password: 'password',
-    remember: true,
-  })
-
-  if (result.success) {
-    console.log('登录成功:', result.data)
-  }
-  else {
-    console.error('登录失败:', result.message)
-  }
-}
-
-// 模拟登出功能
-async function handleLogout() {
-  const result = await userStore.logout()
-  if (result.success) {
-    console.log('登出成功')
-    // 登出成功后跳转到登录页面
-    await router.push('/login')
-  }
-  else {
-    console.error('登出失败:', result.message)
-  }
-}
-
-// 跳转到登录页面
-function goToLogin() {
-  router.push('/login')
-}
 </script>
 
 <template>
@@ -58,15 +17,6 @@ function goToLogin() {
         </div>
         <div class="nav-actions">
           <LanguageSwitcher />
-          <div v-if="userStore.isLoggedIn" class="user-info">
-            <span class="user-name">{{ userStore.displayName }}</span>
-            <button class="logout-btn" @click="handleLogout">
-              登出
-            </button>
-          </div>
-          <button v-else class="login-btn" @click="goToLogin">
-            登录
-          </button>
         </div>
       </div>
     </nav>
@@ -80,16 +30,8 @@ function goToLogin() {
             <span class="gradient-text">Asgard Frontend</span>
           </h1>
           <p class="hero-subtitle">
-            基于 Vue 3 + TypeScript + Vite 的现代化前端模板
+            基于 Vue 3 + Vite + JavaScript 的现代化前端模板
           </p>
-          <div class="hero-buttons">
-            <button v-if="!userStore.isLoggedIn" class="cta-button primary" @click="goToLogin">
-              开始使用
-            </button>
-            <button class="cta-button secondary" @click="userStore.updateActivity()">
-              更新活动
-            </button>
-          </div>
         </div>
         <div class="hero-visual">
           <div class="floating-card">
@@ -105,13 +47,6 @@ function goToLogin() {
             </div>
             <h3>Vite</h3>
             <p>极速构建</p>
-          </div>
-          <div class="floating-card">
-            <div class="card-icon">
-              🧪
-            </div>
-            <h3>Vitest</h3>
-            <p>单元测试</p>
           </div>
           <div class="floating-card">
             <div class="card-icon">
@@ -148,72 +83,6 @@ function goToLogin() {
     <!-- 功能演示区域 -->
     <section class="features-section">
       <div class="container">
-        <!-- Pinia Store 演示 -->
-        <div class="feature-card">
-          <div class="card-header">
-            <div class="card-icon">
-              🍍
-            </div>
-            <h2>Pinia 状态管理</h2>
-            <p>现代化的状态管理解决方案</p>
-          </div>
-
-          <div class="card-content">
-            <div class="status-grid">
-              <div class="status-item">
-                <div class="status-label">
-                  登录状态
-                </div>
-                <div class="status-value" :class="{ success: userStore.isLoggedIn, error: !userStore.isLoggedIn }">
-                  {{ userStore.isLoggedIn ? '已登录' : '未登录' }}
-                </div>
-              </div>
-              <div class="status-item">
-                <div class="status-label">
-                  用户名
-                </div>
-                <div class="status-value">
-                  {{ userStore.displayName }}
-                </div>
-              </div>
-              <div class="status-item">
-                <div class="status-label">
-                  会话时长
-                </div>
-                <div class="status-value">
-                  {{ userStore.sessionDuration }} 分钟
-                </div>
-              </div>
-              <div class="status-item">
-                <div class="status-label">
-                  活动状态
-                </div>
-                <div class="status-value" :class="{ warning: userStore.isInactive }">
-                  {{ userStore.isInactive ? '长时间未活动' : '活跃' }}
-                </div>
-              </div>
-            </div>
-
-            <div class="action-buttons">
-              <button
-                :disabled="userStore.loading || userStore.isLoggedIn"
-                class="action-btn primary"
-                @click="handleLogin"
-              >
-                <span v-if="userStore.loading" class="loading-spinner" />
-                {{ userStore.loading ? '登录中...' : '模拟登录' }}
-              </button>
-              <button
-                :disabled="userStore.loading || !userStore.isLoggedIn"
-                class="action-btn danger"
-                @click="handleLogout"
-              >
-                登出
-              </button>
-            </div>
-          </div>
-        </div>
-
         <!-- VueUse 功能演示 -->
         <div class="feature-card">
           <div class="card-header">
@@ -223,7 +92,6 @@ function goToLogin() {
             <h2>VueUse 工具集</h2>
             <p>Vue 组合式 API 工具库</p>
           </div>
-
           <div class="card-content">
             <div class="demo-grid">
               <div class="demo-item">
@@ -266,7 +134,6 @@ function goToLogin() {
             <h2>环境信息</h2>
             <p>当前运行环境配置</p>
           </div>
-
           <div class="card-content">
             <div class="env-table">
               <div class="env-row">
@@ -323,7 +190,6 @@ function goToLogin() {
   overflow-x: hidden;
 }
 
-// 导航栏
 .navbar {
   position: fixed;
   top: 0;
@@ -361,49 +227,6 @@ function goToLogin() {
   gap: 1rem;
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.user-name {
-  font-weight: 500;
-  color: #374151;
-}
-
-.login-btn,
-.logout-btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.login-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-  }
-}
-
-.logout-btn {
-  background: #ef4444;
-  color: white;
-
-  &:hover {
-    background: #dc2626;
-    transform: translateY(-1px);
-  }
-}
-
-// Hero 区域
 .hero-section {
   padding: 10rem 2rem 6rem;
   min-height: 100vh;
@@ -458,47 +281,6 @@ function goToLogin() {
   line-height: 1.6;
 }
 
-.hero-buttons {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.cta-button {
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.cta-button.primary {
-  background: white;
-  color: #667eea;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  }
-}
-
-.cta-button.secondary {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-  }
-}
-
-// Hero 视觉元素
 .hero-visual {
   display: flex;
   justify-content: flex-start;
@@ -527,34 +309,25 @@ function goToLogin() {
   align-items: center;
   overflow: hidden;
   box-sizing: border-box;
+}
 
-  &:nth-child(1) {
-    animation-delay: 0s;
-  }
-
-  &:nth-child(2) {
-    animation-delay: 1s;
-  }
-
-  &:nth-child(3) {
-    animation-delay: 2s;
-  }
-
-  &:nth-child(4) {
-    animation-delay: 3s;
-  }
-
-  &:nth-child(5) {
-    animation-delay: 4s;
-  }
-
-  &:nth-child(6) {
-    animation-delay: 5s;
-  }
-
-  &:nth-child(7) {
-    animation-delay: 6s;
-  }
+.floating-card:nth-child(1) {
+  animation-delay: 0s;
+}
+.floating-card:nth-child(2) {
+  animation-delay: 1s;
+}
+.floating-card:nth-child(3) {
+  animation-delay: 2s;
+}
+.floating-card:nth-child(4) {
+  animation-delay: 3s;
+}
+.floating-card:nth-child(5) {
+  animation-delay: 4s;
+}
+.floating-card:nth-child(6) {
+  animation-delay: 5s;
 }
 
 .card-icon {
@@ -580,14 +353,13 @@ function goToLogin() {
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0px);
+    transform: translateY(0);
   }
   50% {
     transform: translateY(-20px);
   }
 }
 
-// 功能演示区域
 .features-section {
   padding: 4rem 2rem;
   background: rgba(255, 255, 255, 0.05);
@@ -607,11 +379,11 @@ function goToLogin() {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: all 0.3s ease;
+}
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-  }
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
 }
 
 .card-header {
@@ -621,7 +393,7 @@ function goToLogin() {
   color: white;
 }
 
-.card-icon {
+.card-header .card-icon {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
@@ -642,108 +414,6 @@ function goToLogin() {
   padding: 2rem;
 }
 
-// 状态网格
-.status-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.status-item {
-  padding: 1rem;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-}
-
-.status-label {
-  font-size: 0.8rem;
-  color: #64748b;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.status-value {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1e293b;
-
-  &.success {
-    color: #059669;
-  }
-
-  &.error {
-    color: #dc2626;
-  }
-
-  &.warning {
-    color: #d97706;
-  }
-}
-
-// 操作按钮
-.action-buttons {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.action-btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  &.primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-
-    &:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-  }
-
-  &.danger {
-    background: #ef4444;
-    color: white;
-
-    &:hover:not(:disabled) {
-      background: #dc2626;
-      transform: translateY(-1px);
-    }
-  }
-}
-
-.loading-spinner {
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-// VueUse 演示
 .demo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -786,7 +456,6 @@ function goToLogin() {
   font-family: 'Courier New', monospace;
 }
 
-// 环境信息表格
 .env-table {
   display: grid;
   gap: 0.5rem;
@@ -813,14 +482,13 @@ function goToLogin() {
   color: #6b7280;
   font-family: 'Courier New', monospace;
   font-size: 0.8rem;
-
-  &.success {
-    color: #059669;
-    font-weight: 500;
-  }
 }
 
-// 响应式设计
+.env-value.success {
+  color: #059669;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .hero-section {
     padding: 8rem 2rem 4rem;
@@ -853,30 +521,12 @@ function goToLogin() {
     height: 70px;
   }
 
-  .card-icon {
-    font-size: 1.4rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .floating-card h3 {
-    font-size: 0.75rem;
-    margin-bottom: 0.125rem;
-  }
-
-  .floating-card p {
-    font-size: 0.6rem;
-  }
-
   .nav-container {
     padding: 0 1rem;
   }
 
   .nav-brand h1 {
     font-size: 1.25rem;
-  }
-
-  .status-grid {
-    grid-template-columns: 1fr;
   }
 
   .demo-grid {
