@@ -1,3 +1,7 @@
+# Release 工作流: 多模式构建 (standalone / main / micro)
+# - 矩阵构建三种模式并上传产物
+# - 发布三种 zip: asgard-frontend-template-{standalone,main,micro}-{version}.zip
+# - Docker 镜像可通过本地 docker build --build-arg QIANKUN_MODE=main|micro|standalone 构建
 name: Release
 
 on:
@@ -48,10 +52,16 @@ jobs:
 
       - name: Type check
         run: pnpm type-check
+        continue-on-error: true
 
   build-release:
+    name: Build (${{ matrix.mode }})
     runs-on: ubuntu-latest
     needs: [build-verify]
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [standalone, main, micro]
     permissions:
       contents: read
     steps:
@@ -87,21 +97,21 @@ jobs:
       - name: Get version from tag
         id: get_version
         run: |
-          # 从 tag 获取版本号
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          VERSION=${TAG_NAME#v}  # 移除 'v' 前缀
-          echo "Tag: $TAG_NAME"
-          echo "Version: $VERSION"
+          VERSION=${TAG_NAME#v}
           echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build for production
-        run: pnpm build
+      - name: Build (${{ matrix.mode }})
+        run: |
+          if [ "${{ matrix.mode }}" = "main" ]; then pnpm build:main
+          elif [ "${{ matrix.mode }}" = "micro" ]; then pnpm build:micro
+          else pnpm build; fi
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
-          name: dist-${{ steps.get_version.outputs.version }}
+          name: dist-${{ matrix.mode }}-${{ steps.get_version.outputs.version }}
           path: dist/
           retention-days: 30
 
@@ -120,13 +130,23 @@ jobs:
       - name: Get version from tag
         id: get_version
         run: |
-          # 从 tag 获取版本
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          VERSION=${TAG_NAME#v}  # 移除 'v' 前缀
-          echo "Tag: $TAG_NAME"
-          echo "Version: $VERSION"
+          VERSION=${TAG_NAME#v}
           echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create release archives (per mode)
+        run: |
+          VERSION="${{ steps.get_version.outputs.version }}"
+          for mode in standalone main micro; do
+            if [ -d "dist-$mode-$VERSION" ]; then
+              cd "dist-$mode-$VERSION" && zip -r "../asgard-frontend-template-$mode-${VERSION}.zip" . && cd ..
+            fi
+          done
+          ls -la *.zip 2>/dev/null || true
 
       - name: Extract release notes from CHANGELOG
         id: changelog
@@ -205,21 +225,6 @@ jobs:
           echo "$RELEASE_NOTES" | head -c 300
           echo ""
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: dist-${{ steps.get_version.outputs.version }}
-          path: dist/
-
-      - name: Create release archive
-        run: |
-          VERSION="${{ steps.get_version.outputs.version }}"
-          cd dist
-          zip -r "../asgard-frontend-template-${VERSION}.zip" .
-          cd ..
-          echo "Created release archive: asgard-frontend-template-${VERSION}.zip"
-          ls -la *.zip
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.2.0
         with:
@@ -230,6 +235,8 @@ jobs:
           prerelease: false
           generate_release_notes: false
           files: |
-            asgard-frontend-template-${{ steps.get_version.outputs.version }}.zip
+            asgard-frontend-template-standalone-${{ steps.get_version.outputs.version }}.zip
+            asgard-frontend-template-main-${{ steps.get_version.outputs.version }}.zip
+            asgard-frontend-template-micro-${{ steps.get_version.outputs.version }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

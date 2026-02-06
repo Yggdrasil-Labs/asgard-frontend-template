@@ -40,6 +40,8 @@ docs
 !.env.production
 !.env.test
 !.env.development
+!.env.main
+!.env.micro
 
 # 日志文件
 *.log

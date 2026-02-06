@@ -9,8 +9,13 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:main": "vite --mode main",
+    "dev:micro": "vite --mode micro",
+    "dev:standalone": "vite --mode development",
     "dev:test": "vite --mode test",
     "build": "vite build",
+    "build:main": "vite build --mode main",
+    "build:micro": "vite build --mode micro",
     "build:test": "vite build --mode test",
     "preview": "vite preview",
     "preview:test": "vite preview --mode test",
@@ -25,6 +30,7 @@
     "axios": "^1.13.3",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
+    "qiankun": "^2.10.16",
     "vue": "^3.5.27",
     "vue-i18n": "^11.2.8",
     "vue-router": "^4.6.4"

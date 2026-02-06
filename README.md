@@ -91,6 +91,19 @@ pnpm lint        # ESLint 检查
 pnpm lint:fix    # ESLint 自动修复
 ```
 
+## 微前端支持 (qiankun)
+
+本模板支持以 **主应用**、**子应用** 或 **独立应用** 三种模式运行，基于 [qiankun](https://qiankun.umijs.org/) 微前端方案；默认不启用，保持与单体应用一致。
+
+- **主应用**：`pnpm dev:main`（端口 5174），注册并加载子应用
+- **子应用**：`pnpm dev:micro`（端口 5173），可独立运行或被主应用加载
+- **独立应用**：`pnpm dev` / `pnpm dev:standalone`，与普通 SPA 相同
+
+**快速开始**：[docs/qiankun/quick-start.md](docs/qiankun/quick-start.md)
+**配置与开发**：[docs/qiankun/configuration.md](docs/qiankun/configuration.md)、[docs/qiankun/development.md](docs/qiankun/development.md)
+**部署与最佳实践**：[docs/qiankun/deployment.md](docs/qiankun/deployment.md)、[docs/qiankun/best-practices.md](docs/qiankun/best-practices.md)
+**示例**：[examples/main-app/](examples/main-app/README.md)、[examples/micro-app/](examples/micro-app/README.md)
+
 ## 📝 提交规范
 
 采用 [Conventional Commits](https://www.conventionalcommits.org/)：`feat:`、`fix:`、`docs:`、`refactor:`、`chore:` 等。
