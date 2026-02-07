@@ -4,6 +4,7 @@ import App from '@/App.vue'
 import router from '@/router'
 import { createAppPinia } from '@/stores/pinia'
 import { initAppSettings } from '@/utils/initApp'
+import 'element-plus/dist/index.css'
 import '@scss/main.scss'
 
 initAppSettings()

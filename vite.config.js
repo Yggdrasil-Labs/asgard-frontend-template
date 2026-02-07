@@ -1,6 +1,8 @@
 import path from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
+import Icons from 'unplugin-icons/vite'
+import { ElementPlusResolver, IconsResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
@@ -26,7 +28,12 @@ export default defineConfig(({ mode, command }) => {
       }),
       Components({
         dirs: ['src/components'],
-        resolvers: [],
+        resolvers: [
+          ElementPlusResolver(),
+          IconsResolver({
+            prefix: 'Icon',
+          }),
+        ],
         include: [/\.vue$/, /\.vue\?vue/],
         exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
       }),
@@ -39,7 +46,16 @@ export default defineConfig(({ mode, command }) => {
           '@vueuse/core',
           VueRouterAutoImports,
         ],
+        resolvers: [
+          ElementPlusResolver(),
+          IconsResolver({
+            prefix: 'Icon',
+          }),
+        ],
         vueTemplate: true,
+      }),
+      Icons({
+        autoInstall: true,
       }),
     ].filter(Boolean),
     css: {
@@ -100,7 +116,16 @@ export default defineConfig(({ mode, command }) => {
       },
     },
     optimizeDeps: {
-      include: ['vue', 'vue-router', 'pinia', 'vue-i18n', '@vueuse/core', 'axios'],
+      include: [
+        'vue',
+        'vue-router',
+        'pinia',
+        'vue-i18n',
+        '@vueuse/core',
+        'axios',
+        'element-plus',
+        '@element-plus/icons-vue',
+      ],
       exclude: [],
     },
     define: {
