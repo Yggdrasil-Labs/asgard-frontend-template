@@ -2,7 +2,7 @@ import path from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Icons from 'unplugin-icons/vite'
-import { ElementPlusResolver, IconsResolver } from 'unplugin-vue-components/resolvers'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
@@ -30,9 +30,6 @@ export default defineConfig(({ mode, command }) => {
         dirs: ['src/components'],
         resolvers: [
           ElementPlusResolver(),
-          IconsResolver({
-            prefix: 'Icon',
-          }),
         ],
         include: [/\.vue$/, /\.vue\?vue/],
         exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
@@ -48,9 +45,6 @@ export default defineConfig(({ mode, command }) => {
         ],
         resolvers: [
           ElementPlusResolver(),
-          IconsResolver({
-            prefix: 'Icon',
-          }),
         ],
         vueTemplate: true,
       }),

@@ -13,6 +13,8 @@ export default antfu({
     globals: {
       // Vite 构建时注入
       __APP_VERSION__: 'readonly',
+      // unplugin-vue-router 在页面中注入
+      definePage: 'readonly',
       // unplugin-auto-import 自动导入（VueUse 等）
       useWindowSize: 'readonly',
       useMouse: 'readonly',

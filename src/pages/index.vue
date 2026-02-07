@@ -16,6 +16,9 @@ const isDark = useDark()
           <h1>Asgard Frontend</h1>
         </div>
         <div class="nav-actions">
+          <RouterLink to="/components-demo" class="nav-link">
+            公共组件演示
+          </RouterLink>
           <LanguageSwitcher />
         </div>
       </div>
@@ -225,6 +228,18 @@ const isDark = useDark()
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.nav-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
 }
 
 .hero-section {

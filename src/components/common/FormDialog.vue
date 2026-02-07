@@ -49,20 +49,29 @@ function onSubmit() {
         :label="field.label"
         :prop="field.prop"
       >
-        <component
-          :is="field.component || 'el-input'"
+        <el-select
+          v-if="field.options || field.component === 'el-select'"
           v-model="model[field.prop]"
           v-bind="field.componentProps"
         >
-          <template v-if="field.options" #default>
-            <el-option
-              v-for="option in field.options"
-              :key="option.value"
-              :label="option.label"
-              :value="option.value"
-            />
-          </template>
-        </component>
+          <el-option
+            v-for="option in (field.options || [])"
+            :key="String(option.value)"
+            :label="option.label"
+            :value="option.value"
+          />
+        </el-select>
+        <el-input
+          v-else-if="!field.component || field.component === 'el-input'"
+          v-model="model[field.prop]"
+          v-bind="field.componentProps"
+        />
+        <component
+          :is="field.component"
+          v-else
+          v-model="model[field.prop]"
+          v-bind="field.componentProps"
+        />
       </el-form-item>
       <slot />
     </el-form>

@@ -35,6 +35,7 @@
     "@antfu/eslint-config": "^7.2.0",
     "@commitlint/cli": "^20.3.1",
     "@commitlint/config-conventional": "^20.3.1",
+    "@iconify/utils": "^3.1.0",
     "@microsoft/eslint-formatter-sarif": "^3.1.0",
     "@vitejs/plugin-vue": "^6.0.3",
     "eslint": "^9.39.2",
