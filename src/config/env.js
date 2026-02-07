@@ -22,10 +22,12 @@ function validateEnvVar(value, fallback) {
   return value === undefined || value === '' ? fallback : value
 }
 
-const MODE = import.meta.env.MODE
+const RAW_MODE = import.meta.env.MODE
+const MODE = ENV_DEFAULTS[RAW_MODE] ? RAW_MODE : 'production'
 
 function getEnvDefaults(mode) {
-  const defaults = ENV_DEFAULTS[mode]
+  const resolved = ENV_DEFAULTS[mode] ? mode : 'production'
+  const defaults = ENV_DEFAULTS[resolved]
   if (!defaults) {
     throw new Error(`Unsupported MODE: ${mode}`)
   }
@@ -38,7 +40,7 @@ const APP_ENV = {
   development: 'dev',
   test: 'test',
   production: 'prod',
-}[MODE]
+}[MODE] ?? 'prod'
 
 const APP_NAME = validateEnvVar(
   import.meta.env.VITE_APP_NAME,

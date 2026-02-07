@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
+import apps from '@/config/apps'
 import { isMainApp, isMicroApp } from '@/utils/qiankun'
 
 /**
@@ -28,10 +29,33 @@ const defaultRouter = (() => {
   if (isMicroApp()) {
     return null
   }
-  const router = createAppRouter()
+
+  // 如果是主应用模式，为子应用路由准备配置
+  let routesWithSubapps = [...routes]
   if (isMainApp()) {
-    router.beforeEach((to, from, next) => next())
+    // 为每个子应用的 activeRule 添加 catch-all 路由
+    // 这样 Vue Router 不会在导航到子应用路径时报警告
+    // 实际渲染由 qiankun 在 QiankunContainer 中处理
+    const subappRoutes = apps.map(app => ({
+      path: `${app.activeRule}/:pathMatch(.*)*`,
+      name: `subapp-${app.name}`,
+      component: { render: () => null },
+      meta: { isSubApp: true, appName: app.name },
+    }))
+    routesWithSubapps = [...routes, ...subappRoutes]
   }
+
+  const router = createRouter({
+    history: createWebHistory('/'),
+    routes: routesWithSubapps,
+  })
+
+  router.afterEach((to) => {
+    if (to.meta.title) {
+      document.title = `${to.meta.title} - Asgard Frontend`
+    }
+  })
+
   return router
 })()
 

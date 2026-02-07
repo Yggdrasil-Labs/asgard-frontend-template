@@ -5,6 +5,7 @@ import Components from 'unplugin-vue-components/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig, loadEnv } from 'vite'
+import qiankun from 'vite-plugin-qiankun-x'
 import pkg from './package.json' with { type: 'json' }
 
 export default defineConfig(({ mode, command }) => {
@@ -13,8 +14,19 @@ export default defineConfig(({ mode, command }) => {
   const isProd = command === 'build'
 
   // 获取应用模式
+  // VITE_APP_MODE 可以是 'main'、'standalone' 或子应用标识 (如 'micro-app-1')
+  // 非 main/standalone 的值均视为子应用模式
   const appMode = envVars.VITE_APP_MODE || 'standalone'
-  const isMicroApp = appMode === 'micro'
+  const isMicroApp = appMode !== 'main' && appMode !== 'standalone'
+
+  // 输出配置信息以便调试
+  console.log('[vite.config] 构建配置:', {
+    mode,
+    command,
+    appMode,
+    isMicroApp,
+    port: envVars.VITE_PORT,
+  })
 
   // 基础配置
   const baseConfig = {
@@ -76,11 +88,19 @@ export default defineConfig(({ mode, command }) => {
 
   // 子应用模式特殊配置
   if (isMicroApp) {
-    const appName = envVars.VITE_APP_NAME || 'micro-app'
+    // 子应用名称: 优先使用 VITE_APP_NAME,否则使用 VITE_APP_MODE 值
+    const appName = envVars.VITE_APP_NAME || appMode || 'micro-app'
 
     return {
       ...baseConfig,
       base: envVars.VITE_APP_PUBLIC_PATH || '/',
+      plugins: [
+        ...baseConfig.plugins,
+        // vite-plugin-qiankun-x: 零配置 qiankun 兼容
+        // 开发模式: 自动将 ES Module 转换为 qiankun 可加载的格式
+        // 构建模式: 保留 ESM 特性,无需 UMD
+        qiankun(appName),
+      ],
       server: {
         host: true,
         port: Number(envVars.VITE_PORT) || 5173,
@@ -109,20 +129,6 @@ export default defineConfig(({ mode, command }) => {
         minify: isProd ? 'esbuild' : false,
         // 子应用不拆分 CSS,将所有样式打包在一起
         cssCodeSplit: false,
-        // library 模式,构建为 UMD 格式
-        lib: {
-          name: appName.replace(/-/g, '_'), // 转换为合法的 JavaScript 变量名
-          entry: './src/main.js',
-          formats: ['umd'],
-          fileName: 'app',
-        },
-        rollupOptions: {
-          // 不外部化任何依赖,打包所有代码
-          external: [],
-          output: {
-            globals: {},
-          },
-        },
       },
     }
   }

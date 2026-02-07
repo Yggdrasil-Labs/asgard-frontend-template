@@ -19,6 +19,7 @@
  *
  * @typedef {object} MicroAppConfig
  * @property {string} name - 子应用唯一标识,必须唯一
+ * @property {string} [title] - 子应用显示名称 (用于导航栏下拉菜单,默认使用 name)
  * @property {string} entry - 子应用入口地址,开发环境和生产环境可以不同
  * @property {string} container - 子应用挂载容器的 CSS 选择器
  * @property {string|Function} activeRule - 子应用激活的路由规则
@@ -36,6 +37,7 @@ export default [
   // 示例 1: 子应用 micro-app-1
   {
     name: 'micro-app-1',
+    title: '子应用 1',
     entry: import.meta.env.DEV
       ? '//localhost:5173/'
       : '//cdn.example.com/micro-app-1/',
@@ -49,6 +51,7 @@ export default [
   // 示例 2: 子应用 micro-app-2
   // {
   //   name: 'micro-app-2',
+  //   title: '子应用 2',
   //   entry: import.meta.env.DEV
   //     ? '//localhost:5174/'
   //     : '//cdn.example.com/micro-app-2/',

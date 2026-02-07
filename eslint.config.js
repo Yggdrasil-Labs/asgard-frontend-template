@@ -13,7 +13,28 @@ export default antfu({
     globals: {
       // Vite 构建时注入
       __APP_VERSION__: 'readonly',
-      // unplugin-auto-import 自动导入（VueUse 等）
+      // unplugin-auto-import 自动导入 - Vue 3 核心 API
+      ref: 'readonly',
+      reactive: 'readonly',
+      computed: 'readonly',
+      watch: 'readonly',
+      watchEffect: 'readonly',
+      onMounted: 'readonly',
+      onUnmounted: 'readonly',
+      onBeforeMount: 'readonly',
+      onBeforeUnmount: 'readonly',
+      onUpdated: 'readonly',
+      onBeforeUpdate: 'readonly',
+      nextTick: 'readonly',
+      defineProps: 'readonly',
+      defineEmits: 'readonly',
+      defineExpose: 'readonly',
+      withDefaults: 'readonly',
+      // Vue Router
+      useRouter: 'readonly',
+      useRoute: 'readonly',
+      // VueUse
+      onClickOutside: 'readonly',
       useWindowSize: 'readonly',
       useMouse: 'readonly',
       useDark: 'readonly',
@@ -29,5 +50,6 @@ export default antfu({
     'no-console': ['warn', {
       allow: ['log', 'warn', 'error'],
     }],
+    'jsdoc/require-returns-description': 'off',
   },
 })

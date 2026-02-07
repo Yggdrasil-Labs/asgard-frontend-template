@@ -8,8 +8,6 @@ import { registerMicroApps, start } from 'qiankun'
 import apps from '@/config/apps'
 import qiankunConfig from '@/config/qiankun'
 
-const isQiankunDebug = () => import.meta.env.VITE_QIANKUN_DEBUG === 'true'
-
 /**
  * 创建事件总线
  * 用于主应用和子应用之间的通信
@@ -64,10 +62,6 @@ function createEventBus() {
 export function startMainApp(options = {}) {
   const { onError } = options
 
-  if (isQiankunDebug()) {
-    console.log('[qiankun] 主应用模式启动')
-  }
-
   // 当前正在加载的子应用 (用于 errorHandler 中上报)
   let currentLoadingApp = null
 
@@ -121,44 +115,14 @@ export function startMainApp(options = {}) {
   registerMicroApps(appsWithProps, {
     beforeLoad: (app) => {
       currentLoadingApp = app
-      if (isQiankunDebug()) {
-        console.log('[qiankun] 子应用加载前:', app.name, app.entry)
-      }
       return Promise.resolve()
     },
-    beforeMount: (app) => {
-      if (isQiankunDebug()) {
-        console.log('[qiankun] 子应用挂载前:', app.name)
-      }
-      return Promise.resolve()
-    },
-    afterMount: (app) => {
+    afterMount: () => {
       currentLoadingApp = null
-      if (isQiankunDebug()) {
-        console.log('[qiankun] 子应用挂载后:', app.name)
-      }
-      return Promise.resolve()
-    },
-    beforeUnmount: (app) => {
-      if (isQiankunDebug()) {
-        console.log('[qiankun] 子应用卸载前:', app.name)
-      }
-      return Promise.resolve()
-    },
-    afterUnmount: (app) => {
-      if (isQiankunDebug()) {
-        console.log('[qiankun] 子应用卸载后:', app.name)
-      }
       return Promise.resolve()
     },
   })
 
   // 启动 qiankun
   start(runtimeConfig)
-
-  if (isQiankunDebug()) {
-    console.log('[qiankun] 主应用启动完成')
-    console.log('[qiankun] 已注册子应用数量:', apps.length)
-    console.log('[qiankun] 子应用列表:', apps.map(app => app.name))
-  }
 }

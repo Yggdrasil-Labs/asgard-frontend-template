@@ -1,22 +1,26 @@
 import i18n from '@locales/i18n'
 import { createApp } from 'vue'
 import App from '@/App.vue'
-import { APP_MODE } from '@/constants/qiankun'
 import router from '@/router'
 import { createAppPinia } from '@/stores/pinia'
 import { initAppSettings } from '@/utils/initApp'
-import { getAppMode } from '@/utils/qiankun'
+import { isMainApp, isMicroApp } from '@/utils/qiankun'
 import '@scss/main.scss'
+
+/**
+ * 导出子应用生命周期钩子 (vite-plugin-qiankun-x 要求)
+ *
+ * 插件会自动处理这些导出:
+ * - 开发模式: 转换为 qiankun 可加载的格式
+ * - 构建模式: 保留 ESM 导出
+ */
+export { bootstrap, mount, unmount, update } from '@/qiankun/micro'
 
 // 初始化应用设置
 initAppSettings()
 
-// 获取当前运行模式
-const mode = getAppMode()
-
 // 模式 1: 主应用模式
-if (mode === APP_MODE.MAIN) {
-  // 主应用初始化
+if (isMainApp()) {
   const app = createApp(App)
   const pinia = createAppPinia()
 
@@ -31,24 +35,16 @@ if (mode === APP_MODE.MAIN) {
   })
 }
 // 模式 2: 子应用模式
-else if (mode === APP_MODE.MICRO) {
-  // 动态导入子应用生命周期逻辑
-  import('./qiankun/micro').then((lifecycle) => {
-    // 导出到全局,供 qiankun 调用
-    window.microAppBootstrap = lifecycle.bootstrap
-    window.microAppMount = lifecycle.mount
-    window.microAppUnmount = lifecycle.unmount
-    window.microAppUpdate = lifecycle.update
-
-    // 独立运行时自动挂载
-    if (!window.__POWERED_BY_QIANKUN__) {
-      lifecycle.mount({})
-    }
-  })
+// VITE_APP_MODE 为非 main/standalone 的值均视为子应用模式
+else if (isMicroApp()) {
+  // 独立运行时自动挂载 (非 qiankun 环境,如直接访问子应用开发服务器)
+  if (!window.__POWERED_BY_QIANKUN__) {
+    import('./qiankun/micro').then(lifecycle => lifecycle.mount({}))
+  }
+  // 在 qiankun 环境中,生命周期钩子由上方的 export 提供,qiankun 自动调用
 }
 // 模式 3: 独立应用模式 (默认)
 else {
-  // 标准 SPA 启动流程
   const app = createApp(App)
   const pinia = createAppPinia()
 

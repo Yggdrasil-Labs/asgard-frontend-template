@@ -14,7 +14,6 @@ function handleLanguageChange(event) {
 
   if (newLocale !== currentLocale.value) {
     switchLocale(newLocale)
-    console.log(`Language changed to: ${newLocale}`)
   }
 }
 </script>

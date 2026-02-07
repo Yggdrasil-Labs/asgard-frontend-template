@@ -24,8 +24,7 @@ let pinia = null
  * @returns {Promise<void>}
  */
 export async function bootstrap() {
-  const appName = getAppName() || 'micro-app'
-  console.log(`[qiankun-micro] ${appName} bootstraped`)
+  // 子应用首次加载时调用一次
 }
 
 /**
@@ -41,7 +40,11 @@ export async function bootstrap() {
  */
 export async function mount(props = {}) {
   const appName = getAppName() || 'micro-app'
-  console.log(`[qiankun-micro] ${appName} mounting...`, props)
+
+  // 防止重复挂载: 如果已有 Vue 实例,先卸载再重新挂载
+  if (vueApp) {
+    await unmount()
+  }
 
   try {
     // 1. 配置路由 base
@@ -71,8 +74,6 @@ export async function mount(props = {}) {
     // 5. 挂载到 DOM
     const container = props.container?.querySelector('#app') || '#app'
     vueApp.mount(container)
-
-    console.log(`[qiankun-micro] ${appName} mounted`)
   }
   catch (error) {
     console.error(`[qiankun-micro] ${appName} mount failed:`, error)
@@ -88,7 +89,6 @@ export async function mount(props = {}) {
  */
 export async function unmount() {
   const appName = getAppName() || 'micro-app'
-  console.log(`[qiankun-micro] ${appName} unmounting...`)
 
   try {
     // 1. 卸载 Vue 应用实例
@@ -110,8 +110,6 @@ export async function unmount() {
       })
       pinia = null
     }
-
-    console.log(`[qiankun-micro] ${appName} unmounted`)
   }
   catch (error) {
     console.error(`[qiankun-micro] ${appName} unmount failed:`, error)
@@ -127,9 +125,7 @@ export async function unmount() {
  * @returns {Promise<void>}
  */
 export async function update(props) {
-  const appName = getAppName() || 'micro-app'
-  console.log(`[qiankun-micro] ${appName} updated`, props)
-
   // 可以在这里处理 props 变化
   // 例如: 更新主题、更新全局状态等
+  void props
 }

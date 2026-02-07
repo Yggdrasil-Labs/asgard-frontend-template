@@ -1,37 +1,94 @@
 <script setup>
+import { useRouter } from 'vue-router'
+import apps from '@/config/apps'
 import env from '@/config/env'
+import { getAppMode, getAppName, isMainApp, isMicroApp, isQiankunEnv } from '@/utils/qiankun'
 
 // VueUse 功能
 const { width, height } = useWindowSize()
 const { x, y } = useMouse()
 const isDark = useDark()
+
+// 应用模式信息
+const isMain = isMainApp()
+const isMicro = isMicroApp()
+const appMode = getAppMode()
+const appName = getAppName()
+const inQiankun = isQiankunEnv()
+const router = useRouter()
+
+/**
+ * 当前角色标签
+ */
+const roleLabel = computed(() => {
+  if (isMain)
+    return '主应用'
+  if (isMicro)
+    return `子应用 · ${appName || appMode}`
+  return '独立应用'
+})
+
+/**
+ * 当前角色描述
+ */
+const roleDescription = computed(() => {
+  if (isMain)
+    return '微前端容器,管理和加载子应用'
+  if (isMicro && inQiankun)
+    return '当前运行在 qiankun 容器中'
+  if (isMicro)
+    return '当前独立运行 (未嵌入主应用)'
+  return '标准单体应用模式'
+})
+
+/**
+ * 子应用列表 (仅主应用模式下使用)
+ */
+const microApps = computed(() => {
+  return apps.map(app => ({
+    name: app.name,
+    title: app.title || app.name,
+    path: app.activeRule,
+  }))
+})
+
+/**
+ * 导航到子应用
+ */
+function navigateToApp(path) {
+  router.push(path)
+}
 </script>
 
 <template>
-  <div class="home-page">
-    <!-- 导航栏 -->
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-brand">
-          <h1>Asgard Frontend</h1>
-        </div>
-        <div class="nav-actions">
-          <LanguageSwitcher />
-        </div>
-      </div>
-    </nav>
-
+  <div class="home-page" :class="{ 'is-micro': isMicro }">
     <!-- Hero 区域 -->
     <section class="hero-section">
       <div class="hero-content">
         <div class="hero-text">
+          <!-- 角色徽章 -->
+          <div class="role-badge">
+            <span class="role-dot" />
+            <span>{{ roleLabel }}</span>
+          </div>
+
           <h1 class="hero-title">
             <span class="hero-subtitle-small">欢迎来到</span>
             <span class="gradient-text">Asgard Frontend</span>
           </h1>
           <p class="hero-subtitle">
-            基于 Vue 3 + Vite + JavaScript 的现代化前端模板
+            {{ roleDescription }}
           </p>
+
+          <!-- 模式信息 -->
+          <div class="mode-info">
+            <span class="mode-tag">
+              VITE_APP_MODE = {{ appMode }}
+            </span>
+            <span v-if="inQiankun" class="mode-tag qiankun">
+              qiankun
+            </span>
+          </div>
         </div>
         <div class="hero-visual">
           <div class="floating-card">
@@ -75,6 +132,33 @@ const isDark = useDark()
             </div>
             <h3>Vue-i18n</h3>
             <p>国际化</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 子应用入口卡片 (仅主应用模式) -->
+    <section v-if="isMain && microApps.length" class="apps-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>子应用列表</h2>
+          <p>点击下方卡片进入对应的子应用</p>
+        </div>
+        <div class="apps-grid">
+          <div
+            v-for="app in microApps"
+            :key="app.name"
+            class="app-entry-card"
+            @click="navigateToApp(app.path)"
+          >
+            <div class="app-entry-icon">
+              📦
+            </div>
+            <h3>{{ app.title }}</h3>
+            <p class="app-entry-path">
+              {{ app.path }}
+            </p>
+            <span class="app-entry-arrow">→</span>
           </div>
         </div>
       </div>
@@ -141,8 +225,20 @@ const isDark = useDark()
                 <span class="env-value">{{ env.MODE }}</span>
               </div>
               <div class="env-row">
-                <span class="env-key">应用环境</span>
-                <span class="env-value">{{ env.APP_ENV }}</span>
+                <span class="env-key">应用角色</span>
+                <span class="env-value">
+                  <strong>{{ roleLabel }}</strong>
+                </span>
+              </div>
+              <div class="env-row">
+                <span class="env-key">VITE_APP_MODE</span>
+                <span class="env-value">{{ appMode }}</span>
+              </div>
+              <div class="env-row">
+                <span class="env-key">qiankun 环境</span>
+                <span class="env-value" :class="{ success: inQiankun }">
+                  {{ inQiankun ? '是' : '否' }}
+                </span>
               </div>
               <div class="env-row">
                 <span class="env-key">应用名称</span>
@@ -156,24 +252,6 @@ const isDark = useDark()
                 <span class="env-key">API 地址</span>
                 <span class="env-value">{{ env.API_BASE_URL }}</span>
               </div>
-              <div class="env-row">
-                <span class="env-key">开发模式</span>
-                <span class="env-value" :class="{ success: env.isDev }">
-                  {{ env.isDev ? '是' : '否' }}
-                </span>
-              </div>
-              <div class="env-row">
-                <span class="env-key">生产模式</span>
-                <span class="env-value" :class="{ success: env.isProd }">
-                  {{ env.isProd ? '是' : '否' }}
-                </span>
-              </div>
-              <div class="env-row">
-                <span class="env-key">测试模式</span>
-                <span class="env-value" :class="{ success: env.isTest }">
-                  {{ env.isTest ? '是' : '否' }}
-                </span>
-              </div>
             </div>
           </div>
         </div>
@@ -183,52 +261,89 @@ const isDark = useDark()
 </template>
 
 <style lang="scss" scoped>
+/* ========== 主题色: 主应用紫色渐变, 子应用青绿渐变 ========== */
 .home-page {
+  --theme-from: #667eea;
+  --theme-to: #764ba2;
+  --accent-from: #fbbf24;
+  --accent-to: #f59e0b;
+
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--theme-from) 0%, var(--theme-to) 100%);
   position: relative;
   overflow-x: hidden;
 }
 
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 1rem 0;
+.home-page.is-micro {
+  --theme-from: #0ea5e9;
+  --theme-to: #06b6d4;
+  --accent-from: #a78bfa;
+  --accent-to: #7c3aed;
 }
 
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  justify-content: space-between;
+/* ========== 角色徽章 ========== */
+.role-badge {
+  display: inline-flex;
   align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
 }
 
-.nav-brand h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.role-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 
-.nav-actions {
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ========== 模式信息标签 ========== */
+.mode-info {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 1rem;
 }
 
+.mode-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-family: 'Courier New', monospace;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.03em;
+}
+
+.mode-tag.qiankun {
+  background: rgba(74, 222, 128, 0.25);
+  color: #bbf7d0;
+}
+
+/* ========== Hero 区域 ========== */
 .hero-section {
-  padding: 10rem 2rem 6rem;
+  padding: 6rem 2rem;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -255,7 +370,7 @@ const isDark = useDark()
   font-size: 3.5rem;
   font-weight: 800;
   line-height: 1.5;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-align: center;
 }
 
@@ -268,17 +383,18 @@ const isDark = useDark()
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  background: linear-gradient(135deg, var(--accent-from) 0%, var(--accent-to) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
-  opacity: 0.9;
-  margin-bottom: 2rem;
+  font-size: 1.15rem;
+  opacity: 0.85;
+  margin-bottom: 0;
   line-height: 1.6;
+  text-align: center;
 }
 
 .hero-visual {
@@ -360,6 +476,92 @@ const isDark = useDark()
   }
 }
 
+/* ========== 子应用入口卡片 ========== */
+.apps-section {
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: white;
+}
+
+.section-header h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.section-header p {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 1rem;
+}
+
+.apps-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.app-entry-card {
+  position: relative;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.app-entry-card:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.app-entry-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.app-entry-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.app-entry-path {
+  margin: 0;
+  opacity: 0.6;
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+}
+
+.app-entry-arrow {
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.app-entry-card:hover .app-entry-arrow {
+  opacity: 0.8;
+  right: 1.25rem;
+}
+
+/* ========== 功能演示区域 ========== */
 .features-section {
   padding: 4rem 2rem;
   background: rgba(255, 255, 255, 0.05);
@@ -389,7 +591,7 @@ const isDark = useDark()
 .card-header {
   padding: 2rem 2rem 1rem;
   text-align: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--theme-from) 0%, var(--theme-to) 100%);
   color: white;
 }
 
@@ -437,7 +639,7 @@ const isDark = useDark()
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--theme-from) 0%, var(--theme-to) 100%);
   border-radius: 8px;
   color: white;
 }
@@ -489,9 +691,10 @@ const isDark = useDark()
   font-weight: 500;
 }
 
+/* ========== 响应式 ========== */
 @media (max-width: 768px) {
   .hero-section {
-    padding: 8rem 2rem 4rem;
+    padding: 4rem 2rem;
   }
 
   .hero-content {
@@ -521,14 +724,6 @@ const isDark = useDark()
     height: 70px;
   }
 
-  .nav-container {
-    padding: 0 1rem;
-  }
-
-  .nav-brand h1 {
-    font-size: 1.25rem;
-  }
-
   .demo-grid {
     grid-template-columns: 1fr;
   }
@@ -536,6 +731,18 @@ const isDark = useDark()
   .env-row {
     grid-template-columns: 1fr;
     gap: 0.5rem;
+  }
+
+  .apps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .role-badge {
+    font-size: 0.75rem;
+  }
+
+  .mode-info {
+    justify-content: center;
   }
 }
 </style>
