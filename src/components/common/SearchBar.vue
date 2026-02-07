@@ -1,9 +1,5 @@
 <script setup>
 const props = defineProps({
-  model: {
-    type: Object,
-    default: () => ({}),
-  },
   fields: {
     type: Array,
     default: () => [],
@@ -20,17 +16,22 @@ const props = defineProps({
 
 const emit = defineEmits(['search', 'reset'])
 
-const onSearch = () => {
-  emit('search', props.model)
+const model = defineModel({
+  type: Object,
+  default: () => ({}),
+})
+
+function onSearch() {
+  emit('search', model.value)
 }
 
-const onReset = () => {
+function onReset() {
   emit('reset')
 }
 </script>
 
 <template>
-  <el-form :model="props.model" :label-width="props.labelWidth" inline>
+  <el-form :model="model" :label-width="props.labelWidth" inline>
     <el-form-item
       v-for="field in props.fields"
       :key="field.prop"
@@ -38,7 +39,7 @@ const onReset = () => {
     >
       <component
         :is="field.component || 'el-input'"
-        v-model="props.model[field.prop]"
+        v-model="model[field.prop]"
         v-bind="field.componentProps"
       >
         <template v-if="field.options" #default>
