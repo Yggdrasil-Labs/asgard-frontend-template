@@ -21,8 +21,10 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
     "@vueuse/core": "^14.1.0",
     "axios": "^1.13.3",
+    "element-plus": "^2.11.2",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
     "vue": "^3.5.27",
@@ -42,6 +44,7 @@
     "modern-normalize": "^3.0.1",
     "sass": "^1.97.3",
     "unplugin-auto-import": "^21.0.0",
+    "unplugin-icons": "^22.2.0",
     "unplugin-vue-components": "^31.0.0",
     "unplugin-vue-router": "^0.19.2",
     "vite": "^7.3.1"
