@@ -64,7 +64,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:pagination', 'sort-change'])
+const emit = defineEmits(['update:pagination', 'sortChange'])
 
 const visibleMap = ref({})
 const normalizedColumns = computed(() => props.columns.map(column => ({
@@ -74,9 +74,9 @@ const normalizedColumns = computed(() => props.columns.map(column => ({
 
 watch(
   () => props.columns,
-  columns => {
+  (columns) => {
     const nextVisible = {}
-    columns.forEach(column => {
+    columns.forEach((column) => {
       const key = column.prop || column.label
       nextVisible[key] = column.hidden !== true
     })
@@ -113,15 +113,15 @@ const tableData = computed(() => {
   return props.data
 })
 
-const handleSortChange = payload => {
-  emit('sort-change', payload)
+function handleSortChange(payload) {
+  emit('sortChange', payload)
 }
 
-const handlePageChange = page => {
+function handlePageChange(page) {
   emit('update:pagination', { ...props.pagination, page })
 }
 
-const handleSizeChange = pageSize => {
+function handleSizeChange(pageSize) {
   emit('update:pagination', { ...props.pagination, page: 1, pageSize })
 }
 </script>

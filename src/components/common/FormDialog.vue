@@ -1,9 +1,5 @@
 <script setup>
 const props = defineProps({
-  model: {
-    type: Object,
-    default: () => ({}),
-  },
   rules: {
     type: Object,
     default: () => ({}),
@@ -26,22 +22,27 @@ const props = defineProps({
   },
 })
 
-const visible = defineModel('visible', { type: Boolean, default: false })
 const emit = defineEmits(['submit', 'cancel'])
 
-const onCancel = () => {
+const model = defineModel({
+  type: Object,
+  default: () => ({}),
+})
+
+const visible = defineModel('visible', { type: Boolean, default: false })
+function onCancel() {
   visible.value = false
   emit('cancel')
 }
 
-const onSubmit = () => {
-  emit('submit', props.model)
+function onSubmit() {
+  emit('submit', model.value)
 }
 </script>
 
 <template>
   <el-dialog v-model="visible" :title="props.title" :width="props.width">
-    <el-form :model="props.model" :rules="props.rules" label-width="100px">
+    <el-form :model="model" :rules="props.rules" label-width="100px">
       <el-form-item
         v-for="field in props.fields"
         :key="field.prop"
@@ -50,7 +51,7 @@ const onSubmit = () => {
       >
         <component
           :is="field.component || 'el-input'"
-          v-model="props.model[field.prop]"
+          v-model="model[field.prop]"
           v-bind="field.componentProps"
         >
           <template v-if="field.options" #default>
