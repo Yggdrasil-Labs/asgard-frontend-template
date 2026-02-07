@@ -124,20 +124,12 @@ function openAddDialog() {
     <div class="demo-header">
       <h1>公共组件演示</h1>
       <p class="demo-desc">
-        本页展示 CommonTable、SearchBar、FormDialog、HelloWorld、LanguageSwitcher 等公共组件的用法与效果。
+        本页展示 CommonTable、SearchBar、FormDialog、LanguageSwitcher 等公共组件的用法与效果。
       </p>
-      <div class="demo-header-actions">
-        <LanguageSwitcher />
-      </div>
     </div>
 
     <div class="demo-section">
-      <h2>1. HelloWorld</h2>
-      <HelloWorld msg="公共组件演示页" />
-    </div>
-
-    <div class="demo-section">
-      <h2>2. SearchBar 搜索栏</h2>
+      <h2>1. SearchBar 搜索栏</h2>
       <SearchBar
         v-model="searchModel"
         :fields="searchFields"
@@ -148,7 +140,7 @@ function openAddDialog() {
     </div>
 
     <div class="demo-section">
-      <h2>3. CommonTable 表格</h2>
+      <h2>2. CommonTable 表格</h2>
       <div class="table-actions">
         <el-button type="primary" @click="openAddDialog">
           新增
@@ -173,7 +165,7 @@ function openAddDialog() {
     </div>
 
     <div class="demo-section">
-      <h2>4. FormDialog 表单弹窗</h2>
+      <h2>3. FormDialog 表单弹窗</h2>
       <el-button type="primary" @click="openAddDialog">
         打开表单弹窗
       </el-button>
@@ -215,12 +207,6 @@ function openAddDialog() {
     font-size: 0.95rem;
     color: #64748b;
     line-height: 1.5;
-  }
-
-  .demo-header-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
   }
 }
 

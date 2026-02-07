@@ -8,57 +8,59 @@ const {
   supportedLocales,
 } = useI18nHelper()
 
-function handleLanguageChange(event) {
-  const target = event.target
-  const newLocale = target.value
-
-  if (newLocale !== currentLocale.value) {
-    switchLocale(newLocale)
-    console.log(`Language changed to: ${newLocale}`)
+function handleCommand(locale) {
+  if (locale !== currentLocale.value) {
+    switchLocale(locale)
   }
 }
 </script>
 
 <template>
-  <div class="language-switcher">
-    <select
-      :value="currentLocale"
-      class="language-select"
-      @change="handleLanguageChange"
-    >
-      <option
-        v-for="locale in supportedLocales"
-        :key="locale"
-        :value="locale"
-      >
-        {{ getLocaleDisplayName(locale) }}
-      </option>
-    </select>
-  </div>
+  <el-dropdown trigger="click" @command="handleCommand">
+    <el-button class="language-switcher-btn" size="default">
+      <el-icon>
+        <i-ep-flag />
+      </el-icon>
+      <span class="language-switcher-label">{{ getLocaleDisplayName(currentLocale) }}</span>
+      <el-icon class="el-icon--right">
+        <i-ep-arrow-down />
+      </el-icon>
+    </el-button>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item
+          v-for="locale in supportedLocales"
+          :key="locale"
+          :command="locale"
+          :class="{ 'is-active': currentLocale === locale }"
+        >
+          {{ getLocaleDisplayName(locale) }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
 </template>
 
 <style scoped>
-.language-switcher {
-  display: inline-block;
+.language-switcher-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.language-select {
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background-color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
+.language-switcher-label {
+  max-width: 4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.language-select:hover {
-  border-color: #9ca3af;
+.el-icon--right {
+  margin-left: 4px;
 }
 
-.language-select:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+:deep(.el-dropdown-menu__item.is-active) {
+  color: var(--el-color-primary);
+  font-weight: 500;
 }
 </style>

@@ -1,6 +1,7 @@
 import path from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 import Icons from 'unplugin-icons/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
@@ -30,6 +31,11 @@ export default defineConfig(({ mode, command }) => {
         dirs: ['src/components'],
         resolvers: [
           ElementPlusResolver(),
+          IconsResolver({
+            prefix: 'i',
+            alias: { ep: 'ep' },
+            enabledCollections: ['ep'],
+          }),
         ],
         include: [/\.vue$/, /\.vue\?vue/],
         exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
@@ -50,6 +56,8 @@ export default defineConfig(({ mode, command }) => {
       }),
       Icons({
         autoInstall: true,
+        compiler: 'vue3',
+        defaultClass: 'app-icon',
       }),
     ].filter(Boolean),
     css: {

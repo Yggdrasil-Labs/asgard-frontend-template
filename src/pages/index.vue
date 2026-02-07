@@ -9,21 +9,6 @@ const isDark = useDark()
 
 <template>
   <div class="home-page">
-    <!-- 导航栏 -->
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-brand">
-          <h1>Asgard Frontend</h1>
-        </div>
-        <div class="nav-actions">
-          <RouterLink to="/components-demo" class="nav-link">
-            公共组件演示
-          </RouterLink>
-          <LanguageSwitcher />
-        </div>
-      </div>
-    </nav>
-
     <!-- Hero 区域 -->
     <section class="hero-section">
       <div class="hero-content">
@@ -188,62 +173,13 @@ const isDark = useDark()
 <style lang="scss" scoped>
 .home-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #fff;
   position: relative;
   overflow-x: hidden;
 }
 
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 1rem 0;
-}
-
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav-brand h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.nav-link {
-  color: #667eea;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-}
-
-.nav-link:hover {
-  text-decoration: underline;
-}
-
 .hero-section {
-  padding: 10rem 2rem 6rem;
+  padding: 4rem 2rem 6rem;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -260,7 +196,7 @@ const isDark = useDark()
 }
 
 .hero-text {
-  color: white;
+  color: #1e293b;
 }
 
 .hero-title {
@@ -279,7 +215,7 @@ const isDark = useDark()
   font-weight: 400;
   opacity: 0.9;
   margin-bottom: 0.5rem;
-  color: white;
+  color: #64748b;
 }
 
 .gradient-text {
@@ -291,7 +227,7 @@ const isDark = useDark()
 
 .hero-subtitle {
   font-size: 1.25rem;
-  opacity: 0.9;
+  color: #64748b;
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -307,13 +243,12 @@ const isDark = useDark()
 }
 
 .floating-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 1rem;
   text-align: center;
-  color: white;
+  color: #334155;
   animation: float 6s ease-in-out infinite;
   width: 120px;
   height: 100px;
@@ -377,8 +312,7 @@ const isDark = useDark()
 
 .features-section {
   padding: 4rem 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  background: #fff;
 }
 
 .container {
@@ -404,8 +338,8 @@ const isDark = useDark()
 .card-header {
   padding: 2rem 2rem 1rem;
   text-align: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #f1f5f9;
+  color: #334155;
 }
 
 .card-header .card-icon {
@@ -534,14 +468,6 @@ const isDark = useDark()
     padding: 0.5rem;
     width: 80px;
     height: 70px;
-  }
-
-  .nav-container {
-    padding: 0 1rem;
-  }
-
-  .nav-brand h1 {
-    font-size: 1.25rem;
   }
 
   .demo-grid {

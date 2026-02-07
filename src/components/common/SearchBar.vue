@@ -6,7 +6,7 @@ const props = defineProps({
   },
   labelWidth: {
     type: String,
-    default: '88px',
+    default: 'auto',
   },
   loading: {
     type: Boolean,
@@ -31,7 +31,7 @@ function onReset() {
 </script>
 
 <template>
-  <el-form :model="model" :label-width="props.labelWidth" inline>
+  <el-form class="search-bar" :model="model" :label-width="props.labelWidth" inline>
     <el-form-item
       v-for="field in props.fields"
       :key="field.prop"
@@ -72,3 +72,18 @@ function onReset() {
     </el-form-item>
   </el-form>
 </template>
+
+<style scoped>
+.search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.search-bar :deep(.el-form-item) {
+  margin-bottom: 0;
+  margin-right: 0;
+}
+</style>
