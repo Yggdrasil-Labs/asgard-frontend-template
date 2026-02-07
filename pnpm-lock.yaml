@@ -8,12 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@element-plus/icons-vue':
+        specifier: ^2.3.2
+        version: 2.3.2
       '@vueuse/core':
         specifier: ^14.1.0
         version: 14.1.0(vue@3.5.27(typescript@5.9.3))
       axios:
         specifier: ^1.13.3
         version: 1.13.3
+      element-plus:
+        specifier: ^2.11.2
+        version: 2.11.2
       pinia:
         specifier: ^3.0.4
         version: 3.0.4(typescript@5.9.3)(vue@3.5.27(typescript@5.9.3))
@@ -66,6 +72,9 @@ importers:
       unplugin-auto-import:
         specifier: ^21.0.0
         version: 21.0.0(@vueuse/core@14.1.0(vue@3.5.27(typescript@5.9.3)))
+      unplugin-icons:
+        specifier: ^22.2.0
+        version: 22.2.0
       unplugin-vue-components:
         specifier: ^31.0.0
         version: 31.0.0(vue@3.5.27(typescript@5.9.3))
@@ -138,6 +147,15 @@ packages:
 
   '@antfu/install-pkg@1.1.0':
     resolution: {integrity: sha512-MGQsmw10ZyI+EJo45CdSER4zEb+p31LpDAFp2Z3gkSd1yqVZGi0Ebx++YTEMonJy4oChEMLsxZ64j8FH6sSqtQ==}
+
+  '@element-plus/icons-vue@2.3.2':
+    resolution: {integrity: ''}
+
+  'element-plus@2.11.2':
+    resolution: {integrity: ''}
+
+  'unplugin-icons@22.2.0':
+    resolution: {integrity: ''}
 
   '@asamuzakjp/css-color@4.1.1':
     resolution: {integrity: sha512-B0Hv6G3gWGMn0xKJ0txEi/jM5iFpT3MfDxmhZFb4W047GvytCf1DHQ1D69W3zHI4yWe2aTZAA0JnbMZ7Xc8DuQ==}
