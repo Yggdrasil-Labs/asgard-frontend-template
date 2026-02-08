@@ -50,7 +50,7 @@ const tablePagination = ref({
 })
 const tableColumns = [
   { prop: 'name', label: '名称', minWidth: 120 },
-  { prop: 'status', label: '状态', width: 80 },
+  { prop: 'status', label: '状态', width: 80, slot: 'status' },
   { prop: 'date', label: '日期', width: 120 },
 ]
 const tableData = ref([
@@ -153,6 +153,11 @@ function openAddDialog() {
         :pagination="tablePagination"
         @update:pagination="onPaginationUpdate"
       >
+        <template #status="{ row }">
+          <el-tag :type="row.status === '启用' ? 'success' : 'danger'">
+            {{ row.status }}
+          </el-tag>
+        </template>
         <template #action="{ row }">
           <el-button type="primary" link size="small" @click="handleEdit(row)">
             编辑

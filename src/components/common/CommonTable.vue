@@ -141,7 +141,7 @@ function handleSizeChange(pageSize) {
       @sort-change="handleSortChange"
     >
       <el-table-column v-if="props.showSelection" type="selection" width="48" fixed="left" />
-      <el-table-column v-if="props.showIndex" type="index" width="56" label="#" fixed="left" />
+      <el-table-column v-if="props.showIndex" type="index" width="56" label="#" fixed="left" align="center" />
       <el-table-column
         v-for="column in displayedColumns"
         :key="column.key"
@@ -162,6 +162,7 @@ function handleSizeChange(pageSize) {
         fixed="right"
         :label="props.actionLabel"
         :width="props.actionWidth"
+        align="center"
       >
         <template v-if="props.showColumnSetting" #header>
           <div class="common-table__action-header">
