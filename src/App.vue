@@ -1,14 +1,19 @@
 <script setup>
 import AppNavbar from '@components/AppNavbar.vue'
+import { useElementPlusLocale } from '@/composables/useElementPlusLocale'
+
+const { elementLocale } = useElementPlusLocale()
 </script>
 
 <template>
-  <div class="app">
-    <AppNavbar />
-    <main class="app__main">
-      <RouterView />
-    </main>
-  </div>
+  <el-config-provider :locale="elementLocale">
+    <div class="app">
+      <AppNavbar />
+      <main class="app__main">
+        <RouterView />
+      </main>
+    </div>
+  </el-config-provider>
 </template>
 
 <style lang="scss" scoped>

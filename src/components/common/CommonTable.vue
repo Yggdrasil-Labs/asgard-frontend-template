@@ -128,21 +128,7 @@ function handleSizeChange(pageSize) {
 
 <template>
   <div class="common-table">
-    <div v-if="props.showColumnSetting" class="common-table__toolbar">
-      <el-dropdown trigger="click">
-        <el-button text>
-          列设置
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu class="common-table__dropdown">
-            <el-dropdown-item v-for="column in normalizedColumns" :key="column.key">
-              <el-checkbox v-model="visibleMap[column.key]">
-                {{ column.label }}
-              </el-checkbox>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+    <div v-if="$slots.toolbar" class="common-table__toolbar">
       <slot name="toolbar" />
     </div>
     <el-table
@@ -177,6 +163,33 @@ function handleSizeChange(pageSize) {
         :label="props.actionLabel"
         :width="props.actionWidth"
       >
+        <template v-if="props.showColumnSetting" #header>
+          <div class="common-table__action-header">
+            <span>{{ props.actionLabel }}</span>
+            <el-popover
+              trigger="click"
+              placement="bottom-end"
+              :width="180"
+              popper-class="common-table__column-popover"
+            >
+              <template #reference>
+                <el-icon class="common-table__setting-icon" title="列设置">
+                  <i-ep-setting />
+                </el-icon>
+              </template>
+              <div class="common-table__column-list">
+                <el-checkbox
+                  v-for="column in normalizedColumns"
+                  :key="column.key"
+                  v-model="visibleMap[column.key]"
+                  class="common-table__column-item"
+                >
+                  {{ column.label }}
+                </el-checkbox>
+              </div>
+            </el-popover>
+          </div>
+        </template>
         <template #default="scope">
           <slot name="action" v-bind="scope" />
         </template>
@@ -212,8 +225,31 @@ function handleSizeChange(pageSize) {
   justify-content: space-between;
 }
 
-.common-table__dropdown {
-  padding: 4px 8px;
+.common-table__action-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.common-table__setting-icon {
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--el-text-color-secondary);
+  transition: color 0.2s;
+}
+
+.common-table__setting-icon:hover {
+  color: var(--el-color-primary);
+}
+
+.common-table__column-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.common-table__column-item {
+  margin-right: 0;
 }
 
 .common-table__pagination {
