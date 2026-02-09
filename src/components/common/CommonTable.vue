@@ -67,6 +67,7 @@ const props = defineProps({
 const emit = defineEmits(['update:pagination', 'sortChange'])
 
 const visibleMap = ref({})
+const sortState = ref({ prop: null, order: null })
 const normalizedColumns = computed(() => props.columns.map(column => ({
   ...column,
   key: column.prop || column.label,
@@ -91,14 +92,14 @@ const sortedData = computed(() => {
   if (props.sortMode !== 'frontend') {
     return props.data
   }
-  const active = normalizedColumns.value.find(column => column.sortOrder)
-  if (!active || !active.prop || !active.sortOrder) {
+  const { prop, order } = sortState.value
+  if (!prop || !order) {
     return props.data
   }
-  const direction = active.sortOrder === 'ascending' ? 1 : -1
+  const direction = order === 'ascending' ? 1 : -1
   return [...props.data].sort((left, right) => {
-    const leftValue = left?.[active.prop]
-    const rightValue = right?.[active.prop]
+    const leftValue = left?.[prop]
+    const rightValue = right?.[prop]
     if (leftValue === rightValue) {
       return 0
     }
@@ -114,6 +115,9 @@ const tableData = computed(() => {
 })
 
 function handleSortChange(payload) {
+  if (props.sortMode === 'frontend' && payload) {
+    sortState.value = { prop: payload.prop, order: payload.order || null }
+  }
   emit('sortChange', payload)
 }
 

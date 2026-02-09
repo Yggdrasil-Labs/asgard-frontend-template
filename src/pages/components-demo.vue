@@ -6,7 +6,13 @@ definePage({
 })
 
 // 搜索栏
-const searchModel = ref({ keyword: '', status: '' })
+const searchModel = ref({
+  keyword: '',
+  status: '',
+  type: '',
+  creator: '',
+  dateRange: null,
+})
 const searchLoading = ref(false)
 const searchFields = [
   {
@@ -25,6 +31,36 @@ const searchFields = [
       { label: '禁用', value: '0' },
     ],
   },
+  {
+    prop: 'type',
+    label: '类型',
+    component: 'el-select',
+    componentProps: { placeholder: '请选择', clearable: true, style: 'width: 120px' },
+    options: [
+      { label: '全部', value: '' },
+      { label: '类型A', value: 'A' },
+      { label: '类型B', value: 'B' },
+      { label: '类型C', value: 'C' },
+    ],
+  },
+  {
+    prop: 'creator',
+    label: '创建人',
+    componentProps: { placeholder: '请输入创建人', clearable: true },
+  },
+  {
+    prop: 'dateRange',
+    label: '创建日期',
+    component: 'el-date-picker',
+    componentProps: {
+      type: 'daterange',
+      rangeSeparator: '至',
+      startPlaceholder: '开始日期',
+      endPlaceholder: '结束日期',
+      valueFormat: 'YYYY-MM-DD',
+      style: 'width: 240px',
+    },
+  },
 ]
 
 function onSearch() {
@@ -36,7 +72,13 @@ function onSearch() {
 }
 
 function onReset() {
-  searchModel.value = { keyword: '', status: '' }
+  searchModel.value = {
+    keyword: '',
+    status: '',
+    type: '',
+    creator: '',
+    dateRange: null,
+  }
 }
 
 // 表格
@@ -51,7 +93,7 @@ const tablePagination = ref({
 const tableColumns = [
   { prop: 'name', label: '名称', minWidth: 120 },
   { prop: 'status', label: '状态', width: 80, slot: 'status' },
-  { prop: 'date', label: '日期', width: 120 },
+  { prop: 'date', label: '日期', width: 120, sortable: true },
 ]
 const tableData = ref([
   { id: 1, name: '示例项目 A', status: '启用', date: '2025-02-01' },
@@ -151,6 +193,7 @@ function openAddDialog() {
         :data="tableData"
         :loading="tableLoading"
         :pagination="tablePagination"
+        sort-mode="frontend"
         @update:pagination="onPaginationUpdate"
       >
         <template #status="{ row }">
