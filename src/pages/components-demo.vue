@@ -14,6 +14,8 @@ const searchModel = ref({
   dateRange: null,
 })
 const searchLoading = ref(false)
+/** 表格查询条件，点击「查询」时同步 searchModel，ProTable 据此重新请求 */
+const tableParams = ref({})
 const searchItems = [
   {
     prop: 'keyword',
@@ -64,10 +66,10 @@ const searchItems = [
 
 function onSearch() {
   searchLoading.value = true
+  tableParams.value = { ...searchModel.value }
   setTimeout(() => {
     searchLoading.value = false
-    console.log('搜索', searchModel.value)
-  }, 500)
+  }, 300)
 }
 
 function onReset() {
@@ -75,28 +77,36 @@ function onReset() {
   console.log('已重置', searchModel.value)
 }
 
-// 表格
-const tableLoading = ref(false)
-const tablePagination = ref({
-  page: 1,
-  pageSize: 10,
-  total: 33,
-  layout: 'total, sizes, prev, pager, next, jumper',
-  pageSizes: [10, 20, 50],
-})
+// 表格（ProTable：request 驱动，params 为查询条件）
 const tableColumns = [
   { prop: 'name', label: '名称', minWidth: 120 },
   { prop: 'status', label: '状态', width: 80, slot: 'status' },
   { prop: 'date', label: '日期', width: 120, sortable: true },
 ]
-const tableData = ref([
+const mockList = [
   { id: 1, name: '示例项目 A', status: '启用', date: '2025-02-01' },
   { id: 2, name: '示例项目 B', status: '禁用', date: '2025-02-02' },
   { id: 3, name: '示例项目 C', status: '启用', date: '2025-02-03' },
-])
-
-function onPaginationUpdate(val) {
-  tablePagination.value = val
+  { id: 4, name: '示例项目 D', status: '启用', date: '2025-02-04' },
+  { id: 5, name: '示例项目 E', status: '禁用', date: '2025-02-05' },
+]
+async function tableRequest({ page, pageSize, sortField, sortOrder, keyword, status }) {
+  await new Promise(r => setTimeout(r, 300))
+  let list = [...mockList]
+  if (keyword)
+    list = list.filter(item => item.name.includes(keyword))
+  if (status)
+    list = list.filter(item => (status === '1' ? item.status === '启用' : item.status === '禁用'))
+  if (sortField === 'date' && sortOrder) {
+    list.sort((a, b) => {
+      const d = sortOrder === 'asc' ? 1 : -1
+      return a.date > b.date ? d : -d
+    })
+  }
+  const start = (page - 1) * pageSize
+  const total = list.length
+  const pageList = pageSize > 0 ? list.slice(start, start + pageSize) : list
+  return { list: pageList, total }
 }
 
 // 表单弹窗
@@ -160,7 +170,7 @@ function openAddDialog() {
     <div class="demo-header">
       <h1>公共组件演示</h1>
       <p class="demo-desc">
-        本页展示 CommonTable、SearchBar、FormDialog、LanguageSwitcher 等公共组件的用法与效果。
+        本页展示 ProTable、SearchBar、FormDialog、LanguageSwitcher 等公共组件的用法与效果。
       </p>
     </div>
 
@@ -176,20 +186,23 @@ function openAddDialog() {
     </div>
 
     <div class="demo-section">
-      <h2>2. CommonTable 表格</h2>
+      <h2>2. ProTable 表格</h2>
       <div class="table-actions">
         <el-button type="primary" @click="openAddDialog">
           新增
         </el-button>
       </div>
-      <CommonTable
+      <ProTable
         :columns="tableColumns"
-        :data="tableData"
-        :loading="tableLoading"
-        :pagination="tablePagination"
-        sort-mode="frontend"
-        @update:pagination="onPaginationUpdate"
+        :request="tableRequest"
+        :params="tableParams"
+        :pagination="{ pageSizes: [10, 20, 50] }"
+        show-selection
+        show-index
       >
+        <template #toolbar>
+          <span class="pro-table-toolbar-tip">工具栏插槽示例</span>
+        </template>
         <template #status="{ row }">
           <el-tag :type="row.status === '启用' ? 'success' : 'danger'">
             {{ row.status }}
@@ -203,7 +216,7 @@ function openAddDialog() {
             删除
           </el-button>
         </template>
-      </CommonTable>
+      </ProTable>
     </div>
 
     <div class="demo-section">
@@ -265,5 +278,10 @@ function openAddDialog() {
 
 .table-actions {
   margin-bottom: 0.75rem;
+}
+
+.pro-table-toolbar-tip {
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
 }
 </style>
