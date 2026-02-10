@@ -14,17 +14,20 @@ const searchModel = ref({
   dateRange: null,
 })
 const searchLoading = ref(false)
-const searchFields = [
+const searchItems = [
   {
     prop: 'keyword',
     label: '关键词',
-    componentProps: { placeholder: '请输入关键词', clearable: true },
+    type: 'input',
+    placeholder: '请输入关键词',
+    componentProps: { clearable: true },
   },
   {
     prop: 'status',
     label: '状态',
-    component: 'el-select',
-    componentProps: { placeholder: '请选择', clearable: true, style: 'width: 120px' },
+    type: 'select',
+    placeholder: '请选择',
+    componentProps: { clearable: true, style: 'width: 120px' },
     options: [
       { label: '全部', value: '' },
       { label: '启用', value: '1' },
@@ -34,8 +37,9 @@ const searchFields = [
   {
     prop: 'type',
     label: '类型',
-    component: 'el-select',
-    componentProps: { placeholder: '请选择', clearable: true, style: 'width: 120px' },
+    type: 'select',
+    placeholder: '请选择',
+    componentProps: { clearable: true, style: 'width: 120px' },
     options: [
       { label: '全部', value: '' },
       { label: '类型A', value: 'A' },
@@ -46,20 +50,15 @@ const searchFields = [
   {
     prop: 'creator',
     label: '创建人',
-    componentProps: { placeholder: '请输入创建人', clearable: true },
+    type: 'input',
+    placeholder: '请输入创建人',
+    componentProps: { clearable: true },
   },
   {
     prop: 'dateRange',
     label: '创建日期',
-    component: 'el-date-picker',
-    componentProps: {
-      type: 'daterange',
-      rangeSeparator: '至',
-      startPlaceholder: '开始日期',
-      endPlaceholder: '结束日期',
-      valueFormat: 'YYYY-MM-DD',
-      style: 'width: 240px',
-    },
+    type: 'daterange',
+    componentProps: { style: 'width: 240px' },
   },
 ]
 
@@ -72,13 +71,8 @@ function onSearch() {
 }
 
 function onReset() {
-  searchModel.value = {
-    keyword: '',
-    status: '',
-    type: '',
-    creator: '',
-    dateRange: null,
-  }
+  // SearchBar 内部已清空 model，此处可做重置后的副作用（如重新请求）
+  console.log('已重置', searchModel.value)
 }
 
 // 表格
@@ -174,7 +168,7 @@ function openAddDialog() {
       <h2>1. SearchBar 搜索栏</h2>
       <SearchBar
         v-model="searchModel"
-        :fields="searchFields"
+        :items="searchItems"
         :loading="searchLoading"
         @search="onSearch"
         @reset="onReset"

@@ -1,106 +1,134 @@
 <script setup>
-import { useElementSize } from '@vueuse/core'
-
 const props = defineProps({
-  fields: {
-    type: Array,
-    default: () => [],
-  },
-  labelWidth: {
-    type: String,
-    default: 'auto',
-  },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  /** 各断点下首行展示的字段数量 [窄, 中, 宽]，根据容器宽度自动选取 */
-  visibleCounts: {
-    type: Array,
-    default: () => [1, 2, 3, 4],
-  },
+  /** 搜索项配置列表 */
+  items: { type: Array, required: true },
+  /** 首行展示的搜索项数量，多余的折叠到「更多」；展开时在第二行展示，按钮始终在第一行 */
+  visibleCount: { type: Number, default: 2 },
+  /** 表单项标签宽度 */
+  labelWidth: { type: String, default: 'auto' },
+  /** 查询按钮 loading 状态 */
+  loading: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['search', 'reset'])
+const emit = defineEmits(['search', 'reset', 'change'])
 
 const model = defineModel({
   type: Object,
-  default: () => ({}),
+  required: true,
 })
-
-const containerRef = ref(null)
-const { width: containerWidth } = useElementSize(containerRef)
 
 const expanded = ref(false)
 
-const visibleCount = computed(() => {
-  const w = containerWidth.value || 9999
-  const counts = props.visibleCounts
-  if (w < 480)
-    return counts[0] ?? 1
-  if (w < 640)
-    return counts[1] ?? 2
-  if (w < 880)
-    return counts[2] ?? 3
-  if (w < 1100)
-    return counts[3] ?? 4
-  return Math.max(counts[4] ?? 4, props.fields.length)
-})
+/** 仅显示 visible !== false 的项 */
+const visibleItems = computed(() =>
+  props.items.filter(item => item.visible !== false),
+)
 
-const primaryFields = computed(() =>
-  props.fields.slice(0, visibleCount.value),
+const count = computed(() => Math.max(0, Number(props.visibleCount) || 2))
+
+const primaryItems = computed(() =>
+  visibleItems.value.slice(0, count.value),
 )
-const moreFields = computed(() =>
-  props.fields.slice(visibleCount.value),
+const moreItems = computed(() =>
+  visibleItems.value.slice(count.value),
 )
-const hasMore = computed(() => moreFields.value.length > 0)
+const hasMore = computed(() => moreItems.value.length > 0)
 
 function onSearch() {
-  emit('search', model.value)
+  emit('search', { ...model.value })
 }
 
 function onReset() {
+  visibleItems.value.forEach((item) => {
+    model.value[item.prop] = undefined
+  })
   emit('reset')
+}
+
+function onItemChange(prop, value) {
+  emit('change', { prop, value })
 }
 
 function toggleMore() {
   expanded.value = !expanded.value
 }
+
+/** 合并 placeholder 与 componentProps，供控件使用 */
+function getControlProps(item) {
+  const base = item.placeholder != null
+    ? { placeholder: item.placeholder, ...item.componentProps }
+    : { ...item.componentProps }
+  return base
+}
 </script>
 
 <template>
-  <div ref="containerRef" class="search-bar">
+  <div class="search-bar">
     <el-form class="search-bar__form" :model="model" :label-width="props.labelWidth" inline>
       <div class="search-bar__row">
-        <template v-for="field in primaryFields" :key="field.prop">
-          <el-form-item :label="field.label">
+        <template v-for="item in primaryItems" :key="item.prop">
+          <el-form-item v-if="item.visible !== false" :label="item.label">
+            <!-- custom：使用插槽，插槽名为 prop -->
+            <slot
+              v-if="item.type === 'custom'"
+              :name="item.prop"
+              :item="item"
+              :model="model"
+            />
+            <!-- input -->
+            <el-input
+              v-else-if="item.type === 'input'"
+              v-model="model[item.prop]"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
+            />
+            <!-- select -->
             <el-select
-              v-if="field.options || field.component === 'el-select'"
-              v-model="model[field.prop]"
-              v-bind="field.componentProps"
+              v-else-if="item.type === 'select'"
+              v-model="model[item.prop]"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
             >
               <el-option
-                v-for="option in (field.options || [])"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
+                v-for="opt in (item.options ?? [])"
+                :key="String(opt.value)"
+                :label="opt.label"
+                :value="opt.value"
               />
             </el-select>
-            <el-input
-              v-else-if="!field.component || field.component === 'el-input'"
-              v-model="model[field.prop]"
-              v-bind="field.componentProps"
-            />
+            <!-- date -->
             <el-date-picker
-              v-else-if="field.component === 'el-date-picker'"
-              v-model="model[field.prop]"
-              v-bind="field.componentProps"
+              v-else-if="item.type === 'date'"
+              v-model="model[item.prop]"
+              type="date"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
             />
-            <component
-              :is="field.component"
+            <!-- daterange -->
+            <el-date-picker
+              v-else-if="item.type === 'daterange'"
+              v-model="model[item.prop]"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="YYYY-MM-DD"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
+            />
+            <!-- number -->
+            <el-input-number
+              v-else-if="item.type === 'number'"
+              v-model="model[item.prop]"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
+            />
+            <!-- 未指定 type 时回退为 input -->
+            <el-input
               v-else
-              v-model="model[field.prop]"
-              v-bind="field.componentProps"
+              v-model="model[item.prop]"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
             />
           </el-form-item>
         </template>
@@ -123,35 +151,62 @@ function toggleMore() {
         </el-form-item>
       </div>
       <div v-show="expanded && hasMore" class="search-bar__more">
-        <template v-for="field in moreFields" :key="field.prop">
-          <el-form-item :label="field.label">
+        <template v-for="item in moreItems" :key="item.prop">
+          <el-form-item v-if="item.visible !== false" :label="item.label">
+            <slot
+              v-if="item.type === 'custom'"
+              :name="item.prop"
+              :item="item"
+              :model="model"
+            />
+            <el-input
+              v-else-if="item.type === 'input'"
+              v-model="model[item.prop]"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
+            />
             <el-select
-              v-if="field.options || field.component === 'el-select'"
-              v-model="model[field.prop]"
-              v-bind="field.componentProps"
+              v-else-if="item.type === 'select'"
+              v-model="model[item.prop]"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
             >
               <el-option
-                v-for="option in (field.options || [])"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
+                v-for="opt in (item.options ?? [])"
+                :key="String(opt.value)"
+                :label="opt.label"
+                :value="opt.value"
               />
             </el-select>
-            <el-input
-              v-else-if="!field.component || field.component === 'el-input'"
-              v-model="model[field.prop]"
-              v-bind="field.componentProps"
+            <el-date-picker
+              v-else-if="item.type === 'date'"
+              v-model="model[item.prop]"
+              type="date"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
             />
             <el-date-picker
-              v-else-if="field.component === 'el-date-picker'"
-              v-model="model[field.prop]"
-              v-bind="field.componentProps"
+              v-else-if="item.type === 'daterange'"
+              v-model="model[item.prop]"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="YYYY-MM-DD"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
             />
-            <component
-              :is="field.component"
+            <el-input-number
+              v-else-if="item.type === 'number'"
+              v-model="model[item.prop]"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
+            />
+            <el-input
               v-else
-              v-model="model[field.prop]"
-              v-bind="field.componentProps"
+              v-model="model[item.prop]"
+              v-bind="getControlProps(item)"
+              @change="val => onItemChange(item.prop, val)"
             />
           </el-form-item>
         </template>
@@ -171,9 +226,10 @@ function toggleMore() {
   gap: 12px;
 }
 
+/* 第一行：搜索项 + 更多 + 按钮组，撑满一行；放不下时多余项在「更多」中 */
 .search-bar__row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   min-width: 0;
@@ -195,12 +251,13 @@ function toggleMore() {
   vertical-align: middle;
 }
 
+/* 展开时第二行仅展示多余搜索项，按钮仍在第一行 */
 .search-bar__more {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  padding-top: 4px;
+  padding-top: 12px;
   border-top: 1px solid var(--el-border-color-lighter);
 }
 
