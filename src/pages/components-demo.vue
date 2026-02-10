@@ -113,28 +113,10 @@ async function tableRequest({ page, pageSize, sortField, sortOrder, keyword, sta
 const dialogVisible = ref(false)
 const formSubmitLoading = ref(false)
 const formModel = ref({ name: '', status: '', remark: '' })
-const formFields = [
-  {
-    prop: 'name',
-    label: '名称',
-    componentProps: { placeholder: '请输入名称' },
-  },
-  {
-    prop: 'status',
-    label: '状态',
-    component: 'el-select',
-    componentProps: { placeholder: '请选择', style: 'width: 100%' },
-    options: [
-      { label: '启用', value: '1' },
-      { label: '禁用', value: '0' },
-    ],
-  },
-  {
-    prop: 'remark',
-    label: '备注',
-    component: 'el-input',
-    componentProps: { type: 'textarea', rows: 3, placeholder: '请输入备注' },
-  },
+const formItems = [
+  { prop: 'name', label: '名称', type: 'input', placeholder: '请输入名称', rules: [{ required: true, message: '请输入名称' }], span: 24 },
+  { prop: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ label: '启用', value: '1' }, { label: '禁用', value: '0' }], span: 24 },
+  { prop: 'remark', label: '备注', type: 'textarea', placeholder: '请输入备注', componentProps: { rows: 3 }, span: 24 },
 ]
 
 function handleEdit(row) {
@@ -163,6 +145,47 @@ function openAddDialog() {
   formModel.value = { name: '', status: '', remark: '' }
   dialogVisible.value = true
 }
+
+// ProForm 弹窗示例（三种模式：新增 / 编辑 / 查看）
+const proFormDialogVisible = ref(false)
+const proFormRef = ref(null)
+const proFormModel = ref({ name: '', status: '1', remark: '' })
+const proFormMode = ref('edit')
+const proFormItems = [
+  { prop: 'name', label: '名称', type: 'input', placeholder: '请输入名称', rules: [{ required: true, message: '请输入名称' }], span: 12 },
+  { prop: 'status', label: '状态', type: 'select', placeholder: '请选择', options: [{ label: '启用', value: '1' }, { label: '禁用', value: '0' }], span: 12 },
+  { prop: 'remark', label: '备注', type: 'textarea', placeholder: '请输入备注', span: 24 },
+]
+const proFormDialogTitle = computed(() => {
+  const t = { create: '新增', edit: '编辑', view: '查看' }
+  return t[proFormMode.value] || '表单'
+})
+function openProFormDialog(mode) {
+  proFormMode.value = mode
+  if (mode === 'create') {
+    proFormModel.value = { name: '', status: '1', remark: '' }
+  }
+  else {
+    proFormModel.value = { name: '示例数据', status: '1', remark: '这是一条示例记录' }
+  }
+  proFormDialogVisible.value = true
+}
+function onProFormSubmit(values) {
+  console.log('ProForm 提交', values)
+  proFormDialogVisible.value = false
+}
+function onProFormReset() {
+  console.log('ProForm 重置')
+}
+function closeProFormDialog() {
+  proFormDialogVisible.value = false
+}
+function proFormSubmitClick() {
+  proFormRef.value?.submit()
+}
+function proFormResetClick() {
+  proFormRef.value?.reset()
+}
 </script>
 
 <template>
@@ -170,7 +193,7 @@ function openAddDialog() {
     <div class="demo-header">
       <h1>公共组件演示</h1>
       <p class="demo-desc">
-        本页展示 ProTable、SearchBar、FormDialog、LanguageSwitcher 等公共组件的用法与效果。
+        本页展示 ProTable、SearchBar、FormDialog、ProForm、LanguageSwitcher 等公共组件的用法与效果。
       </p>
     </div>
 
@@ -228,11 +251,55 @@ function openAddDialog() {
         v-model="formModel"
         v-model:visible="dialogVisible"
         title="编辑示例"
-        :fields="formFields"
+        :items="formItems"
         :submit-loading="formSubmitLoading"
         @submit="onFormSubmit"
         @cancel="onFormCancel"
       />
+    </div>
+
+    <div class="demo-section">
+      <h2>4. ProForm 表单（弹窗三种模式）</h2>
+      <div class="demo-section-toolbar">
+        <el-button @click="openProFormDialog('create')">
+          新增
+        </el-button>
+        <el-button type="primary" @click="openProFormDialog('edit')">
+          编辑
+        </el-button>
+        <el-button @click="openProFormDialog('view')">
+          查看
+        </el-button>
+      </div>
+      <el-dialog
+        v-model="proFormDialogVisible"
+        :title="proFormDialogTitle"
+        width="560px"
+        destroy-on-close
+      >
+        <ProForm
+          ref="proFormRef"
+          v-model="proFormModel"
+          :items="proFormItems"
+          :mode="proFormMode"
+          label-width="100px"
+          @submit="onProFormSubmit"
+          @reset="onProFormReset"
+        />
+        <template #footer>
+          <el-button @click="closeProFormDialog">
+            取消
+          </el-button>
+          <template v-if="proFormMode !== 'view'">
+            <el-button @click="proFormResetClick">
+              重置
+            </el-button>
+            <el-button type="primary" @click="proFormSubmitClick">
+              提交
+            </el-button>
+          </template>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -263,6 +330,10 @@ function openAddDialog() {
     color: #64748b;
     line-height: 1.5;
   }
+}
+
+.demo-section-toolbar {
+  margin-bottom: 1rem;
 }
 
 .demo-section {
