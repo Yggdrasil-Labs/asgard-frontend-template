@@ -17,6 +17,5 @@ export interface CoreMessages {
     placeholder: Record<string, string>
   }
   navigation: Record<string, string>
-  user: Record<string, string>
   time: Record<string, string>
 }

@@ -6,12 +6,10 @@
 export const STORAGE_KEYS = {
   /** 应用语言设置 */
   LOCALE: 'locale',
-  /** 用户偏好设置 */
-  USER_PREFERENCES: 'user-preferences',
+  /** 应用偏好设置 */
+  APP_PREFERENCES: 'app-preferences',
   /** 主题设置 */
   THEME: 'theme',
-  /** 用户认证信息 */
-  AUTH_TOKEN: 'auth-token',
 } as const
 
 // 导出类型，方便 TypeScript 类型检查

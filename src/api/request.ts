@@ -94,10 +94,8 @@ request.interceptors.response.use(
         // HTTP 状态码错误处理
         switch (status) {
           case 401:
-            errorMessage = '未授权，请重新登录'
+            errorMessage = '未授权'
             errorCode = 'UNAUTHORIZED'
-            // 可以在这里添加跳转到登录页的逻辑
-            // router.push('/login')
             break
           case 403:
             errorMessage = '拒绝访问'

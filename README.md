@@ -197,7 +197,7 @@ pnpm dep:update
 
 ```bash
 # 新功能
-git commit -m "feat(scope): 添加用户登录功能"
+git commit -m "feat(scope): 添加通用模板能力"
 
 # Bug 修复
 git commit -m "fix(scope): 修复路由跳转问题"
@@ -206,13 +206,13 @@ git commit -m "fix(scope): 修复路由跳转问题"
 git commit -m "docs: 更新 README"
 
 # 代码重构
-git commit -m "refactor(scope): 重构用户状态管理"
+git commit -m "refactor(scope): 重构公共组件结构"
 
 # 性能优化
 git commit -m "perf(scope): 优化图片加载"
 
 # 测试相关
-git commit -m "test: 添加登录页面测试"
+git commit -m "test: 添加首页交互测试"
 
 # 构建相关
 git commit -m "build: 更新 Vite 配置"

@@ -1,9 +1,4 @@
 /**
  * Pinia Store 入口文件
- * 统一导出所有 Store 模块
+ * 当前模板仅保留基础 Pinia 装配，业务 Store 由接入方自行扩展。
  */
-
-export { useUserStore } from './user'
-
-// 导出类型
-export type * from '@/types/store'

@@ -129,18 +129,6 @@
     "privacy": "隐私政策",
     "terms": "服务条款"
   },
-  "user": {
-    "login": "登录",
-    "logout": "退出登录",
-    "register": "注册",
-    "profile": "个人资料",
-    "account": "账户设置",
-    "preferences": "偏好设置",
-    "notifications": "通知",
-    "messages": "消息",
-    "security": "安全设置",
-    "privacy": "隐私设置"
-  },
   "time": {
     "now": "现在",
     "today": "今天",

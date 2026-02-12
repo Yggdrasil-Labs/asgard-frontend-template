@@ -8,12 +8,6 @@ export {
   useI18nHelper,
 } from './useI18n'
 
-// Store 相关组合函数
-export {
-  useStores,
-  useUser,
-} from './useStores'
-
 // 可以在这里添加更多组合函数的导出
 // export { useTheme } from './useTheme'
 // export { useApi } from './useApi'

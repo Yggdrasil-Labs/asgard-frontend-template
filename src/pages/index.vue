@@ -1,227 +1,77 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import env from '@/config/env'
-import { useUserStore } from '@/stores'
 
-const router = useRouter()
-
-// VueUse 功能
 const { width, height } = useWindowSize()
 const { x, y } = useMouse()
 const isDark = useDark()
 
-// Pinia Stores
-const userStore = useUserStore()
-
-// 模拟登录功能
-async function handleLogin() {
-  const result = await userStore.login({
-    username: 'demo',
-    password: 'password',
-    remember: true,
-  })
-
-  if (result.success) {
-    console.log('登录成功:', result.data)
-  }
-  else {
-    console.error('登录失败:', result.message)
-  }
-}
-
-// 模拟登出功能
-async function handleLogout() {
-  const result = await userStore.logout()
-  if (result.success) {
-    console.log('登出成功')
-    // 登出成功后跳转到登录页面
-    await router.push('/login')
-  }
-  else {
-    console.error('登出失败:', result.message)
-  }
-}
-
-// 跳转到登录页面
-function goToLogin() {
-  router.push('/login')
-}
+const techStack = [
+  { icon: '🚀', name: 'Vue 3', desc: '组合式 API' },
+  { icon: '⚡', name: 'Vite', desc: '极速构建' },
+  { icon: '🛣️', name: 'Vue Router', desc: '路由管理' },
+  { icon: '🍍', name: 'Pinia', desc: '状态管理' },
+  { icon: '🌐', name: 'Vue I18n', desc: '国际化支持' },
+  { icon: '🔧', name: 'VueUse', desc: '组合式工具集' },
+]
 </script>
 
 <template>
   <div class="home-page">
-    <!-- 导航栏 -->
     <nav class="navbar">
       <div class="nav-container">
         <div class="nav-brand">
-          <h1>Asgard Frontend</h1>
+          <h1>Asgard Frontend Template</h1>
         </div>
         <div class="nav-actions">
           <LanguageSwitcher />
-          <div v-if="userStore.isLoggedIn" class="user-info">
-            <span class="user-name">{{ userStore.displayName }}</span>
-            <button class="logout-btn" @click="handleLogout">
-              登出
-            </button>
-          </div>
-          <button v-else class="login-btn" @click="goToLogin">
-            登录
-          </button>
         </div>
       </div>
     </nav>
 
-    <!-- Hero 区域 -->
     <section class="hero-section">
       <div class="hero-content">
-        <div class="hero-text">
-          <h1 class="hero-title">
-            <span class="hero-subtitle-small">欢迎来到</span>
-            <span class="gradient-text">Asgard Frontend</span>
-          </h1>
-          <p class="hero-subtitle">
-            基于 Vue 3 + TypeScript + Vite 的现代化前端模板
-          </p>
-          <div class="hero-buttons">
-            <button v-if="!userStore.isLoggedIn" class="cta-button primary" @click="goToLogin">
-              开始使用
-            </button>
-            <button class="cta-button secondary" @click="userStore.updateActivity()">
-              更新活动
-            </button>
-          </div>
-        </div>
-        <div class="hero-visual">
-          <div class="floating-card">
-            <div class="card-icon">
-              🚀
-            </div>
-            <h3>Vue 3</h3>
-            <p>组合式 API</p>
-          </div>
-          <div class="floating-card">
-            <div class="card-icon">
-              ⚡
-            </div>
-            <h3>Vite</h3>
-            <p>极速构建</p>
-          </div>
-          <div class="floating-card">
-            <div class="card-icon">
-              🧪
-            </div>
-            <h3>Vitest</h3>
-            <p>单元测试</p>
-          </div>
-          <div class="floating-card">
-            <div class="card-icon">
-              🔧
-            </div>
-            <h3>VueUse</h3>
-            <p>工具集</p>
-          </div>
-          <div class="floating-card">
-            <div class="card-icon">
-              🛣️
-            </div>
-            <h3>Router</h3>
-            <p>路由管理</p>
-          </div>
-          <div class="floating-card">
-            <div class="card-icon">
-              🍍
-            </div>
-            <h3>Pinia</h3>
-            <p>状态管理</p>
-          </div>
-          <div class="floating-card">
-            <div class="card-icon">
-              🌐
-            </div>
-            <h3>Vue-i18n</h3>
-            <p>国际化</p>
-          </div>
-        </div>
+        <h1 class="hero-title">
+          <span class="hero-subtitle-small">面向通用场景的</span>
+          <span class="gradient-text">Vue 3 模板工程</span>
+        </h1>
+        <p class="hero-subtitle">
+          仅保留基础能力，不预置登录与用户业务。
+        </p>
       </div>
     </section>
 
-    <!-- 功能演示区域 -->
     <section class="features-section">
       <div class="container">
-        <!-- Pinia Store 演示 -->
         <div class="feature-card">
           <div class="card-header">
             <div class="card-icon">
-              🍍
+              🧱
             </div>
-            <h2>Pinia 状态管理</h2>
-            <p>现代化的状态管理解决方案</p>
+            <h2>技术栈基线</h2>
+            <p>可直接扩展到你的业务项目</p>
           </div>
-
           <div class="card-content">
-            <div class="status-grid">
-              <div class="status-item">
-                <div class="status-label">
-                  登录状态
+            <div class="tech-grid">
+              <div v-for="item in techStack" :key="item.name" class="tech-item">
+                <div class="tech-icon">
+                  {{ item.icon }}
                 </div>
-                <div class="status-value" :class="{ success: userStore.isLoggedIn, error: !userStore.isLoggedIn }">
-                  {{ userStore.isLoggedIn ? '已登录' : '未登录' }}
-                </div>
-              </div>
-              <div class="status-item">
-                <div class="status-label">
-                  用户名
-                </div>
-                <div class="status-value">
-                  {{ userStore.displayName }}
+                <div class="tech-text">
+                  <h4>{{ item.name }}</h4>
+                  <p>{{ item.desc }}</p>
                 </div>
               </div>
-              <div class="status-item">
-                <div class="status-label">
-                  会话时长
-                </div>
-                <div class="status-value">
-                  {{ userStore.sessionDuration }} 分钟
-                </div>
-              </div>
-              <div class="status-item">
-                <div class="status-label">
-                  活动状态
-                </div>
-                <div class="status-value" :class="{ warning: userStore.isInactive }">
-                  {{ userStore.isInactive ? '长时间未活动' : '活跃' }}
-                </div>
-              </div>
-            </div>
-
-            <div class="action-buttons">
-              <button
-                :disabled="userStore.loading || userStore.isLoggedIn"
-                class="action-btn primary"
-                @click="handleLogin"
-              >
-                <span v-if="userStore.loading" class="loading-spinner" />
-                {{ userStore.loading ? '登录中...' : '模拟登录' }}
-              </button>
-              <button
-                :disabled="userStore.loading || !userStore.isLoggedIn"
-                class="action-btn danger"
-                @click="handleLogout"
-              >
-                登出
-              </button>
             </div>
           </div>
         </div>
 
-        <!-- VueUse 功能演示 -->
         <div class="feature-card">
           <div class="card-header">
             <div class="card-icon">
               🔧
             </div>
-            <h2>VueUse 工具集</h2>
-            <p>Vue 组合式 API 工具库</p>
+            <h2>运行时演示</h2>
+            <p>VueUse 响应式能力示例</p>
           </div>
 
           <div class="card-content">
@@ -257,7 +107,6 @@ function goToLogin() {
           </div>
         </div>
 
-        <!-- 环境信息 -->
         <div class="feature-card">
           <div class="card-header">
             <div class="card-icon">
@@ -319,11 +168,9 @@ function goToLogin() {
 .home-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  position: relative;
   overflow-x: hidden;
 }
 
-// 导航栏
 .navbar {
   position: fixed;
   top: 0;
@@ -355,93 +202,31 @@ function goToLogin() {
   background-clip: text;
 }
 
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.user-name {
-  font-weight: 500;
-  color: #374151;
-}
-
-.login-btn,
-.logout-btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.login-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-  }
-}
-
-.logout-btn {
-  background: #ef4444;
-  color: white;
-
-  &:hover {
-    background: #dc2626;
-    transform: translateY(-1px);
-  }
-}
-
-// Hero 区域
 .hero-section {
-  padding: 10rem 2rem 6rem;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 9rem 2rem 3rem;
 }
 
 .hero-content {
-  max-width: 1200px;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.hero-text {
+  max-width: 900px;
+  margin: 0 auto;
   color: white;
+  text-align: center;
 }
 
 .hero-title {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   font-weight: 800;
-  line-height: 1.5;
-  margin-bottom: 2rem;
-  text-align: center;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
 }
 
 .hero-subtitle-small {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 400;
   opacity: 0.9;
   margin-bottom: 0.5rem;
-  color: white;
 }
 
 .gradient-text {
@@ -453,143 +238,11 @@ function goToLogin() {
 
 .hero-subtitle {
   font-size: 1.25rem;
-  opacity: 0.9;
-  margin-bottom: 2rem;
-  line-height: 1.6;
+  opacity: 0.95;
 }
 
-.hero-buttons {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.cta-button {
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.cta-button.primary {
-  background: white;
-  color: #667eea;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  }
-}
-
-.cta-button.secondary {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-  }
-}
-
-// Hero 视觉元素
-.hero-visual {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 1.5rem;
-  height: 300px;
-  flex-wrap: wrap;
-  margin-top: 2rem;
-}
-
-.floating-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  padding: 1rem;
-  text-align: center;
-  color: white;
-  animation: float 6s ease-in-out infinite;
-  width: 120px;
-  height: 100px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  box-sizing: border-box;
-
-  &:nth-child(1) {
-    animation-delay: 0s;
-  }
-
-  &:nth-child(2) {
-    animation-delay: 1s;
-  }
-
-  &:nth-child(3) {
-    animation-delay: 2s;
-  }
-
-  &:nth-child(4) {
-    animation-delay: 3s;
-  }
-
-  &:nth-child(5) {
-    animation-delay: 4s;
-  }
-
-  &:nth-child(6) {
-    animation-delay: 5s;
-  }
-
-  &:nth-child(7) {
-    animation-delay: 6s;
-  }
-}
-
-.card-icon {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
-  line-height: 1;
-}
-
-.floating-card h3 {
-  margin: 0 0 0.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.floating-card p {
-  margin: 0;
-  opacity: 0.8;
-  font-size: 0.7rem;
-  line-height: 1.1;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-// 功能演示区域
 .features-section {
-  padding: 4rem 2rem;
+  padding: 2rem;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
 }
@@ -606,12 +259,6 @@ function goToLogin() {
   border-radius: 16px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-  }
 }
 
 .card-header {
@@ -622,270 +269,106 @@ function goToLogin() {
 }
 
 .card-icon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
+  font-size: 2.2rem;
+  margin-bottom: 0.6rem;
 }
 
 .card-header h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 700;
+  margin: 0 0 0.4rem;
 }
 
 .card-header p {
   margin: 0;
   opacity: 0.9;
-  font-size: 0.9rem;
 }
 
 .card-content {
   padding: 2rem;
 }
 
-// 状态网格
-.status-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.status-item {
-  padding: 1rem;
-  background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-}
-
-.status-label {
-  font-size: 0.8rem;
-  color: #64748b;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.status-value {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1e293b;
-
-  &.success {
-    color: #059669;
-  }
-
-  &.error {
-    color: #dc2626;
-  }
-
-  &.warning {
-    color: #d97706;
-  }
-}
-
-// 操作按钮
-.action-buttons {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.action-btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  &.primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-
-    &:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-  }
-
-  &.danger {
-    background: #ef4444;
-    color: white;
-
-    &:hover:not(:disabled) {
-      background: #dc2626;
-      transform: translateY(-1px);
-    }
-  }
-}
-
-.loading-spinner {
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-// VueUse 演示
+.tech-grid,
 .demo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
+.tech-item,
 .demo-item {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.8rem;
   padding: 1rem;
+  border-radius: 10px;
   background: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
 }
 
+.tech-icon,
 .demo-icon {
-  font-size: 1.5rem;
-  width: 3rem;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 8px;
-  color: white;
+  font-size: 1.6rem;
 }
 
+.tech-text h4,
 .demo-content h4 {
-  margin: 0 0 0.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #374151;
-}
-
-.demo-content p {
   margin: 0;
-  font-size: 0.8rem;
-  color: #6b7280;
-  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  color: #111827;
 }
 
-// 环境信息表格
+.tech-text p,
+.demo-content p {
+  margin: 0.2rem 0 0;
+  color: #4b5563;
+}
+
 .env-table {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .env-row {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
+  display: flex;
+  justify-content: space-between;
   gap: 1rem;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
   background: #f8fafc;
-  border-radius: 6px;
-  border: 1px solid #e2e8f0;
-  align-items: center;
 }
 
 .env-key {
-  font-weight: 500;
-  color: #374151;
-  font-size: 0.9rem;
+  color: #6b7280;
 }
 
 .env-value {
-  color: #6b7280;
-  font-family: 'Courier New', monospace;
-  font-size: 0.8rem;
-
-  &.success {
-    color: #059669;
-    font-weight: 500;
-  }
+  color: #111827;
+  font-weight: 600;
+  word-break: break-all;
 }
 
-// 响应式设计
+.env-value.success {
+  color: #16a34a;
+}
+
 @media (max-width: 768px) {
-  .hero-section {
-    padding: 8rem 2rem 4rem;
-  }
-
-  .hero-content {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    text-align: center;
-  }
-
-  .hero-title {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero-subtitle-small {
-    font-size: 1.2rem;
-  }
-
-  .hero-visual {
-    height: 250px;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .floating-card {
-    padding: 0.5rem;
-    width: 80px;
-    height: 70px;
-  }
-
-  .card-icon {
-    font-size: 1.4rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .floating-card h3 {
-    font-size: 0.75rem;
-    margin-bottom: 0.125rem;
-  }
-
-  .floating-card p {
-    font-size: 0.6rem;
-  }
-
   .nav-container {
     padding: 0 1rem;
   }
 
-  .nav-brand h1 {
-    font-size: 1.25rem;
+  .hero-title {
+    font-size: 2.2rem;
   }
 
-  .status-grid {
-    grid-template-columns: 1fr;
+  .hero-subtitle-small {
+    font-size: 1.5rem;
   }
 
-  .demo-grid {
-    grid-template-columns: 1fr;
+  .features-section {
+    padding: 1rem;
   }
 
-  .env-row {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+  .card-content,
+  .card-header {
+    padding: 1.25rem;
   }
 }
 </style>
