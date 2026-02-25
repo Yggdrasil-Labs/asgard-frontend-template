@@ -2,14 +2,14 @@ import path from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { VueRouterAutoImports } from 'unplugin-vue-router'
-import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vitest/config'
+import { VueRouterAutoImports } from 'vue-router/unplugin'
+import VueRouter from 'vue-router/vite'
 
 export default defineConfig({
   plugins: [
     VueRouter({
-      dts: 'src/types/typed-router.d.ts',
+      dts: 'src/types/route-map.d.ts',
     }),
     vue(),
     Components({

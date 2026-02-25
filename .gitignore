@@ -35,7 +35,7 @@ storageState.json
 # Auto Generated Types
 src/types/auto-imports.d.ts
 src/types/components.d.ts
-src/types/typed-router.d.ts
+src/types/route-map.d.ts
 
 # 忽略所有实际环境文件
 .env

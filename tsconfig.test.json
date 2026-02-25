@@ -15,10 +15,7 @@
       "@scss/*": [
         "./src/assets/scss/*"
       ]
-    },
-    "types": [
-      "unplugin-vue-router/client"
-    ]
+    }
   },
   "include": [
     "src/**/*.ts",

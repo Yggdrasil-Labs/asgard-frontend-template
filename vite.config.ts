@@ -2,9 +2,9 @@ import path from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { VueRouterAutoImports } from 'unplugin-vue-router'
-import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig, loadEnv } from 'vite'
+import { VueRouterAutoImports } from 'vue-router/unplugin'
+import VueRouter from 'vue-router/vite'
 import pkg from './package.json' with { type: 'json' }
 
 // https://vite.dev/config/
@@ -16,9 +16,9 @@ export default defineConfig(({ mode, command }) => {
 
   return {
     plugins: [
-      // https://github.com/posva/unplugin-vue-router
+      // Vue Router 5 file-based routing plugin
       VueRouter({
-        dts: 'src/types/typed-router.d.ts',
+        dts: 'src/types/route-map.d.ts',
         // 自动生成路由元信息
         routesFolder: 'src/pages',
       }),

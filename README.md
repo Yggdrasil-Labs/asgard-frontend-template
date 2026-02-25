@@ -18,7 +18,7 @@ General frontend template. Asgard——kingdom of gods.
 
 ## 📁 项目结构
 
-```
+```bash
 asgard-frontend-template
 ├── .github/            # GitHub 配置
 │   ├── workflows/      # CI/CD 工作流
@@ -76,7 +76,7 @@ asgard-frontend-template
 - 🧪 **完整测试**: Playwright 端到端测试 + Page Object 模式
 - 🌍 **国际化支持**: Vue I18n 多语言支持，内置中英文切换
 - 📦 **自动导入**: 组件和 API 自动导入，无需手动 import
-- 🛣️ **文件路由**: 基于 `unplugin-vue-router` 的文件系统路由
+- 🛣️ **文件路由**: 基于 Vue Router 5 的文件系统路由
 - 💾 **状态管理**: Pinia + 持久化插件，支持本地存储
 - 🎨 **样式方案**: Sass + Modern Normalize，提供丰富的样式工具
 
@@ -119,7 +119,7 @@ asgard-frontend-template
 - [ESLint](https://eslint.org/) `^9.39.2` - 代码检查工具
 - [@antfu/eslint-config](https://github.com/antfu/eslint-config) `^6.7.3` - ESLint 配置
 - [Sass](https://sass-lang.com/) `^1.97.2` - CSS 预处理器
-- [unplugin-vue-router](https://github.com/posva/unplugin-vue-router) `^0.19.2` - 文件系统路由
+- [Vue Router](https://router.vuejs.org/) `^5.0.3` - Vue.js 官方路由管理器（内置文件系统路由）
 - [unplugin-auto-import](https://github.com/unplugin/unplugin-auto-import) `^20.3.0` - API 自动导入
 - [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components) `^30.0.0` - 组件自动导入
 
