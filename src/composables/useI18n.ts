@@ -19,8 +19,13 @@ export function useI18nHelper() {
   // 当前语言 - 使用 ref 而不是 computed，因为需要双向绑定
   const currentLocale = ref<Locale>(storedLocale.value || getCurrentLocale())
 
-  // syncRef 简化双向同步
-  syncRef(currentLocale, storedLocale)
+  // syncRef 双向同步（两 ref 类型不同时需提供 transform）
+  syncRef(currentLocale, storedLocale, {
+    transform: {
+      ltr: (left: Locale) => left,
+      rtl: (right: string | null | undefined) => (right ?? getCurrentLocale()) as Locale,
+    },
+  })
 
   // 语言检测
   const isChinese = computed(() => currentLocale.value === 'zh-CN')
