@@ -1,21 +1,7 @@
 <script setup lang="ts">
 import type { SemanticIconName } from '@components/icon/icon.types'
-import type { Locale } from '@locales/types'
-import { useI18nHelper } from '@/composables/useI18n'
 import env from '@/config/env'
 import { showSuccess } from '@/utils/message'
-
-const {
-  currentLocale,
-  switchLocale,
-  getLocaleDisplayName,
-  supportedLocales,
-} = useI18nHelper()
-
-function handleLanguageChange(locale: Locale) {
-  if (locale !== currentLocale.value)
-    switchLocale(locale)
-}
 
 const { width, height } = useWindowSize()
 const { x, y } = useMouse()
@@ -54,33 +40,6 @@ function handleDemoClick() {
 
 <template>
   <div class="home-page">
-    <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-brand">
-          <h1>Asgard Frontend Template</h1>
-        </div>
-        <div class="nav-actions">
-          <el-dropdown trigger="click" @command="handleLanguageChange">
-            <el-button type="primary" link>
-              {{ getLocaleDisplayName(currentLocale) }}
-              <span class="nav-lang-arrow">▼</span>
-            </el-button>
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item
-                  v-for="locale in supportedLocales"
-                  :key="locale"
-                  :command="locale"
-                >
-                  {{ getLocaleDisplayName(locale) }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </div>
-      </div>
-    </nav>
-
     <section class="hero-section">
       <div class="hero-content">
         <h1 class="hero-title">
@@ -186,50 +145,15 @@ function handleDemoClick() {
 
 <style lang="scss" scoped>
 .home-page {
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   overflow-x: hidden;
 }
 
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 1rem 0;
-}
-
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav-brand h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.nav-lang-arrow {
-  margin-left: 0.25rem;
-  font-size: 0.6em;
-  opacity: 0.8;
-}
-
 .hero-section {
-  padding: 9rem 2rem 3rem;
+  padding: 3rem 2rem 3rem;
 }
 
 .hero-content {
@@ -374,10 +298,6 @@ function handleDemoClick() {
 }
 
 @media (max-width: 768px) {
-  .nav-container {
-    padding: 0 1rem;
-  }
-
   .hero-title {
     font-size: 2.2rem;
   }

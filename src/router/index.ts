@@ -1,19 +1,37 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { routes } from 'vue-router/auto-routes'
+import MainLayout from '@/layouts/MainLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: [
+    {
+      path: '/',
+      component: MainLayout,
+      children: [
+        {
+          path: '',
+          name: 'Home',
+          component: () => import('@/pages/index.vue'),
+          meta: { title: '首页' },
+        },
+        {
+          path: 'pro-form-demo',
+          name: 'ProFormDemo',
+          component: () => import('@/pages/pro-form-demo.vue'),
+          meta: { title: 'ProForm 示例' },
+        },
+      ],
+    },
+  ],
 })
 
 // 路由守卫（模板默认不做业务鉴权）
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   console.log('Router navigate:', {
     to: to.path,
     from: from.path,
     meta: to.meta,
   })
-  next()
 })
 
 // 路由后置守卫

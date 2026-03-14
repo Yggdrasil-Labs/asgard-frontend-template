@@ -29,10 +29,9 @@ export default defineConfig({
     }),
   ],
   test: {
-    // Vitest 主要用于类型检查和工具能力，不运行测试
-    // 实际测试使用 Playwright E2E 测试
-    include: [],
-    exclude: ['**/*'],
+    // 默认仍以 Playwright E2E 为主；仅开启 unit spec 以支持局部验证
+    include: ['tests/unit/**/*.spec.ts'],
+    exclude: ['**/node_modules/**', '**/dist/**', '**/.{git,cache,output,temp}/**'],
   },
   css: {
     preprocessorOptions: {

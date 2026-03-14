@@ -6,5 +6,8 @@
 // API 相关类型
 export * from './api'
 
+// ProForm 相关类型
+export * from './pro-form'
+
 // Store 相关类型
 export * from './store'
