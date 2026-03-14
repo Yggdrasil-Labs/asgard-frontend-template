@@ -15,3 +15,5 @@
 
 // Element Plus 主题变量覆盖
 @use 'theme/_element-overrides' as *;
+// Element Plus 函数式 API 样式（Message / MessageBox / Notification / Loading）
+@use 'theme/_element-api-styles';
