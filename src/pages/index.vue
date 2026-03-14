@@ -1,7 +1,21 @@
 <script setup lang="ts">
 import type { SemanticIconName } from '@components/icon/icon.types'
+import type { Locale } from '@locales/types'
+import { useI18nHelper } from '@/composables/useI18n'
 import env from '@/config/env'
 import { showSuccess } from '@/utils/message'
+
+const {
+  currentLocale,
+  switchLocale,
+  getLocaleDisplayName,
+  supportedLocales,
+} = useI18nHelper()
+
+function handleLanguageChange(locale: Locale) {
+  if (locale !== currentLocale.value)
+    switchLocale(locale)
+}
 
 const { width, height } = useWindowSize()
 const { x, y } = useMouse()
@@ -46,7 +60,23 @@ function handleDemoClick() {
           <h1>Asgard Frontend Template</h1>
         </div>
         <div class="nav-actions">
-          <LanguageSwitcher />
+          <el-dropdown trigger="click" @command="handleLanguageChange">
+            <el-button type="primary" link>
+              {{ getLocaleDisplayName(currentLocale) }}
+              <span class="nav-lang-arrow">▼</span>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  v-for="locale in supportedLocales"
+                  :key="locale"
+                  :command="locale"
+                >
+                  {{ getLocaleDisplayName(locale) }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
       </div>
     </nav>
@@ -190,6 +220,12 @@ function handleDemoClick() {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.nav-lang-arrow {
+  margin-left: 0.25rem;
+  font-size: 0.6em;
+  opacity: 0.8;
 }
 
 .hero-section {
