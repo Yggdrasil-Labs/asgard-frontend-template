@@ -13,7 +13,7 @@ General frontend template. Asgard——kingdom of gods.
 ## 📋 环境要求
 
 - **Node.js**: >= 22.14.0
-- **pnpm**: 10.28.0
+- **pnpm**: >= 10.28.0（建议与 `package.json` 中 `packageManager` 一致）
 - **操作系统**: Windows、macOS、Linux
 
 ## 📁 项目结构
@@ -87,23 +87,23 @@ asgard-frontend-template
 - 📝 **代码规范**: 遵循 `@antfu/eslint-config` 规范，支持自动修复
 - 🔄 **Git 规范**: Conventional Commits + Release Please 自动化发布
 - 🎯 **路径别名**: 预配置多个路径别名，简化导入路径
-- 📚 **完善文档**: 详细的 Cursor Rules 文档，助力 AI 辅助开发
+- 📚 **完善文档**: AGENTS.md 与 `docs/` 下的规范与设计文档，助力 AI 辅助开发
 
 ### 工程化
 
-- 🔄 **CI/CD**: GitHub Actions 自动化测试、发布
+- 🔄 **CI/CD**: GitHub Actions 执行 Lint、类型检查（构建可后续纳入）；E2E 在本地或发布前运行，可选纳入 CI
 - 📦 **依赖管理**: 使用 pnpm，支持依赖检查和更新
 - 🏷️ **版本管理**: Release Please 自动化版本管理和变更日志
 - 🧹 **代码质量**: Pre-commit hooks 确保代码质量
 - 🔍 **多环境支持**: 开发、测试、生产环境配置
-- 📊 **测试覆盖**: E2E 测试覆盖关键业务流程
+- 📊 **测试**: Playwright E2E 测试，关键流程可在本地或 CI 中运行
 
 ## 📦 核心依赖
 
 ### 生产依赖
 
 - [Vue](https://cn.vuejs.org/) `^3.5.26` - 渐进式 JavaScript 框架
-- [Vue Router](https://router.vuejs.org/zh/) `^4.6.4` - Vue 官方路由管理器
+- [Vue Router](https://router.vuejs.org/zh/) `^5.x` - Vue 官方路由管理器（含文件系统路由）
 - [Pinia](https://pinia.vuejs.org/zh/) `^3.0.4` - Vue 状态管理库
 - [pinia-plugin-persistedstate](https://github.com/prazdevs/pinia-plugin-persistedstate) `^4.7.1` - Pinia 持久化插件
 - [Vue I18n](https://vue-i18n.intlify.dev/) `^11.2.8` - Vue 国际化插件
