@@ -2,6 +2,10 @@ import type { Locator, Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 import { BasePage } from './BasePage'
 
+const PAGE_TITLE_RE = /Asgard Frontend/
+const WINDOW_SIZE_RE = /\d+ × \d+/
+const MOUSE_POSITION_RE = /\(\d+, \d+\)/
+
 /**
  * 首页页面对象类
  */
@@ -38,7 +42,7 @@ export class HomePage extends BasePage {
   }
 
   async verifyPageTitle() {
-    await this.expectTitleToContain(/Asgard Frontend/)
+    await this.expectTitleToContain(PAGE_TITLE_RE)
   }
 
   async verifyNavbar() {
@@ -65,10 +69,10 @@ export class HomePage extends BasePage {
     await this.expectElementToContainText(this.demoContentHeaders.nth(2), '深色模式')
 
     const windowSizeText = await this.getElementText(this.demoContentParagraphs.nth(0))
-    expect(windowSizeText).toMatch(/\d+ × \d+/)
+    expect(windowSizeText).toMatch(WINDOW_SIZE_RE)
 
     const mousePositionText = await this.getElementText(this.demoContentParagraphs.nth(1))
-    expect(mousePositionText).toMatch(/\(\d+, \d+\)/)
+    expect(mousePositionText).toMatch(MOUSE_POSITION_RE)
   }
 
   async verifyEnvironmentInfo() {

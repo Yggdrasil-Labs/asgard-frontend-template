@@ -7,6 +7,13 @@ import { VueRouterAutoImports } from 'vue-router/unplugin'
 import VueRouter from 'vue-router/vite'
 import pkg from './package.json' with { type: 'json' }
 
+const VUE_FILE_RE = /\.vue$/
+const VUE_QUERY_RE = /\.vue\?vue/
+const NODE_MODULES_RE = /[\\/]node_modules[\\/]/
+const GIT_RE = /[\\/]\.git[\\/]/
+const NUXT_RE = /[\\/]\.nuxt[\\/]/
+const API_PREFIX_RE = /^\/api/
+
 // https://vite.dev/config/
 export default defineConfig(({ mode, command }) => {
   // 加载环境变量
@@ -38,9 +45,9 @@ export default defineConfig(({ mode, command }) => {
         // 自动导入组件
         resolvers: [],
         // 包含的文件类型
-        include: [/\.vue$/, /\.vue\?vue/],
+        include: [VUE_FILE_RE, VUE_QUERY_RE],
         // 排除的文件
-        exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
+        exclude: [NODE_MODULES_RE, GIT_RE, NUXT_RE],
       }),
 
       // https://github.com/antfu/unplugin-auto-import
@@ -88,7 +95,7 @@ export default defineConfig(({ mode, command }) => {
         '/api': {
           target: envVars.VITE_API_BASE_URL || 'http://localhost:8080',
           changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, ''),
+          rewrite: path => path.replace(API_PREFIX_RE, ''),
           // 配置代理超时
           timeout: 10000,
         },
