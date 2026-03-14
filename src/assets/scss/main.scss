@@ -12,3 +12,6 @@
 
 // 导入基础样式
 @use 'base/_reset' as *;
+
+// Element Plus 主题变量覆盖
+@use 'theme/_element-overrides' as *;

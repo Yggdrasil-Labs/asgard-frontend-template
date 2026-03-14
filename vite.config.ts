@@ -1,6 +1,8 @@
 import path from 'node:path'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
+import Icons from 'unplugin-icons/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig, loadEnv } from 'vite'
 import { VueRouterAutoImports } from 'vue-router/unplugin'
@@ -42,8 +44,8 @@ export default defineConfig(({ mode, command }) => {
       Components({
         dts: 'src/types/components.d.ts',
         dirs: ['src/components'],
-        // 自动导入组件
-        resolvers: [],
+        // 自动导入组件（Element Plus 按需）
+        resolvers: [ElementPlusResolver()],
         // 包含的文件类型
         include: [VUE_FILE_RE, VUE_QUERY_RE],
         // 排除的文件
@@ -63,6 +65,7 @@ export default defineConfig(({ mode, command }) => {
         dts: 'src/types/auto-imports.d.ts',
         vueTemplate: true, // 允许在 <template> 直接使用自动导入的 API
       }),
+      Icons(),
     ].filter(Boolean),
     css: {
       preprocessorOptions: {
@@ -130,6 +133,8 @@ export default defineConfig(({ mode, command }) => {
           manualChunks: {
             // Vue 核心库
             'vue-vendor': ['vue', 'vue-router'],
+            // Element Plus
+            'element-plus': ['element-plus'],
             // UI 库
             'ui-vendor': ['@vueuse/core'],
             // HTTP 库
@@ -155,6 +160,7 @@ export default defineConfig(({ mode, command }) => {
         'vue-i18n',
         '@vueuse/core',
         'axios',
+        'element-plus',
       ],
       exclude: [],
     },

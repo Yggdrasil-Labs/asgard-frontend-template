@@ -2,6 +2,8 @@
  * 全局类型声明
  */
 
+/// <reference types="unplugin-icons/types/vue3" />
+
 // SVG 文件模块声明
 declare module '*.svg' {
   const svgUrl: string
