@@ -32,11 +32,11 @@ const fieldLabelWidth = computed(() => props.schema.ui.layout?.labelWidth)
 const isVisible = computed(() => props.schema.runtime?.visible !== false)
 
 const effectiveDisabled = computed(
-  () => props.disabled ?? props.schema.runtime?.disabled ?? false,
+  () => props.disabled || props.schema.runtime?.disabled || false,
 )
 
 const effectiveReadonly = computed(
-  () => props.readonly ?? props.schema.runtime?.readonly ?? false,
+  () => props.readonly || props.schema.runtime?.readonly || props.schema.ui.readonly || false,
 )
 
 const fieldComponent = computed(() =>
@@ -83,6 +83,13 @@ const selectModelValue = computed(() => {
   const v = fieldValue.value
   return v === undefined || v === null ? undefined : (v as string | number | boolean)
 })
+
+/** 合并 schema.ui.props，并保证 readonly/disabled 由 ProForm 控制，不被 schema 覆盖 */
+const mergedFieldProps = computed(() => ({
+  ...(props.schema.ui.props ?? {}),
+  disabled: effectiveDisabled.value,
+  readonly: effectiveReadonly.value,
+}))
 </script>
 
 <template>
@@ -146,10 +153,8 @@ const selectModelValue = computed(() => {
       <component
         :is="fieldComponent"
         v-else-if="fieldComponent"
-        v-bind="schema.ui.props"
+        v-bind="mergedFieldProps"
         v-model="fieldValue"
-        :disabled="effectiveDisabled"
-        :readonly="effectiveReadonly"
       />
 
       <slot

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormFieldSchema, ProFormEmits, ProFormProps } from '@/types/pro-form'
 import { ElCol, ElCollapse, ElCollapseItem, ElForm, ElRow } from 'element-plus'
-import { computed, onMounted, ref, useSlots, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, useSlots, watch } from 'vue'
 import ProFormField from './ProFormField.vue'
 import { buildElFormRules } from './validation'
 
@@ -18,6 +18,9 @@ const formRef = ref<InstanceType<typeof ElForm> | null>(null)
 /** 用于 resetFields 的初始值（仅首次合并时快照，后续不随 modelValue 覆盖） */
 const initialValues = ref<Record<string, unknown>>({})
 let hasSetInitialValues = false
+
+/** reset 进行中标志：reset 期间跳过依赖重校验，避免 clearValidate 后又立刻产生新的校验错误 */
+let isResetting = false
 
 const isReadonly = computed(() => props.mode === 'readonly')
 
@@ -73,6 +76,27 @@ const groupedSchema = computed<FormGroup[]>(() => {
 
 /** 折叠面板当前展开项，默认全部展开；随分组变化自动包含新分组 */
 const expandedGroupKeys = ref<string[]>([])
+
+/** 根据字段 key 取所在分组 key（用于校验失败时展开对应面板） */
+function getGroupKeyByFieldKey(fieldKey: string): string | undefined {
+  const field = props.schema.find(f => f.meta.field === fieldKey)
+  if (!field)
+    return undefined
+  return field.ui.layout?.group ?? DEFAULT_GROUP_KEY
+}
+
+/** 展开所有包含错误字段的折叠面板（保证任意错误所在面板都会展开） */
+function expandGroupsContainingInvalidFields(invalidFields: Record<string, unknown>) {
+  const keys = Object.keys(invalidFields)
+  const toExpand = new Set(expandedGroupKeys.value)
+  for (const fieldKey of keys) {
+    const groupKey = getGroupKeyByFieldKey(fieldKey)
+    if (groupKey)
+      toExpand.add(groupKey)
+  }
+  expandedGroupKeys.value = [...toExpand]
+}
+
 watch(
   groupedSchema,
   (groups) => {
@@ -165,10 +189,14 @@ function getFieldsValue(): Record<string, unknown> {
 }
 
 function resetFields() {
+  isResetting = true
   const values = { ...initialValues.value }
   emit('update:modelValue', values)
   formRef.value?.clearValidate()
   emit('reset', values)
+  nextTick(() => {
+    isResetting = false
+  })
 }
 
 async function validate(): Promise<boolean> {
@@ -177,10 +205,16 @@ async function validate(): Promise<boolean> {
     return true
   }
   catch (err: unknown) {
-    const errObj = err as Record<string, unknown>
-    const fields = errObj?.fields as Record<string, unknown> | undefined
-    const firstProp = fields && typeof fields === 'object' ? Object.keys(fields)[0] : undefined
-    if (firstProp) {
+    // Element Plus Form 校验失败时 reject 的是 invalidFields 对象本身（键为字段名），不是 { fields: ... }
+    const invalidFields = err && typeof err === 'object' && !(err instanceof Error)
+      ? (err as Record<string, unknown>)
+      : undefined
+    if (invalidFields && Object.keys(invalidFields).length > 0) {
+      expandGroupsContainingInvalidFields(invalidFields)
+      await nextTick()
+      // 等待折叠面板展开（含动画）后再滚动，否则面板可能仍为折叠态
+      await new Promise(resolve => setTimeout(resolve, 350))
+      const firstProp = Object.keys(invalidFields)[0]
       formRef.value?.scrollToField(firstProp)
     }
     return false
@@ -232,7 +266,7 @@ watch(
 watch(
   () => props.modelValue,
   (newVal, oldVal) => {
-    if (!oldVal)
+    if (!oldVal || isResetting)
       return
     const changedKeys = new Set<string>()
     for (const key of Object.keys({ ...newVal, ...oldVal })) {
@@ -247,7 +281,9 @@ watch(
         && (field.runtime?.validation?.revalidateOnDependencyChange !== false),
     )
     for (const field of fieldsToRevalidate) {
-      formRef.value?.validateField(field.meta.field)
+      formRef.value?.validateField(field.meta.field)?.catch(() => {
+        // 依赖变化触发的重校验仅用于更新错误展示，不向外抛出，避免 Uncaught (in promise)
+      })
     }
   },
   { deep: true },
@@ -263,6 +299,7 @@ watch(
     :label-width="labelWidth"
     :label-position="labelPosition"
     :disabled="isDisabled"
+    :validate-on-rule-change="false"
   >
     <template v-if="slots['form-header']">
       <section class="pro-form__header">
@@ -400,7 +437,10 @@ watch(
 }
 
 .pro-form__collapse :deep(.el-collapse-item__content) {
-  padding: 16px 0 24px;
+  padding: 20px 24px 24px;
+  background-color: var(--el-fill-color-lighter, #f5f7fa);
+  border-radius: 8px;
+  margin-top: 4px;
 }
 
 .pro-form__group-header {
