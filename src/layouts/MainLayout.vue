@@ -43,7 +43,7 @@ function handleNavCommand(path: string) {
         <div class="nav-actions">
           <el-dropdown trigger="click" @command="handleNavCommand">
             <el-button type="primary" link>
-              页面
+              菜单
               <span class="nav-arrow">▼</span>
             </el-button>
             <template #dropdown>

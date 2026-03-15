@@ -273,6 +273,7 @@ watch(
     <ElCollapse
       v-model="expandedGroupKeys"
       class="pro-form__collapse"
+      expand-icon-position="left"
     >
       <ElCollapseItem
         v-for="group in groupedSchema"
@@ -412,7 +413,7 @@ watch(
 
 .pro-form__group-title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .pro-form__group-extra {
