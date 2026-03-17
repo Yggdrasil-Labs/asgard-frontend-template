@@ -8,6 +8,7 @@ import {
   ElSelect,
   ElSwitch,
 } from 'element-plus'
+import FormFieldTag from '@/components/pro-field-components/FormFieldTag.vue'
 
 const fieldComponentRegistry = new Map<string, Component>()
 
@@ -39,4 +40,6 @@ export function registerDefaultFieldComponents() {
   registerFieldComponent('Checkbox', ElCheckbox)
   registerFieldComponent('CheckboxGroup', ElCheckboxGroup)
   registerFieldComponent('InputNumber', ElInputNumber)
+  /** 仅展示用，表单中为只读 Tag；ProDetail 中同样用 Tag 展示 */
+  registerFieldComponent('Tag', FormFieldTag)
 }
