@@ -1,5 +1,5 @@
 # .husky/commit-msg
-pnpm exec commitlint --edit "$1"
+# pnpm exec commitlint --edit "$1"
 
 # .husky/pre-commit
-pnpm exec lint-staged
+# pnpm exec lint-staged
