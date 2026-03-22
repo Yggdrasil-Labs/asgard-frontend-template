@@ -39,6 +39,7 @@ function registerDynamicPageRoutes(router: ReturnType<typeof createRouter>) {
     '/': '首页',
     '/pro-form-demo': 'ProForm 示例',
     '/pro-detail-demo': 'ProDetail 示例',
+    '/pro-table-demo': 'ProTable 示例',
   }
 
   for (const [file, loader] of Object.entries(pages)) {
@@ -85,14 +86,6 @@ const router = createRouter({
 registerDynamicPageRoutes(router)
 
 // 路由守卫（模板默认不做业务鉴权）
-router.beforeEach((to, from) => {
-  console.log('Router navigate:', {
-    to: to.path,
-    from: from.path,
-    meta: to.meta,
-  })
-})
-
 // 路由后置守卫
 router.afterEach((to) => {
   // 更新页面标题

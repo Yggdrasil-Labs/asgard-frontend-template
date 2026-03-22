@@ -77,9 +77,9 @@ export default defineConfig({
     },
   ],
 
-  // Web 服务器配置
+  // Web 服务器配置（CI 下 preview 默认 4173，与 baseURL 5173 不一致会导致永远等不到端口）
   webServer: {
-    command: process.env.CI ? 'pnpm preview' : 'pnpm dev',
+    command: process.env.CI ? 'pnpm preview --host 127.0.0.1 --port 5173' : 'pnpm dev',
     port: 5173,
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,

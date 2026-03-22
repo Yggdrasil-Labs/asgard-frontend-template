@@ -22,6 +22,8 @@ interface NavItem {
 const navItems: NavItem[] = [
   { path: '/', title: '首页' },
   { path: '/pro-form-demo', title: 'ProForm 示例' },
+  { path: '/pro-detail-demo', title: 'ProDetail 示例' },
+  { path: '/pro-table-demo', title: 'ProTable 示例' },
 ]
 
 const route = useRoute()
