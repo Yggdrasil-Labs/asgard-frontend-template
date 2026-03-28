@@ -19,6 +19,7 @@
         "./src/assets/scss/*"
       ]
     },
+    "types": ["node"],
     "strictNullChecks": true, /* 强制检查 null/undefined（减少运行时错误） */
     "noFallthroughCasesInSwitch": true, /* 防止 switch case 穿透 */
     /* Linting */

@@ -40,6 +40,7 @@ function registerDynamicPageRoutes(router: ReturnType<typeof createRouter>) {
     '/pro-form-demo': 'ProForm 示例',
     '/pro-detail-demo': 'ProDetail 示例',
     '/pro-table-demo': 'ProTable 示例',
+    '/search-bar-demo': 'SearchBar 示例',
   }
 
   for (const [file, loader] of Object.entries(pages)) {
@@ -53,6 +54,7 @@ function registerDynamicPageRoutes(router: ReturnType<typeof createRouter>) {
     if (path === '/')
       continue
 
+    // 子路由使用相对路径挂到 MainLayout，最终访问地址仍保持 '/foo' 形式。
     const record: RouteRecordRaw = {
       path: path.slice(1),
       name,

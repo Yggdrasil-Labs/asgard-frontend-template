@@ -1,5 +1,6 @@
 import process from 'node:process'
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig } from '@playwright/test'
+import { createPlaywrightProjects } from './tests/e2e/projects'
 
 /**
  * Playwright 配置文件
@@ -50,32 +51,8 @@ export default defineConfig({
   },
 
   // 项目配置
-  projects: [
-    {
-      name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-      },
-    },
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-      },
-    },
-    {
-      name: 'Mobile Chrome',
-      use: {
-        ...devices['Pixel 5'],
-      },
-    },
-    {
-      name: 'Mobile Safari',
-      use: {
-        ...devices['iPhone 12'],
-      },
-    },
-  ],
+  // WebKit 在部分 Linux/WSL 环境缺少系统依赖；默认仅在 macOS 启用，其他环境通过 PLAYWRIGHT_INCLUDE_WEBKIT=true 显式打开。
+  projects: createPlaywrightProjects(),
 
   // Web 服务器配置（CI 下 preview 默认 4173，与 baseURL 5173 不一致会导致永远等不到端口）
   webServer: {
