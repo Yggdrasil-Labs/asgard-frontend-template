@@ -37,6 +37,7 @@ function registerDynamicPageRoutes(router: ReturnType<typeof createRouter>) {
   // 可选：为常用 demo 页提供默认标题（避免依赖宏/解析 definePage）
   const titleMap: Record<string, string> = {
     '/': '首页',
+    '/pro-dialog-demo': 'ProDialog 示例',
     '/pro-form-demo': 'ProForm 示例',
     '/pro-detail-demo': 'ProDetail 示例',
     '/pro-table-demo': 'ProTable 示例',
