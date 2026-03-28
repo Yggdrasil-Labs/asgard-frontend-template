@@ -9,6 +9,8 @@
 - **位置**：`src/components/pro-detail`
 - **依赖**：Vue 3 Composition API、Element Plus 2.x、项目内类型 `@/types/pro-form` 与 `src/components/pro-detail/types.ts`
 - **能力**：`schema` 分组与 `runtime.visible` 过滤、`data` 按 `meta.field` 取值、`runtime.transform.display` 格式化展示、`ui.component === 'Tag'` 时用标签样式、`ui.copyable` 一键复制
+- **共享协议**：基础字段语义见 [共享字段协议](./shared-field-protocol.md)
+- **API 约定**：slot / 事件 / expose 命名规范见 [组件 API 约定](./component-api-conventions.md)
 
 ---
 
@@ -17,6 +19,12 @@
 - 可直接复用编辑页的 `FormFieldSchema[]`，在 **详情扩展字段** 上增加 ProDetail 专用配置即可（见 [Schema 扩展](#schema-扩展detailfieldschema)）。
 - ProForm 不读取 `meta.emptyText`、`ui.copyable` 等扩展，互不影响。
 - 更完整的表单能力见 [ProForm 组件说明](./pro-form.md)。
+
+边界建议：
+
+- 需要编辑、校验、提交时，使用 `ProForm`
+- 需要稳定的只读展示时，使用 `ProDetail`
+- `ProForm mode="readonly"` 只适合编辑表单流程中的临时只读态，不替代正式详情页
 
 ---
 
@@ -206,3 +214,5 @@ const schema: FormFieldSchema[] = [
 | `src/components/pro-detail/ProDetailField.vue` | 单字段展示、复制、`custom-render` |
 | `src/components/pro-detail/index.ts` | 导出 |
 | `src/types/pro-form.ts` | 基础 `FormFieldSchema` 类型 |
+
+展示 renderer 的后续收敛预研见 [Renderer Layer Spike](../plans/2026-03-28-renderer-layer-spike.md)。

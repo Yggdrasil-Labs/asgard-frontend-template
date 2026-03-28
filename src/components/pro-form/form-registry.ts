@@ -8,7 +8,7 @@ import {
   ElSelect,
   ElSwitch,
 } from 'element-plus'
-import FormFieldTag from '@/components/pro-field-components/FormFieldTag.vue'
+import FormFieldTag from '@/components/field-components/FormFieldTag.vue'
 
 const fieldComponentRegistry = new Map<string, Component>()
 

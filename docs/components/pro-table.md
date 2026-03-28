@@ -9,6 +9,7 @@
 - **位置**：`src/components/pro-table`
 - **依赖**：Vue 3、Element Plus 2.x、类型 `@/types/pro-table`
 - **设计文档**：[Spec](../superpowers/specs/2026-03-22-pro-table-design.md)
+- **API 约定**：slot / 事件 / expose 命名规范见 [组件 API 约定](./component-api-conventions.md)
 
 ---
 
@@ -169,3 +170,4 @@ const columns: TableColumnSchema[] = [
 
 - [ProForm](./pro-form.md)
 - [ProDetail](./pro-detail.md)
+- 展示 renderer 的后续收敛预研见 [Renderer Layer Spike](../plans/2026-03-28-renderer-layer-spike.md)

@@ -4,6 +4,12 @@
  */
 
 import type { Component } from 'vue'
+import type {
+  BaseFieldLayout,
+  BaseFieldMeta,
+  BaseFieldRuntime,
+  BaseFieldUi,
+} from './shared-field'
 
 // ---------------------------------------------------------------------------
 // 表单上下文（供 when、options、transform 等使用）
@@ -21,15 +27,7 @@ export type FormFieldValueType
   = 'string' | 'number' | 'boolean' | 'array' | 'date' | 'dateRange' | (string & {})
 
 /** 字段元信息：field、label、valueType、默认值、是否必填 */
-export interface FormFieldMeta {
-  /** 字段唯一键，对应 modelValue 的 key */
-  field: string
-  /** 展示标签 */
-  label: string
-  /** 值类型，用于校验与控件选择 */
-  valueType: FormFieldValueType
-  /** 默认值（可选） */
-  defaultValue?: unknown
+export interface FormFieldMeta extends BaseFieldMeta {
   /**
    * 是否必填
    * 首版保持为显式 boolean（也可由 validation.rules 进一步表达）
@@ -51,11 +49,7 @@ export interface FormFieldBreakpoints {
 }
 
 /** 字段布局：分组、栅格 span、对齐、标签宽、断点、操作区 */
-export interface FormFieldLayout {
-  /** 分组名，同组渲染在同一区块 */
-  group?: string
-  /** 栅格占位（24 栅格），默认 24 */
-  span?: number
+export interface FormFieldLayout extends BaseFieldLayout {
   /** 标签/内容对齐 */
   align?: 'left' | 'right' | 'center'
   /** 字段级标签宽度，覆盖表单级 */
@@ -82,7 +76,7 @@ export interface FormFieldOption {
 }
 
 /** 字段 UI 配置：组件名、props、布局、tooltip、静态 options、只读、插槽名 */
-export interface FormFieldUi {
+export interface FormFieldUi extends BaseFieldUi {
   /** 组件注册表名称（如 'Input' | 'Select'） */
   component: string
   /** 透传给控件的 props */
@@ -163,9 +157,8 @@ export interface FormFieldTransform {
 }
 
 /** 字段运行时配置（首版以静态 + 简单依赖为主） */
-export interface FormFieldRuntime {
+export interface FormFieldRuntime extends BaseFieldRuntime {
   /** 是否可见 */
-  visible?: boolean
   /** 是否禁用 */
   disabled?: boolean
   /** 是否只读 */
@@ -210,7 +203,7 @@ export interface ProFormProps {
   schema: FormFieldSchema[]
   /** 表单值（v-model） */
   modelValue: Record<string, unknown>
-  /** 模式：编辑 / 只读 */
+  /** 模式：编辑 / 只读。readonly 仅用于编辑表单的临时只读态，正式详情展示应使用 ProDetail。 */
   mode?: 'edit' | 'readonly'
   /** 透传上下文 */
   context?: ProFormContext

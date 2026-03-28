@@ -4,6 +4,7 @@ import type {
   SearchRouteQuery,
   SearchSerializedValues,
 } from '@/types/search-bar'
+import { buildRouteQueryKey, stripRouteQueryNamespace } from './query-protocol'
 
 function isEmptySearchValue(value: unknown): boolean {
   if (value == null)
@@ -31,20 +32,14 @@ function withRouteNamespace(source: SearchSerializedValues, routeKey?: string): 
     return source
   // 命名空间用于一个页面放多个 SearchBar 时隔离 query，避免同名字段互相覆盖。
   return Object.fromEntries(
-    Object.entries(source).map(([key, value]) => [`${routeKey}.${key}`, value]),
+    Object.entries(source).map(([key, value]) => [buildRouteQueryKey(routeKey, key), value]),
   )
 }
 
 function stripRouteNamespace(query: SearchRouteQuery, routeKey?: string): SearchRouteQuery {
   if (!routeKey)
     return query
-
-  const prefix = `${routeKey}.`
-  return Object.fromEntries(
-    Object.entries(query)
-      .filter(([key]) => key.startsWith(prefix))
-      .map(([key, value]) => [key.slice(prefix.length), value]),
-  )
+  return stripRouteQueryNamespace(routeKey, query)
 }
 
 export function collectSearchRouteQueryKeys(

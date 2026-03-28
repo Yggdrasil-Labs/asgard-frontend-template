@@ -10,6 +10,12 @@
 - 输出请求参数
 - 同步路由参数
 
+基础字段语义与共享字段边界见 [共享字段协议](./shared-field-protocol.md)。
+
+其中 `serialize`、`deserialize`、`syncRoute` 共同构成 SearchBar 的“查询协议层”，用于统一查询值与路由 query 的映射方式，而不是承接页面业务请求逻辑。
+
+slot / 事件 / expose 命名规范见 [组件 API 约定](./component-api-conventions.md)。
+
 它不负责：
 
 - 强校验

@@ -328,4 +328,36 @@ describe('pro-dialog', () => {
 
     dialog.unmount()
   })
+
+  it('toggle(false) closes through the shared close pipeline', async () => {
+    const dialog = mountDialog({
+      modelValue: true,
+    })
+
+    await dialog.flush()
+
+    dialog.dialogRef.value?.toggle(false)
+    await dialog.flush()
+
+    expect(dialog.visible.value).toBe(false)
+
+    dialog.unmount()
+  })
+
+  it('keeps dialog open when closeOnConfirm is false', async () => {
+    const dialog = mountDialog({
+      modelValue: true,
+      closeOnConfirm: false,
+    })
+
+    await dialog.flush()
+
+    document.body.querySelector('[data-testid="dialog-confirm"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await dialog.flush()
+
+    expect(dialog.events.confirm).toHaveBeenCalledTimes(1)
+    expect(dialog.visible.value).toBe(true)
+
+    dialog.unmount()
+  })
 })

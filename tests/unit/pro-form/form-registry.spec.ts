@@ -18,6 +18,11 @@ describe('pro-form/form-registry', () => {
     expect(getFieldComponent('Input')).toBeTruthy()
   })
 
+  it('默认注册后 get("Tag") 仍指向共享字段组件', () => {
+    registerDefaultFieldComponents()
+    expect(getFieldComponent('Tag')).toBeTruthy()
+  })
+
   it('覆盖注册后 get 返回新组件', () => {
     const FakeB = {} as Component
     registerFieldComponent('Input', FakeB)

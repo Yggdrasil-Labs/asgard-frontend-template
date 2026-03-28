@@ -28,6 +28,8 @@
   - `ProDialog` 只提供容器与关闭语义
   - 详情展示仍由 `ProDetail` 负责
 
+slot / 事件 / expose 命名规范见 [组件 API 约定](./component-api-conventions.md)。
+
 ---
 
 ## 基本用法

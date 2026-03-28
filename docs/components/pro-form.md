@@ -9,6 +9,10 @@
 - **位置**：`src/components/pro-form`
 - **依赖**：Vue 3 Composition API、Element Plus 2.x、项目内类型 `@/types/pro-form`
 - **能力**：通过 `schema` 描述字段（meta + ui + runtime），自动渲染表单项、生成校验规则、支持分组折叠与响应式栅格
+- **共享协议**：基础字段语义见 [共享字段协议](./shared-field-protocol.md)
+- **API 约定**：slot / 事件 / expose 命名规范见 [组件 API 约定](./component-api-conventions.md)
+
+`ProForm` 的定位始终是“编辑协议”。其中 `mode="readonly"` 只用于编辑表单在某些阶段临时进入只读状态，不用于替代正式详情展示。
 
 ---
 
@@ -81,6 +85,8 @@ const schema: FormFieldSchema[] = [
 | `context` | `ProFormContext` | `{}` | 透传上下文，供 when/options/transform 使用 |
 | `layout` | `ProFormLayout` | — | 表单级布局：`labelWidth`、`labelPosition` |
 | `loading` | `boolean` | `false` | 加载态（为 true 时表单项 disabled） |
+
+当页面目标是“稳定展示详情信息”，应优先使用 [ProDetail](./pro-detail.md)，而不是把 `ProForm` 长期停留在 `readonly` 模式。
 
 ---
 
