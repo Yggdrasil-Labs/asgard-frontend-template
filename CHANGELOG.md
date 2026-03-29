@@ -1,5 +1,81 @@
 # Changelog
 
+## [1.2.0](https://github.com/Yggdrasil-Labs/asgard-frontend-template/compare/v1.1.0...v1.2.0) (2026-03-29)
+
+
+### ✨ Features
+
+* **api:** 移动请求封装到util包 ([bc0ea8d](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/bc0ea8d678514cf0b58f8b5621394ff64760c880))
+* **docker:** 支持容器化构建 ([bac5cb8](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/bac5cb816ae723cd4458e691989a264ab522efc1))
+* **docs:** 添加组件 API 约定文档，统一公共组件的 API 风格 ([0a06f22](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/0a06f22ad946ce2e67c9093f963e1aadea69fb95))
+* **layout:** 使用 shell 组件实现新的布局架构 ([eca3854](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/eca3854e8fe58f21f27cd3215ddd0d0ca990d189))
+* **ProDialog:** 实现pro-Dialog公共组件 ([dcf8f07](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/dcf8f071af89e2240b836975a51f321744dec111))
+* **responsive:** 跨组件实现移动布局支持 ([7236d44](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/7236d4436ab7387d692a558150302ddafff099f9))
+* **search-bar:** 实现SearchBar公共组件 ([12b9697](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/12b969705a552482dd24d5ed1e273a841a16aca5))
+* 优化ProForm样式 ([ee43999](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ee43999637b46523d352e08ede1ca1d8f90bc149))
+* 在ESLint配置中添加Vite和VueUse的全局变量 ([b31ffd1](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b31ffd16be431e5eb2dec71ee75b57cbe8418980))
+* 实现ProForm组件基本能力 ([b045f07](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b045f07cc2346a3c3a61f1a7a66bb5048390b58f))
+* 将 Element Plus 和图标支持与自定义主题覆盖集成 ([9250b97](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/9250b975085fe01961ce2e7dc2b5a28f90d200de))
+* 添加 Element Plus 函数式 API 样式支持 ([5291817](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/5291817d320bb26594c9c5a09ced4303ddff558a))
+* 添加 ProDetail 组件及相关字段展示功能，支持动态字段分组和复制功能 ([42d1c35](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/42d1c351b6a7db0406d0f6522215a72a1d90e86b))
+* 添加 ProForm 组件文档，完善基本用法、属性、事件及校验说明 ([15d103d](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/15d103dc87b28fd35ea91f31be6a178a0468fb83))
+* 添加 ProTable 组件及其文档，支持多种列类型和自定义渲染功能 ([ad4481e](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ad4481eb3759e113eaed15bacc592a30ee8cb7b5))
+
+
+### 📝 Documentation
+
+* 更新 README 文档，完善环境要求和项目结构说明，删除无用的样式和 ESLint 规范文档 ([7e98132](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/7e98132c3ff3cc80a2fab47a393c5af335a00e11))
+* 添加 ProDetail 组件文档，详细说明组件用法、属性及与 ProForm 的关系 ([474fa84](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/474fa842e13b1445bce2c2cd7aa86b23056c1357))
+
+
+### ♻️ Code Refactoring
+
+* enhance syncRef functionality with transform options for locale management ([2c8d477](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/2c8d47776054fa7387e8b44efa24eceed7f53342))
+* **env:** 优化环境变量的配置 ([650966b](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/650966b7ce15f7cd9eba67f5a8886d906278492c))
+* **env:** 删除不需要的环境变量 VITE_ENV ([120e228](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/120e22836ef22ac615afe846e403f9e91962a60c))
+* **ProTable:** 清理ESLint ([12e73fd](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/12e73fd671f23c2f23436aa1b99029c54a9f719b))
+* 修复lint，使用静态正则 ([94ae2a6](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/94ae2a6178539807ddd8b04dbe22d44b538b8ae9))
+* 删除与用户相关的 API 并存储、更新 README 和组件以获得更通用的模板 ([ee37c0c](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ee37c0cc68ad8c61630a96ecebe73aab10e8e834))
+* 删除无用的组件 ([3859d1f](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/3859d1fe89dcbb501cda25a76bc5f35ee35593e6))
+* 移除登录页面相关代码并简化首页功能测试。 ([9e2ad80](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/9e2ad80edb71e07223f41bd13eacef0b686618be))
+
+
+### 🔧 Miscellaneous Chores
+
+* add 'docs/plans/' to .gitignore ([c1440a0](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/c1440a0806f6323836c9ac8c9acac7ca071c5c82))
+* **deps-dev:** bump @antfu/eslint-config from 6.7.3 to 7.0.1 ([6e91ccb](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/6e91ccb4ae735585adba991b568928bd97cae726))
+* **deps-dev:** bump the minor-and-patch group with 2 updates ([186af30](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/186af30eec00f338832485cef7c63bffb1bf9bab))
+* **deps-dev:** bump the minor-and-patch group with 3 updates ([9c10653](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/9c106538f7046b7d4207fcaa4fca93e5b84d01b5))
+* **deps-dev:** bump unplugin-auto-import from 20.3.0 to 21.0.0 ([b07c11e](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b07c11e0a4c93e4b6a0a74c5246e2cac256c2be4))
+* **deps-dev:** bump unplugin-vue-components from 30.0.0 to 31.0.0 ([0f51046](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/0f51046573b82fbe844dde79cb37405e16916ee0))
+* **deps:** bump actions/cache from 4.2.0 to 5.0.1 ([44d2d39](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/44d2d39c683f33c72eccf23c7747a0ba6bf43671))
+* **deps:** bump actions/cache from 5.0.1 to 5.0.2 ([ceb5cb6](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ceb5cb646188c16f6b05d03f887a8dafdf99dd53))
+* **deps:** bump actions/cache from 5.0.2 to 5.0.3 ([33cecac](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/33cecac3dc05e6cf27d8315de65fbad8de2dc86e))
+* **deps:** bump actions/cache from 5.0.3 to 5.0.4 ([cd2b472](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/cd2b472e7ed4556160fa218944ba60f0f4652162))
+* **deps:** bump actions/checkout from 4 to 6 ([7aa1953](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/7aa19536cba0bac3f7333c0406c433552ca8b6e4))
+* **deps:** bump actions/download-artifact from 4.1.8 to 7.0.0 ([27175be](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/27175bef7acd757138374a43aa9ce25bb641ae21))
+* **deps:** bump actions/download-artifact from 7.0.0 to 8.0.0 ([b9d5003](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b9d5003a6fa5be23c1649f523edc05fdb5f1c1b1))
+* **deps:** bump actions/download-artifact from 8.0.0 to 8.0.1 ([5f69bc1](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/5f69bc1d3b1778d7f371edc6ad4265414c85c135))
+* **deps:** bump actions/github-script from 7.0.1 to 8.0.0 ([d94b5f9](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/d94b5f9410475f1bf57a64f6a8b72251553b519a))
+* **deps:** bump actions/setup-node from 4 to 6 ([6c4d79c](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/6c4d79cd49e19d1ac7d44efb42747258c91b5ab8))
+* **deps:** bump actions/upload-artifact from 4.5.0 to 6.0.0 ([542d791](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/542d7913ee78a249180ed47a7d83578efa8b376a))
+* **deps:** bump actions/upload-artifact from 6.0.0 to 7.0.0 ([0870c8a](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/0870c8aad8f91416ee61100c378a4782d7c42bdb))
+* **deps:** bump pnpm/action-setup from 4.0.0 to 4.2.0 ([dd10551](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/dd10551915b86cdee2ad186d6536a40f171dd02b))
+* **deps:** bump pnpm/action-setup from 4.2.0 to 4.4.0 ([b39c63d](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b39c63d1547b0ec93ce4df77e933417ee60735d3))
+* **deps:** bump softprops/action-gh-release from 2.1.0 to 2.5.0 ([fbcf9c7](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/fbcf9c74ce8006f9476280bc9dda77b1643df17c))
+* **deps:** bump softprops/action-gh-release from 2.5.0 to 2.6.0 ([3a18930](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/3a189303d12b77f8d37b5d2ae34758bf802c23e7))
+* **deps:** bump softprops/action-gh-release from 2.6.0 to 2.6.1 ([290204a](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/290204a8e567f2336948b0fd19ccd165749e5f36))
+* **deps:** bump the minor-and-patch group across 1 directory with 9 updates ([6277659](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/627765916517b4a06e3b064b61689a52a4ab8b05))
+* **deps:** bump the minor-and-patch group with 2 updates ([813ebe1](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/813ebe11526bbfbe04cac6433ce7499b8d7d5e76))
+* **deps:** bump the minor-and-patch group with 5 updates ([0abab4e](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/0abab4e4f6895b1bf909fb7e0baaf2b09e5f46c6))
+* **deps:** bump the minor-and-patch group with 6 updates ([d2d50b1](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/d2d50b17c52f21e88efeb9b171461a360675e140))
+* **deps:** bump the minor-and-patch group with 7 updates ([a094016](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/a094016e90fe1958b75b4aa993540deb9ecfc321))
+* **deps:** 升级依赖到最新版本 ([adb8f4d](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/adb8f4d6b9dbaec89cf633ea9521c4b92fe16627))
+* **gitignore:** 暂时忽略ai相关文件 ([9a190db](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/9a190db48139e0921ccab7808e13ead115ff9a15))
+* update release-please configuration to exclude component in tag ([ecc3c41](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ecc3c416da282a45d3e85b637f3293d26da4a396))
+* 使用vue-router v5，移除unplugin-vue-router ([0604498](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/0604498edba9c6a29c05ffadfb6cab79a83d3b56))
+* 增加mise的配置文件; 关闭预提交检查 ([e3d45b9](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/e3d45b9c2c0335fefe8c7bc3a1043b3d96ebb261))
+
 ## [1.1.0](https://github.com/Yggdrasil-Labs/asgard-frontend-template/compare/asgard-frontend-template-v1.0.0...asgard-frontend-template-v1.1.0) (2026-01-10)
 
 
