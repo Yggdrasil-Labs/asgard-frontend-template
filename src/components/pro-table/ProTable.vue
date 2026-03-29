@@ -18,6 +18,7 @@ import {
 } from 'element-plus'
 import { Comment, computed, Fragment, markRaw, nextTick, onMounted, ref, Text, useSlots, watch } from 'vue'
 import AppIcon from '@/components/icon/AppIcon.vue'
+import { useAppBreakpoint } from '@/composables'
 import {
   ProTableDynamicCellHost,
   renderBuiltinCell,
@@ -60,6 +61,7 @@ function headerTooltipIcon(icon?: string): SemanticIconName | undefined {
 }
 
 const slots = useSlots()
+const { isMobile } = useAppBreakpoint()
 const tableRef = ref<InstanceType<typeof ElTable> | null>(null)
 
 /** 稳定引用，供 `#cell` 的 `defaultRender` 与 `component :is` 使用 */
@@ -296,19 +298,20 @@ defineExpose({
         </ElAlert>
       </slot>
 
-      <ElTable
-        ref="tableRef"
-        class="pro-table__table"
-        :class="{ 'pro-table__table--error': showErrorBanner }"
-        :data="data"
-        :row-key="(row: Record<string, unknown>) => resolveRowKey(row)"
-        :height="height"
-        :max-height="maxHeight"
-        @row-click="(row, column, e) => emit('rowClick', row as Record<string, unknown>, column, e)"
-        @row-dblclick="(row, column, e) => emit('rowDblclick', row as Record<string, unknown>, column, e)"
-        @sort-change="onSortChange"
-        @selection-change="emitSelectionFromTable"
-      >
+      <div class="pro-table__scroll" data-scroll="x">
+        <ElTable
+          ref="tableRef"
+          class="pro-table__table"
+          :class="{ 'pro-table__table--error': showErrorBanner }"
+          :data="data"
+          :row-key="(row: Record<string, unknown>) => resolveRowKey(row)"
+          :height="height"
+          :max-height="maxHeight"
+          @row-click="(row, column, e) => emit('rowClick', row as Record<string, unknown>, column, e)"
+          @row-dblclick="(row, column, e) => emit('rowDblclick', row as Record<string, unknown>, column, e)"
+          @sort-change="onSortChange"
+          @selection-change="emitSelectionFromTable"
+        >
         <ElTableColumn
           v-if="selection.enabled"
           type="selection"
@@ -371,7 +374,8 @@ defineExpose({
             {{ emptyText }}
           </slot>
         </template>
-      </ElTable>
+        </ElTable>
+      </div>
     </div>
 
     <div
@@ -398,6 +402,7 @@ defineExpose({
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
 }
 
 .pro-table__toolbar {
@@ -418,6 +423,7 @@ defineExpose({
 
 .pro-table__main {
   min-height: 120px;
+  min-width: 0;
 }
 
 .pro-table__error-alert {
@@ -473,5 +479,35 @@ defineExpose({
 .pro-table__pagination {
   display: flex;
   justify-content: flex-end;
+  min-width: 0;
+}
+
+.pro-table__scroll {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .pro-table__toolbar,
+  .pro-table__pagination {
+    justify-content: flex-start;
+  }
+
+  .pro-table__toolbar-prefix,
+  .pro-table__toolbar-extra {
+    width: 100%;
+  }
+
+  .pro-table__pagination :deep(.el-pagination) {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .pro-table__table {
+    min-width: 640px;
+  }
 }
 </style>

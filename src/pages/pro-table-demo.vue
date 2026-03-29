@@ -298,6 +298,8 @@ const columns = computed<TableColumnSchema[]>(() => [
 <style scoped lang="scss">
 .pro-table-demo {
   padding: 24px;
+  width: 100%;
+  min-width: 0;
 }
 
 .pro-table-demo__title {
@@ -307,6 +309,7 @@ const columns = computed<TableColumnSchema[]>(() => [
 
 .pro-table-demo__toolbar {
   margin-bottom: 16px;
+  min-width: 0;
 }
 
 .pro-table-demo__actions {
@@ -314,10 +317,30 @@ const columns = computed<TableColumnSchema[]>(() => [
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+  min-width: 0;
 }
 
 .pro-table-demo__hint {
   font-size: 12px;
   color: var(--el-text-color-secondary);
+}
+
+@media (max-width: 768px) {
+  .pro-table-demo {
+    padding: 16px;
+  }
+
+  .pro-table-demo__actions {
+    align-items: stretch;
+  }
+
+  .pro-table-demo__actions > * {
+    max-width: 100%;
+  }
+
+  .pro-table-demo__actions :deep(.el-button),
+  .pro-table-demo__actions :deep(.el-select) {
+    width: 100%;
+  }
 }
 </style>

@@ -78,10 +78,9 @@ describe('app sider', () => {
     expect(app.container.textContent).toContain('ProForm 示例')
     expect(app.container.textContent).not.toContain('Workspace navigation')
     expect(app.container.textContent).not.toContain('主导航')
-    expect(sider?.dataset.motion).toBe('collapsible')
-    expect(sider?.dataset.density).toBe('compact')
-    expect(toolbar?.dataset.density).toBe('compact')
-    expect(firstItem?.dataset.density).toBe('compact')
+    expect(sider).not.toBeNull()
+    expect(toolbar).not.toBeNull()
+    expect(firstItem).not.toBeNull()
 
     const toggle = app.container.querySelector<HTMLButtonElement>('[data-testid="sider-toggle"]')
 

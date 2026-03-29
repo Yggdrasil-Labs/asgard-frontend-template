@@ -3,6 +3,7 @@ import type { ProDetailContext } from './types'
 import type { FormFieldSchema } from '@/types/pro-form'
 import { ElCollapse, ElCollapseItem, ElDescriptions, ElDescriptionsItem, ElTooltip } from 'element-plus'
 import { computed, ref, useSlots, watch } from 'vue'
+import { useAppBreakpoint } from '@/composables'
 import ProDetailField from './ProDetailField.vue'
 
 defineOptions({ name: 'ProDetail' })
@@ -22,6 +23,7 @@ interface ProDetailLayout {
 }
 
 const slots = useSlots()
+const { isMobile } = useAppBreakpoint()
 
 interface DetailGroup {
   key: string
@@ -77,7 +79,7 @@ watch(
   { immediate: true },
 )
 
-const column = computed(() => props.layout?.column ?? 3)
+const column = computed(() => isMobile.value ? 1 : (props.layout?.column ?? 3))
 const size = computed(() => props.layout?.size ?? 'default')
 const border = computed(() => props.layout?.border ?? true)
 const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
@@ -261,5 +263,22 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
 .pro-detail__empty {
   padding: 16px 8px;
   color: var(--el-text-color-secondary, #909399);
+}
+
+@media (max-width: 768px) {
+  .pro-detail {
+    padding: 16px;
+  }
+
+  .pro-detail__header,
+  .pro-detail__group-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pro-detail__header-extra,
+  .pro-detail__group-extra {
+    margin-left: 0;
+  }
 }
 </style>

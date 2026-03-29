@@ -2,6 +2,7 @@
 import type { FormFieldSchema, ProFormEmits, ProFormProps } from '@/types/pro-form'
 import { ElCol, ElCollapse, ElCollapseItem, ElForm, ElRow } from 'element-plus'
 import { computed, nextTick, onMounted, ref, useSlots, watch } from 'vue'
+import { useAppBreakpoint } from '@/composables'
 import ProFormField from './ProFormField.vue'
 import { buildElFormRules } from './validation'
 
@@ -12,6 +13,7 @@ const props = defineProps<ProFormProps>()
 const emit = defineEmits<ProFormEmits>()
 
 const slots = useSlots()
+const { isMobile } = useAppBreakpoint()
 
 const formRef = ref<InstanceType<typeof ElForm> | null>(null)
 
@@ -28,7 +30,7 @@ const isDisabled = computed(() => isReadonly.value || props.loading === true)
 
 const labelWidth = computed(() => props.layout?.labelWidth ?? '120px')
 
-const labelPosition = computed(() => props.layout?.labelPosition)
+const labelPosition = computed(() => isMobile.value ? 'top' : props.layout?.labelPosition)
 
 /** 根据 schema 与当前 modelValue 生成 ElForm rules */
 const formRules = computed(() =>
@@ -107,10 +109,14 @@ watch(
 )
 
 function getFieldSpan(field: FormFieldSchema) {
+  if (isMobile.value)
+    return 24
   return field.ui.layout?.span ?? 24
 }
 
 function getFieldBreakpoints(field: FormFieldSchema) {
+  if (isMobile.value)
+    return {}
   return field.ui.layout?.breakpoints ?? {}
 }
 
@@ -345,6 +351,7 @@ watch(
             <ElCol
               v-for="field in rowFields"
               :key="field.meta.field"
+              class="pro-form__field-col"
               :span="getFieldSpan(field)"
               v-bind="getFieldBreakpoints(field)"
             >
@@ -479,5 +486,31 @@ watch(
 
 .pro-form__footer {
   margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .pro-form {
+    padding: 16px;
+  }
+
+  .pro-form__collapse :deep(.el-collapse-item__content) {
+    padding: 16px 16px 20px;
+  }
+
+  .pro-form__row {
+    --el-row-gutter: 0 !important;
+  }
+
+  .pro-form__row :deep(.el-form-item) {
+    margin-bottom: 16px;
+  }
+
+  .pro-form__footer {
+    margin-top: 20px;
+  }
+
+  .pro-form__footer :deep(.el-button) {
+    min-height: 40px;
+  }
 }
 </style>

@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test'
+import type { Locator } from '@playwright/test'
 
 /**
  * ProTable 示例页
@@ -8,6 +9,7 @@ export class ProTableDemoPage {
 
   async goto() {
     await this.page.goto('/pro-table-demo')
+    await this.resetViewportOrigin()
   }
 
   root() {
@@ -19,23 +21,29 @@ export class ProTableDemoPage {
   }
 
   async clickClearData() {
-    await this.page.getByTestId('pro-table-demo-clear-data').click()
+    await this.resetViewportOrigin()
+    await this.clickInViewport(this.page.getByTestId('pro-table-demo-clear-data'))
   }
 
   async clickRestoreData() {
-    await this.page.getByTestId('pro-table-demo-restore-data').click()
+    await this.resetViewportOrigin()
+    await this.clickInViewport(this.page.getByTestId('pro-table-demo-restore-data'))
   }
 
   async clickPaginationNext() {
-    await this.root().getByTestId('pro-table-pagination').locator('.btn-next').click()
+    await this.resetViewportOrigin()
+    const pagination = this.root().getByTestId('pro-table-pagination')
+    await this.clickInViewport(pagination.locator('.btn-next'))
   }
 
   async clickSimulateError() {
-    await this.page.getByTestId('pro-table-demo-trigger-error').click()
+    await this.resetViewportOrigin()
+    await this.clickInViewport(this.page.getByTestId('pro-table-demo-trigger-error'))
   }
 
   async clickRetry() {
-    await this.root().getByTestId('pro-table-retry').click()
+    await this.resetViewportOrigin()
+    await this.clickInViewport(this.root().getByTestId('pro-table-retry'))
   }
 
   batchCount() {
@@ -51,11 +59,13 @@ export class ProTableDemoPage {
   }
 
   async toggleRowSelection(index: number) {
-    await this.tableBodyRows()
-      .nth(index)
-      .locator('.el-checkbox')
-      .first()
-      .click()
+    await this.resetViewportOrigin()
+    const row = this.tableBodyRows().nth(index)
+    const checkbox = row.locator('.el-checkbox').first()
+
+    await row.scrollIntoViewIfNeeded()
+    await this.resetTableScrollLeft()
+    await this.clickInViewport(checkbox)
   }
 
   /** 名称列（示例页带自定义插槽 ★） */
@@ -77,5 +87,39 @@ export class ProTableDemoPage {
 
   async dispatchClickOnFirstInlineActionButton() {
     await this.firstInlineActionButton().dispatchEvent('click')
+  }
+
+  private async clickInViewport(locator: Locator) {
+    await locator.scrollIntoViewIfNeeded()
+    await locator.click()
+  }
+
+  private async resetViewportOrigin() {
+    await this.page.evaluate(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+
+      for (const selector of ['.default-layout__main', '.default-layout__page-container']) {
+        const element = document.querySelector<HTMLElement>(selector)
+        if (element)
+          element.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      }
+    })
+    await this.resetTableScrollLeft()
+  }
+
+  private async resetTableScrollLeft() {
+    await this.page.evaluate(() => {
+      const selectors = [
+        '.pro-table__scroll',
+        '.el-table__body-wrapper',
+        '.el-table__header-wrapper',
+      ]
+
+      for (const selector of selectors) {
+        const element = document.querySelector<HTMLElement>(selector)
+        if (element)
+          element.scrollLeft = 0
+      }
+    })
   }
 }

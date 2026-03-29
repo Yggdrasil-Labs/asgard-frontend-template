@@ -10,6 +10,7 @@ import type {
 } from '@/types/search-bar'
 import { ElButton, ElCol, ElForm, ElRow } from 'element-plus'
 import { computed, nextTick, onMounted, ref, useSlots, watch } from 'vue'
+import { useAppBreakpoint } from '@/composables'
 import {
   collectSearchRouteQueryKeys,
   deserializeSearchValues,
@@ -38,6 +39,7 @@ const emit = defineEmits<SearchBarEmits>()
 const slots = useSlots()
 const route = useRoute()
 const router = useRouter()
+const { isMobile } = useAppBreakpoint()
 
 const expanded = ref(!props.defaultCollapsed)
 const initialized = ref(false)
@@ -55,6 +57,7 @@ const hasAdvancedFields = computed(() => groupedFields.value.advanced.length > 0
 const canToggleExpand = computed(() =>
   hasAdvancedFields.value || groupedFields.value.basic.length > props.defaultVisibleCount,
 )
+const effectiveLabelPosition = computed(() => isMobile.value ? 'top' : 'right')
 
 function buildDefaultValues() {
   return mergeSearchDefaults(props.schema, {})
@@ -268,7 +271,7 @@ defineExpose<SearchBarExpose>({
     <ElForm
       :model="currentValues"
       :label-width="labelWidth"
-      label-position="right"
+      :label-position="effectiveLabelPosition"
       class="search-bar__form"
     >
       <div class="search-bar__body">
@@ -277,8 +280,9 @@ defineExpose<SearchBarExpose>({
             <ElCol
               v-for="field in visibleFields"
               :key="field.meta.field"
-              :span="field.ui.layout?.span ?? 8"
-              v-bind="field.ui.layout?.breakpoints ?? {}"
+              class="search-bar__field-col"
+              :span="isMobile ? 24 : (field.ui.layout?.span ?? 8)"
+              v-bind="isMobile ? {} : (field.ui.layout?.breakpoints ?? {})"
             >
               <SearchBarField
                 :schema="field"
@@ -365,6 +369,25 @@ defineExpose<SearchBarExpose>({
     width: 100%;
     justify-content: flex-start;
     padding: 0 0 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    padding: 0.875rem 0.875rem 0.5rem;
+    border-radius: 16px;
+  }
+
+  .search-bar__fields :deep(.el-row) {
+    --el-row-gutter: 0 !important;
+  }
+
+  .search-bar__actions {
+    gap: 0.75rem;
+  }
+
+  .search-bar__actions :deep(.el-button) {
+    min-height: 40px;
   }
 }
 </style>

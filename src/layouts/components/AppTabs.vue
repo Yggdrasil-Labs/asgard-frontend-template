@@ -43,7 +43,7 @@ function handleRefresh() {
 <template>
   <section class="app-tabs" data-spacing="inset">
     <div class="app-tabs__bar" data-layout="inline">
-      <div class="app-tabs__list" role="tablist" aria-label="页面标签">
+      <div class="app-tabs__list" role="tablist" aria-label="页面标签" data-overflow="x">
         <div
           v-for="item in items"
           :key="item.key"
@@ -54,6 +54,7 @@ function handleRefresh() {
           }"
           :data-marker="item.key === activeKey ? 'active' : undefined"
           :data-marker-style="item.key === activeKey ? 'outline' : undefined"
+          data-shrink="fixed"
           data-size="tab"
         >
           <button
@@ -175,13 +176,16 @@ function handleRefresh() {
   min-width: 0;
   gap: var(--shell-space-2);
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 0;
   scrollbar-width: thin;
+  scrollbar-gutter: stable both-edges;
 }
 
 .app-tabs__item {
   position: relative;
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   gap: var(--shell-space-1);
   min-width: 0;
@@ -189,6 +193,7 @@ function handleRefresh() {
   border-radius: calc(var(--shell-radius-md) - 2px);
   background: rgba(255, 255, 255, 0.82);
   min-height: var(--shell-tabs-height);
+  max-width: min(18rem, 70vw);
   padding: var(--shell-space-1) var(--shell-space-1) var(--shell-space-1) var(--shell-space-3);
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
   transition:
@@ -280,6 +285,24 @@ function handleRefresh() {
   transform: translateY(-1px);
   border-color: var(--shell-border-strong);
   background: rgba(255, 255, 255, 0.96);
+}
+
+.app-tabs__list::-webkit-scrollbar {
+  height: 8px;
+}
+
+.app-tabs__list::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.06);
+  border-radius: 999px;
+}
+
+.app-tabs__list::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.42);
+  border-radius: 999px;
+}
+
+.app-tabs__list::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.6);
 }
 
 @media (max-width: 768px) {

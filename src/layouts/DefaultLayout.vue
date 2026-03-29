@@ -174,6 +174,7 @@ function getTabCacheKey(routeName: string, fullPath: string) {
 
         <div class="default-layout__content" data-scroll-boundary="viewport" data-density="compact">
           <AppTabs
+            v-if="!isMobile"
             :items="tabsStore.items"
             :active-key="tabsStore.activeKey"
             @select="handleTabSelect"
@@ -241,7 +242,7 @@ function getTabCacheKey(routeName: string, fullPath: string) {
 .default-layout__main {
   flex: 1;
   min-height: 0;
-  padding: 0 var(--shell-content-gap) var(--shell-content-gap);
+  padding: var(--shell-space-2) var(--shell-content-gap);
   overflow: auto;
 }
 
@@ -260,6 +261,7 @@ function getTabCacheKey(routeName: string, fullPath: string) {
   max-width: var(--shell-page-max-width);
   margin: 0 auto;
   padding: var(--shell-page-padding-block) var(--shell-page-padding-inline);
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
@@ -272,7 +274,7 @@ function getTabCacheKey(routeName: string, fullPath: string) {
   }
 
   .default-layout__main {
-    padding: 0 var(--shell-content-gap) var(--shell-content-gap);
+    padding: var(--shell-space-2) var(--shell-content-gap);
   }
 
   .default-layout__main-surface {

@@ -111,7 +111,7 @@ textarea {
     --shell-panel-gap: var(--shell-space-2);
     --shell-content-gap: var(--shell-space-3);
     --shell-page-padding-inline: 0;
-    --shell-page-padding-block: 0;
+    --shell-page-padding-block: var(--shell-space-2);
     --shell-page-section-gap: var(--shell-space-4);
   }
 }
