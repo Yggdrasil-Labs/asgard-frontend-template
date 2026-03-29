@@ -2,6 +2,7 @@
 import type { Locale } from '@/locales/config'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import AppLayoutRenderer from '@/app/shell/AppLayoutRenderer.vue'
 import { getElementLocale } from '@/locales/element-locale'
 
 const { locale } = useI18n()
@@ -11,7 +12,7 @@ const elementLocale = computed(() => getElementLocale(locale.value as Locale))
 <template>
   <ElConfigProvider :locale="elementLocale">
     <div class="app">
-      <RouterView />
+      <AppLayoutRenderer class="app-layout-renderer" />
     </div>
   </ElConfigProvider>
 </template>
@@ -19,8 +20,10 @@ const elementLocale = computed(() => getElementLocale(locale.value as Locale))
 <style lang="scss" scoped>
 .app {
   min-height: 100vh;
-  max-width: 100vw;
-  margin: 0 auto;
-  text-align: center;
+}
+
+.app-layout-renderer {
+  display: block;
+  min-height: 100vh;
 }
 </style>

@@ -10,6 +10,8 @@ export type SemanticIconName
     | 'refresh'
     | 'close'
     | 'back'
+    | 'expand'
+    | 'fold'
     | 'success'
     | 'warning'
     | 'error'

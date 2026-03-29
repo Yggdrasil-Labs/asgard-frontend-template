@@ -1,96 +1,73 @@
-import type { RouteRecordRaw } from 'vue-router'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
-import MainLayout from '@/layouts/MainLayout.vue'
+import { useMenuStore, useTabsStore } from '@/stores'
+import { normalizedAppRouteSchema } from './app-route-tree'
+import { createRouteRecords } from './app-routes'
 
-const MAIN_LAYOUT_ROUTE_NAME = 'MainLayout'
+function findRouteByPath(path: string) {
+  for (const routeItem of normalizedAppRouteSchema) {
+    if (routeItem.path === path)
+      return routeItem
 
-const PAGE_FILE_RE = /\/src\/pages\/([^/]+)\.vue$/
-const PASCAL_SEG_RE = /(^\w)|-(\w)/g
-
-function toRoutePathFromPageFile(file: string): string | undefined {
-  // 约定：src/pages/index.vue -> '/'
-  //      src/pages/foo-bar.vue -> '/foo-bar'
-  // 只处理一级 pages，避免隐式嵌套路由引入歧义
-  const match = file.match(PAGE_FILE_RE)
-  if (!match)
-    return undefined
-  const name = match[1]
-  if (name === 'index')
-    return '/'
-  return `/${name}`
-}
-
-function toRouteNameFromPath(path: string): string {
-  if (path === '/')
-    return 'Home'
-  return path
-    .slice(1)
-    .split('/')
-    .filter(Boolean)
-    .map(seg => seg.replace(PASCAL_SEG_RE, (_, a, b) => (a ?? b).toUpperCase()))
-    .join('')
-}
-
-function registerDynamicPageRoutes(router: ReturnType<typeof createRouter>) {
-  const pages = import.meta.glob('/src/pages/*.vue')
-
-  // 可选：为常用 demo 页提供默认标题（避免依赖宏/解析 definePage）
-  const titleMap: Record<string, string> = {
-    '/': '首页',
-    '/pro-dialog-demo': 'ProDialog 示例',
-    '/pro-form-demo': 'ProForm 示例',
-    '/pro-detail-demo': 'ProDetail 示例',
-    '/pro-table-demo': 'ProTable 示例',
-    '/search-bar-demo': 'SearchBar 示例',
+    if (routeItem.children) {
+      const nested = routeItem.children.find(child => child.path === path)
+      if (nested)
+        return nested
+    }
   }
 
-  for (const [file, loader] of Object.entries(pages)) {
-    const path = toRoutePathFromPageFile(file)
-    if (!path)
-      continue
+  return null
+}
 
-    const name = toRouteNameFromPath(path)
+function buildTabRecord(route: RouteLocationNormalizedLoaded) {
+  const routeKey = String(route.name ?? route.path)
 
-    // 跳过首页（由静态 children 承载），其他都动态注入到 MainLayout 下
-    if (path === '/')
-      continue
+  return {
+    key: routeKey,
+    routeName: routeKey,
+    path: route.path,
+    fullPath: route.fullPath,
+    title: String(route.meta.title ?? routeKey),
+    closable: route.meta.tab?.closable ?? routeKey !== 'Home',
+    pinned: route.meta.tab?.pinned ?? routeKey === 'Home',
+  }
+}
 
-    // 子路由使用相对路径挂到 MainLayout，最终访问地址仍保持 '/foo' 形式。
-    const record: RouteRecordRaw = {
-      path: path.slice(1),
-      name,
-      component: loader,
-      meta: { title: titleMap[path] ?? name },
-    }
+function syncShellState(to: RouteLocationNormalizedLoaded) {
+  const menuStore = useMenuStore()
+  const tabsStore = useTabsStore()
+  const currentKey = String(to.name ?? to.path)
 
-    router.addRoute(MAIN_LAYOUT_ROUTE_NAME, record)
+  menuStore.syncRoute(String(to.meta.menu?.activeMenu ?? currentKey))
+
+  const homeRoute = findRouteByPath('/')
+  if (homeRoute && currentKey !== homeRoute.name && !tabsStore.items.some(item => item.key === homeRoute.name)) {
+    tabsStore.syncRoute({
+      key: homeRoute.name,
+      routeName: homeRoute.name,
+      path: homeRoute.path,
+      fullPath: homeRoute.path,
+      title: homeRoute.meta.title,
+      closable: homeRoute.meta.tab?.closable ?? false,
+      pinned: homeRoute.meta.tab?.pinned ?? true,
+    })
+  }
+
+  if (to.meta.tab?.enabled !== false) {
+    tabsStore.syncRoute(buildTabRecord(to))
   }
 }
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      name: MAIN_LAYOUT_ROUTE_NAME,
-      component: MainLayout,
-      children: [
-        {
-          path: '',
-          name: 'Home',
-          component: () => import('@/pages/index.vue'),
-          meta: { title: '首页' },
-        },
-      ],
-    },
-  ],
+  routes: createRouteRecords(),
 })
-
-registerDynamicPageRoutes(router)
 
 // 路由守卫（模板默认不做业务鉴权）
 // 路由后置守卫
 router.afterEach((to) => {
+  syncShellState(to)
+
   // 更新页面标题
   if (to.meta.title) {
     document.title = `${to.meta.title} - Asgard Frontend`

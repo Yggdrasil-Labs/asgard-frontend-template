@@ -38,14 +38,16 @@ asgard-frontend-template
 │   │   └── modules/    # 各业务模块 API
 │   ├── assets/         # 静态资源
 │   │   └── scss/       # 样式文件
+│   ├── app/            # 应用级 shell 与页面承载
 │   ├── components/     # 通用组件
 │   ├── composables/    # 组合式函数
 │   ├── config/         # 配置文件
 │   ├── constants/      # 常量定义
+│   ├── layouts/        # Layout 骨架与布局组件
 │   ├── locales/        # 国际化资源
-│   ├── pages/          # 页面组件（自动路由）
-│   ├── router/         # 路由配置
-│   ├── stores/         # 状态管理（Pinia）
+│   ├── pages/          # 页面组件（由路由 schema 承载）
+│   ├── router/         # 路由协议、schema、标准化与注册
+│   ├── stores/         # 状态管理（Pinia / Shell Store）
 │   ├── types/          # TypeScript 类型定义
 │   ├── utils/          # 工具函数
 │   ├── App.vue         # 根组件
@@ -76,8 +78,9 @@ asgard-frontend-template
 - 🧪 **完整测试**: Playwright 端到端测试 + Page Object 模式
 - 🌍 **国际化支持**: Vue I18n 多语言支持，内置中英文切换
 - 📦 **自动导入**: 组件和 API 自动导入，无需手动 import
-- 🛣️ **文件路由**: 基于 Vue Router 5 的文件系统路由
-- 💾 **状态管理**: Pinia + 持久化插件，支持本地存储
+- 🧭 **Shell 布局体系**: `AppLayoutRenderer + Default/Blank Layout + AppPageRenderer`
+- 🛣️ **Schema 路由**: 通过 `AppRouteRecord/AppRouteMeta`、本地 route schema 和 normalizer 驱动路由注册
+- 💾 **状态管理**: Pinia + 壳层状态 Store，统一管理 menu / tabs / keep-alive / responsive
 - 🎨 **样式方案**: Sass + Modern Normalize，提供丰富的样式工具
 
 ### 开发体验
@@ -97,6 +100,20 @@ asgard-frontend-template
 - 🧹 **代码质量**: Pre-commit hooks 确保代码质量
 - 🔍 **多环境支持**: 开发、测试、生产环境配置
 - 📊 **测试**: Playwright E2E 测试，关键流程可在本地或 CI 中运行
+
+## 🏗️ Layout Shell 架构
+
+当前模板的页面承载已经从单一 `MainLayout + RouterView` 升级为 schema 驱动的后台壳层：
+
+- `src/router/types.ts`：定义 `AppRouteRecord / AppRouteMeta`
+- `src/router/app-route-schema.ts`：声明本地页面 schema
+- `src/router/route-normalizer.ts`：补齐 layout / menu / tab / keepAlive 默认值
+- `src/router/app-routes.ts`：把标准化路由转换为 Vue Router records
+- `src/app/shell/AppLayoutRenderer.vue`：根据当前路由选择 `DefaultLayout` 或 `BlankLayout`
+- `src/app/shell/AppPageRenderer.vue`：集中处理 `RouterView + KeepAlive`
+- `src/stores/*`：统一管理菜单、Tabs、缓存和响应式壳层状态
+
+这套结构的目标是让页面行为通过协议集中表达，而不是把菜单高亮、Tabs、缓存和响应式逻辑散落在页面组件里。
 
 ## 📦 核心依赖
 

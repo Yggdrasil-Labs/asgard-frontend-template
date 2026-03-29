@@ -25,6 +25,28 @@ $colors: (
   gray-900: #0f172a
 );
 
+// 企业控制台壳层色板
+// -----------------------------------------------------------------------------
+$shell-colors: (
+  bg: #f4f7fb,
+  bg-strong: #edf2f8,
+  surface: rgba(255, 255, 255, 0.88),
+  surface-strong: #ffffff,
+  surface-muted: rgba(242, 246, 252, 0.94),
+  border: rgba(15, 23, 42, 0.08),
+  border-strong: rgba(15, 23, 42, 0.14),
+  text: #0f172a,
+  text-muted: #64748b,
+  text-soft: #94a3b8,
+  accent: #2f6feb,
+  accent-soft: rgba(47, 111, 235, 0.12),
+  accent-strong: #1d4ed8,
+  success: #0f766e,
+  warning: #b45309,
+  shadow: 0 18px 50px rgba(15, 23, 42, 0.08),
+  shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.06),
+);
+
 // 字体系统
 // -----------------------------------------------------------------------------
 $font-family-base:
@@ -100,6 +122,42 @@ $border-radius: (
   xl: 0.75rem,
   // 12px
   full: 9999px,
+);
+
+// 壳层圆角
+// -----------------------------------------------------------------------------
+$shell-radius: (
+  sm: 12px,
+  md: 18px,
+  lg: 24px,
+  xl: 32px,
+  full: 9999px,
+);
+
+// 壳层间距与尺寸
+// -----------------------------------------------------------------------------
+$shell-spacing: (
+  1: 4px,
+  2: 8px,
+  3: 12px,
+  4: 16px,
+  5: 24px,
+  6: 32px,
+);
+
+$shell-layout: (
+  frame-padding: 12px,
+  panel-gap: 12px,
+  content-gap: 16px,
+  control-height: 36px,
+  header-height: 68px,
+  tabs-height: 44px,
+  sider-width: 252px,
+  sider-collapsed-width: 82px,
+  page-max-width: 1280px,
+  page-padding-inline: 8px,
+  page-padding-block: 8px,
+  page-section-gap: 24px,
 );
 
 // 阴影 - 简化版

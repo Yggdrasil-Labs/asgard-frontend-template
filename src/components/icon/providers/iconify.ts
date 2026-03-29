@@ -9,6 +9,8 @@ import IconEpBack from '~icons/ep/back'
 import IconEpClose from '~icons/ep/close'
 import IconEpDelete from '~icons/ep/delete'
 import IconEpEdit from '~icons/ep/edit'
+import IconEpExpand from '~icons/ep/expand'
+import IconEpFold from '~icons/ep/fold'
 import IconEpFolder from '~icons/ep/folder'
 import IconEpInfo from '~icons/ep/info-filled'
 import IconEpLink from '~icons/ep/link'
@@ -27,6 +29,8 @@ const iconifyMap: Record<SemanticIconName, Component> = {
   'delete': IconEpDelete,
   'edit': IconEpEdit,
   'error': IconEpError,
+  'expand': IconEpExpand,
+  'fold': IconEpFold,
   'info': IconEpInfo,
   'menu-dashboard': IconEpSuccess, // 暂用 success，后续可换为本地 menu/dashboard.svg
   'menu-system': IconEpInfo,

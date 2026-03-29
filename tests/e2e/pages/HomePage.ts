@@ -1,6 +1,7 @@
 import type { Locator, Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 import { BasePage } from './BasePage'
+import { LayoutShellPage } from './LayoutShellPage'
 
 const PAGE_TITLE_RE = /Asgard Frontend/
 const WINDOW_SIZE_RE = /\d+ × \d+/
@@ -20,6 +21,7 @@ export class HomePage extends BasePage {
   private readonly demoContentParagraphs: Locator
   private readonly envKeys: Locator
   private readonly heroContent: Locator
+  private readonly shell: LayoutShellPage
 
   constructor(page: Page) {
     super(page)
@@ -34,6 +36,7 @@ export class HomePage extends BasePage {
     this.demoContentParagraphs = page.locator('.demo-content p')
     this.envKeys = page.locator('.env-key')
     this.heroContent = page.locator('.hero-content')
+    this.shell = new LayoutShellPage(page)
   }
 
   async navigateToHome() {
@@ -98,5 +101,9 @@ export class HomePage extends BasePage {
 
     await this.setViewportSize({ width: 375, height: 667 })
     await this.expectElementVisible(this.heroContent)
+  }
+
+  layoutShell() {
+    return this.shell
   }
 }
