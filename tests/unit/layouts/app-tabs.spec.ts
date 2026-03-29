@@ -57,43 +57,6 @@ async function mountTabs() {
   }
 }
 
-async function mountManyTabs() {
-  const container = document.createElement('div')
-  document.body.appendChild(container)
-  mountedContainers.push(container)
-
-  const items = Array.from({ length: 10 }, (_, index) => ({
-    key: `Tab-${index + 1}`,
-    routeName: `Tab${index + 1}`,
-    path: `/tab-${index + 1}`,
-    fullPath: `/tab-${index + 1}`,
-    title: `超长标签页标题 ${index + 1} - 用于验证横向滚动是否可用`,
-    closable: true,
-    pinned: false,
-  }))
-
-  const Host = defineComponent({
-    setup() {
-      return () => h(AppTabs, {
-        items,
-        activeKey: 'Tab-10',
-      })
-    },
-  })
-
-  const app = createApp(Host)
-  app.mount(container)
-  await nextTick()
-
-  return {
-    container,
-    unmount() {
-      app.unmount()
-      container.remove()
-    },
-  }
-}
-
 describe('app tabs', () => {
   it('renders pinned home tab', async () => {
     const app = await mountTabs()

@@ -18,7 +18,6 @@ import {
 } from 'element-plus'
 import { Comment, computed, Fragment, markRaw, nextTick, onMounted, ref, Text, useSlots, watch } from 'vue'
 import AppIcon from '@/components/icon/AppIcon.vue'
-import { useAppBreakpoint } from '@/composables'
 import {
   ProTableDynamicCellHost,
   renderBuiltinCell,
@@ -61,7 +60,6 @@ function headerTooltipIcon(icon?: string): SemanticIconName | undefined {
 }
 
 const slots = useSlots()
-const { isMobile } = useAppBreakpoint()
 const tableRef = ref<InstanceType<typeof ElTable> | null>(null)
 
 /** 稳定引用，供 `#cell` 的 `defaultRender` 与 `component :is` 使用 */
@@ -312,68 +310,68 @@ defineExpose({
           @sort-change="onSortChange"
           @selection-change="emitSelectionFromTable"
         >
-        <ElTableColumn
-          v-if="selection.enabled"
-          type="selection"
-          width="48"
-          fixed="left"
-          :reserve-selection="reserveSelection"
-        />
+          <ElTableColumn
+            v-if="selection.enabled"
+            type="selection"
+            width="48"
+            fixed="left"
+            :reserve-selection="reserveSelection"
+          />
 
-        <ElTableColumn
-          v-for="(col, colIndex) in visibleColumns"
-          :key="columnVueKey(col, colIndex)"
-          :prop="col.meta.field"
-          :label="col.meta.label"
-          :width="col.ui.width"
-          :min-width="col.ui.minWidth"
-          :align="col.ui.align"
-          :header-align="col.ui.headerAlign ?? col.ui.align"
-          :fixed="col.ui.fixed === false ? undefined : col.ui.fixed"
-          :show-overflow-tooltip="col.ui.ellipsis === true"
-          :sortable="col.ui.sortable ? 'custom' : false"
-        >
-          <template #header>
-            <span class="pro-table__th-label">{{ col.meta.label }}</span>
-            <ElTooltip
-              v-if="col.ui.tooltip"
-              :content="col.ui.tooltip.content"
-              :placement="col.ui.tooltip.placement ?? 'top'"
-            >
-              <span class="pro-table__th-tip" aria-label="列说明">
-                <AppIcon
-                  v-if="headerTooltipIcon(col.ui.tooltip.icon)"
-                  :name="headerTooltipIcon(col.ui.tooltip.icon)!"
-                  class="pro-table__th-icon"
-                />
-                <template v-else>
-                  ?
-                </template>
-              </span>
-            </ElTooltip>
-          </template>
+          <ElTableColumn
+            v-for="(col, colIndex) in visibleColumns"
+            :key="columnVueKey(col, colIndex)"
+            :prop="col.meta.field"
+            :label="col.meta.label"
+            :width="col.ui.width"
+            :min-width="col.ui.minWidth"
+            :align="col.ui.align"
+            :header-align="col.ui.headerAlign ?? col.ui.align"
+            :fixed="col.ui.fixed === false ? undefined : col.ui.fixed"
+            :show-overflow-tooltip="col.ui.ellipsis === true"
+            :sortable="col.ui.sortable ? 'custom' : false"
+          >
+            <template #header>
+              <span class="pro-table__th-label">{{ col.meta.label }}</span>
+              <ElTooltip
+                v-if="col.ui.tooltip"
+                :content="col.ui.tooltip.content"
+                :placement="col.ui.tooltip.placement ?? 'top'"
+              >
+                <span class="pro-table__th-tip" aria-label="列说明">
+                  <AppIcon
+                    v-if="headerTooltipIcon(col.ui.tooltip.icon)"
+                    :name="headerTooltipIcon(col.ui.tooltip.icon)!"
+                    class="pro-table__th-icon"
+                  />
+                  <template v-else>
+                    ?
+                  </template>
+                </span>
+              </ElTooltip>
+            </template>
 
-          <template #default="{ row }">
-            <slot
-              name="cell"
-              :field="col.meta.field"
-              :row="row"
-              :column-schema="col"
-              :value="row[col.meta.field]"
-              :context="context"
-              :default-render="DynamicCellHost"
-              :builtin-cell-render="cellRenderFn(col, row as Record<string, unknown>)"
-            >
-              <ProTableDynamicCellHost :render-fn="cellRenderFn(col, row as Record<string, unknown>)" />
+            <template #default="{ row }">
+              <slot
+                name="cell"
+                :field="col.meta.field"
+                :row="row"
+                :column-schema="col"
+                :value="row[col.meta.field]"
+                :context="context"
+                :default-render="DynamicCellHost"
+                :builtin-cell-render="cellRenderFn(col, row as Record<string, unknown>)"
+              >
+                <ProTableDynamicCellHost :render-fn="cellRenderFn(col, row as Record<string, unknown>)" />
+              </slot>
+            </template>
+          </ElTableColumn>
+
+          <template #empty>
+            <slot v-if="showEmptyState" name="empty">
+              {{ emptyText }}
             </slot>
           </template>
-        </ElTableColumn>
-
-        <template #empty>
-          <slot v-if="showEmptyState" name="empty">
-            {{ emptyText }}
-          </slot>
-        </template>
         </ElTable>
       </div>
     </div>
