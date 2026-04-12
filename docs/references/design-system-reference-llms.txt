@@ -1,0 +1,28 @@
+面向 AI 贡献者的设计系统参考
+
+仓库：asgard-frontend-template
+用途：提供快速操作提示，不替代正式组件文档
+
+1. UI 技术栈
+- 主框架：Vue 3 + TypeScript
+- 基础 UI 库：Element Plus
+- 样式体系：Sass + 共享 token + 主题覆盖
+
+2. 设计优先级
+- 后台风格清晰度优先于营销页装饰感
+- 可复用基元优先于页面局部小组件
+- header、sider、tabs、page container 之间保持 shell 一致性
+- 有文档的组件 API 优先于“看源码自己猜”
+
+3. 应先看哪里
+- 顶层 UI 规则：`docs/FRONTEND.md`
+- 长期设计决策：`docs/design-docs/`
+- 公共组件契约：`docs/components/`
+- shell 结构：`ARCHITECTURE.md`、`src/layouts/`、`src/app/shell/`
+
+4. 工作规则
+- 如果某个视觉或交互规则只属于单个公共组件，应更新对应组件文档
+- 如果它改变了 shell 或整个仓库的行为，应更新架构或设计文档
+
+5. 当前限制
+- 仓库目前还没有独立的 design token 包，也没有跨平台设计系统导出

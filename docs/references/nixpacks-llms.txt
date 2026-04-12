@@ -1,0 +1,20 @@
+面向 AI 贡献者的 Nixpacks 参考
+
+当前状态：
+- 仓库当前没有提交任何 Nixpacks 配置
+- 当前可见的部署相关工件包括 `Dockerfile`、`nginx.conf`、`build.sh`、`build.ps1` 和标准 Vite 构建产物假设
+
+这意味着：
+- 不要把 Nixpacks 当成当前部署事实来源
+- 如果部署行为变化，应文档化真实存在的工件和入口
+
+优先查看：
+- `build.sh`
+- `build.ps1`
+- `Dockerfile`
+- `nginx.conf`
+- `package.json` scripts
+- `.github/workflows/`
+
+更新规则：
+- 只有当仓库真正引入 Nixpacks 配置后，才把本说明替换成具体的 Nixpacks 指引
