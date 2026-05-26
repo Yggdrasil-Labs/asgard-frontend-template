@@ -1,22 +1,23 @@
-# 设计文档索引
+# 设计决策目录
 
-这个目录保存长期有效的设计决策。
+项目级通用设计决策。每个文档定义一个跨功能的设计主题，智能体在相关领域编码前应先查阅。
 
-## 什么时候应该读这个目录
+| id | 主题 | status | owner | 适用范围 | 路径 |
+|----|------|--------|-------|----------|------|
+| design-core-beliefs | 核心工程信条 | verified | — | 全仓库 | `core-beliefs.md` |
+| design-route-shell | 路由与 Shell 架构 | verified | — | router, shell, layouts | `route-and-shell-architecture.md` |
+| design-component-lib | 组件库策略 | verified | — | components | `component-library-strategy.md` |
+| design-doc-system | 文档系统设计 | verified | — | docs | `documentation-system.md` |
 
-- 需要理解仓库为何这样组织
-- 正在修改路由、shell 或组件库行为
-- 正在判断新抽象应放到哪里
+## status 含义
 
-## 文档列表
+- **draft**：设计尚未落地。智能体可参考但需注意细节可能变化。
+- **verified**：设计与实现一致。智能体应严格遵守。
+- **stale**：实现已偏离设计。智能体不应信赖细节，需先更新。
 
-- `core-beliefs.md`：长期原则
-- `route-and-shell-architecture.md`：route schema 与 shell 组合
-- `component-library-strategy.md`：共享 UI 基元如何演进
-- `documentation-system.md`：文档系统如何组织
+## 如何添加
 
-## 非目标
-
-- 保存任务清单
-- 重复组件 API 文档
-- 归档具体实现计划
+1. 复制 `_template.md` 为 `{主题名}.md`
+2. 填写 frontmatter 和所有章节
+3. 在上方目录表中添加条目
+4. status 设为 draft；落地验证后更新为 verified

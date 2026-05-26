@@ -1,3 +1,12 @@
+---
+id: design-doc-system
+status: verified
+owner: ""
+tags: [docs, harness]
+created: 2026-03-28
+verified: 2026-05-26
+---
+
 # 文档系统
 
 ## 目的
@@ -10,14 +19,16 @@
 
 ## 结构
 
-- `AGENTS.md`：轻量导航
+- `AGENTS.md`：轻量导航（< 100 行）
 - `ARCHITECTURE.md`：顶层地图
+- `docs/DOMAINS.md`：业务领域划分
 - `docs/design-docs/`：长期设计决策
-- `docs/product-specs/`：能力规格
-- `docs/exec-plans/`：工作跟踪与技术债
-- `docs/generated/`：生成物
-- `docs/references/`：紧凑参考
+- `docs/active/`：活跃需求与技术债
+- `docs/archive/`：版本归档
+- `docs/generated/`：自动生成物
+- `docs/references/`：外部参考
 - `docs/components/`：组件契约
+- `docs/skills/`：项目级工作流 skill
 
 ## 为什么这种形状更适合 AI
 

@@ -1,10 +1,36 @@
+---
+updated: 2026-05-26
+---
+
 # 架构
 
 本文档是仓库的顶层地图，只回答三件事：系统怎么分层、事实来源在哪里、改动通常应落到哪一层。
 
-## 系统概览
+## 这个系统是什么？
 
-这个仓库是一个面向后台场景的前端模板。最重要的架构选择是：让 shell 行为由显式的 route schema 和共享组件契约驱动，而不是分散在页面组件里。
+面向后台场景的前端模板（Vue 3 + TypeScript + Vite）。核心架构选择：shell 行为由显式的 route schema 和共享组件契约驱动，而不是分散在页面组件里。
+
+## 业务领域
+
+业务领域划分独立维护在 `docs/DOMAINS.md`。
+
+## 代码分层模型
+
+```mermaid
+flowchart LR
+  Router["路由协议"] --> Shell["Shell 渲染"]
+  Shell --> State["Shell 状态"]
+  Components["可复用组件"] --> Pages["示例页"]
+  Router --> Pages
+  State --> Shell
+```
+
+**依赖规则：**
+- 示例页可依赖路由协议和组件，但不定义 shell 策略
+- Shell 运行时只读取 route metadata 和 store，不反向依赖页面
+- 可复用组件不依赖 shell 状态或路由实现
+
+## 系统概览
 
 从高层看：
 
@@ -14,6 +40,19 @@
 - `src/components/` 提供可复用 UI 基元和更高层的通用组件
 - `src/pages/` 承载用于演示模板能力的示例页
 - `docs/` 是文档记录系统
+
+## 技术栈
+
+| 层级 | 技术 | 备注 |
+|------|------|------|
+| 框架 | Vue 3.5 + TypeScript 5.9 | Composition API + `<script setup>` |
+| 构建 | Vite 7 | 开发 / 生产 |
+| 状态 | Pinia 3 | UI 与 shell 状态 |
+| 路由 | Vue Router 5 | schema 驱动 |
+| UI 库 | Element Plus | 基础组件 |
+| 国际化 | Vue I18n 11 | 中英双语 |
+| 测试 | Vitest + Playwright | 单元 + E2E |
+| 包管理 | pnpm 10 | Node >= 22.14 |
 
 ## 架构原则
 

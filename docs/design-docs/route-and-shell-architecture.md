@@ -1,3 +1,12 @@
+---
+id: design-route-shell
+status: verified
+owner: ""
+tags: [router, shell, layout]
+created: 2026-03-28
+verified: 2026-05-26
+---
+
 # 路由与 Shell 架构
 
 ## 目的

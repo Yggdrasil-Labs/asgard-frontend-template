@@ -1,3 +1,12 @@
+---
+id: design-component-lib
+status: verified
+owner: ""
+tags: [components, pro-form, pro-table]
+created: 2026-03-28
+verified: 2026-05-26
+---
+
 # 组件库策略
 
 ## 目的
