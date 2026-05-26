@@ -60,5 +60,6 @@ source ~/.nvm/nvm.sh
 pnpm install
 pnpm lint            # ESLint
 pnpm type-check      # vue-tsc
-pnpm test:e2e        # Playwright
+pnpm test            # Vitest 单元测试
+# E2E 测试已迁移到独立仓库 bifrost-e2e
 ```

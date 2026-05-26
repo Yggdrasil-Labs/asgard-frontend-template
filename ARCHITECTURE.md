@@ -51,7 +51,7 @@ flowchart LR
 | 路由 | Vue Router 5 | schema 驱动 |
 | UI 库 | Element Plus | 基础组件 |
 | 国际化 | Vue I18n 11 | 中英双语 |
-| 测试 | Vitest + Playwright | 单元 + E2E |
+| 测试 | Vitest | 单元测试 |
 | 包管理 | pnpm 10 | Node >= 22.14 |
 
 ## 架构原则
