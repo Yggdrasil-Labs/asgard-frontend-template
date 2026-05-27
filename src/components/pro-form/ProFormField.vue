@@ -197,7 +197,7 @@ const mergedFieldProps = computed(() => ({
 }
 
 .pro-form-field__missing-component {
-  color: var(--el-color-danger, #f56c6c);
+  color: var(--el-color-danger, #dc2626);
   font-size: 12px;
 }
 </style>

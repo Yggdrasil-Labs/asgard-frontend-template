@@ -117,10 +117,10 @@ async function handleCopy() {
   border: none;
   background: transparent;
   cursor: pointer;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--el-text-color-secondary, #5e6578);
 }
 
 .pro-detail__copy:hover {
-  color: var(--el-color-primary, #409eff);
+  color: var(--el-color-primary, #4f6ef7);
 }
 </style>

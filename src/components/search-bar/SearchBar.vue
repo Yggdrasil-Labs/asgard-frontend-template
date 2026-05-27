@@ -328,11 +328,10 @@ defineExpose<SearchBarExpose>({
 
 <style scoped lang="scss">
 .search-bar {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.92) 100%);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 18px;
-  padding: 1rem 1rem 0.25rem;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  background: var(--shell-surface-strong, #ffffff);
+  border: 1px solid var(--shell-border, #e8eaed);
+  border-radius: 8px;
+  padding: 16px 16px 4px;
 }
 
 .search-bar__form {
@@ -342,7 +341,7 @@ defineExpose<SearchBarExpose>({
 .search-bar__body {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .search-bar__fields {
@@ -354,9 +353,9 @@ defineExpose<SearchBarExpose>({
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.5rem;
+  gap: 8px;
   flex-wrap: wrap;
-  min-width: 220px;
+  min-width: 200px;
   padding-top: 2px;
 }
 
@@ -368,14 +367,13 @@ defineExpose<SearchBarExpose>({
   .search-bar__actions {
     width: 100%;
     justify-content: flex-start;
-    padding: 0 0 0.75rem;
+    padding: 0 0 12px;
   }
 }
 
 @media (max-width: 768px) {
   .search-bar {
-    padding: 0.875rem 0.875rem 0.5rem;
-    border-radius: 16px;
+    padding: 12px 12px 4px;
   }
 
   .search-bar__fields :deep(.el-row) {
@@ -383,7 +381,7 @@ defineExpose<SearchBarExpose>({
   }
 
   .search-bar__actions {
-    gap: 0.75rem;
+    gap: 8px;
   }
 
   .search-bar__actions :deep(.el-button) {

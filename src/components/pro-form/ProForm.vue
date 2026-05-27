@@ -445,7 +445,7 @@ watch(
 
 .pro-form__collapse :deep(.el-collapse-item__content) {
   padding: 20px 24px 24px;
-  background-color: var(--el-fill-color-lighter, #f5f7fa);
+  background-color: var(--el-fill-color-lighter, #f8f9fa);
   border-radius: 8px;
   margin-top: 4px;
 }

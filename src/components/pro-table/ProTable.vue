@@ -441,7 +441,7 @@ defineExpose({
 }
 
 .pro-table__error-desc {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--el-text-color-regular);
 }
 

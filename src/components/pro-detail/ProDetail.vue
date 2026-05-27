@@ -255,14 +255,14 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
   margin-left: 4px;
   border-radius: 50%;
   font-size: 12px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
-  color: var(--el-text-color-secondary, #909399);
+  border: 1px solid var(--el-border-color, #e8eaed);
+  color: var(--el-text-color-secondary, #5e6578);
   cursor: default;
 }
 
 .pro-detail__empty {
   padding: 16px 8px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--el-text-color-secondary, #5e6578);
 }
 
 @media (max-width: 768px) {
