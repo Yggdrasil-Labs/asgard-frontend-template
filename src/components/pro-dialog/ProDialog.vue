@@ -365,6 +365,16 @@ defineExpose<ProDialogExpose>({
   height: 100%;
 }
 
+.dialog-body__scrollbar :deep(.el-scrollbar__bar.is-vertical .el-scrollbar__thumb) {
+  width: 6px;
+  border-radius: 3px;
+}
+
+.dialog-body__scrollbar :deep(.el-scrollbar__bar.is-horizontal .el-scrollbar__thumb) {
+  height: 6px;
+  border-radius: 3px;
+}
+
 .dialog-body {
   display: flex;
   flex-direction: column;

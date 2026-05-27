@@ -437,6 +437,12 @@ watch(
   height: auto;
   min-height: 48px;
   padding: 0 4px;
+  border-radius: 6px;
+  transition: background-color 150ms ease;
+}
+
+.pro-form__collapse :deep(.el-collapse-item__header:hover) {
+  background-color: var(--el-fill-color-light, #f8f9fa);
 }
 
 .pro-form__collapse :deep(.el-collapse-item__wrap) {

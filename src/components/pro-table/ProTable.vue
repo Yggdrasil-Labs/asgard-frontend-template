@@ -426,10 +426,12 @@ defineExpose({
 
 .pro-table__error-alert {
   margin-bottom: 12px;
+  border-radius: 6px;
 }
 
 .pro-table__error-title {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -486,6 +488,7 @@ defineExpose({
   display: flex;
   justify-content: flex-end;
   min-width: 0;
+  padding-top: 12px;
 }
 
 .pro-table__scroll {

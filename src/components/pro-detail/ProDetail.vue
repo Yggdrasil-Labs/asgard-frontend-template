@@ -225,6 +225,15 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
   margin-bottom: 0;
 }
 
+.pro-detail__collapse :deep(.el-collapse-item__header) {
+  border-radius: 6px;
+  transition: background-color 150ms ease;
+}
+
+.pro-detail__collapse :deep(.el-collapse-item__header:hover) {
+  background-color: var(--el-fill-color-light, #f8f9fa);
+}
+
 .pro-detail__group-header {
   display: flex;
   align-items: center;
