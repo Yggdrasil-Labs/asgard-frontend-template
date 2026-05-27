@@ -451,7 +451,6 @@ function triggerLoading() {
 .pro-form-demo-page {
   max-width: 960px;
   margin: 0 auto;
-  padding: 24px;
 }
 
 .page-title {

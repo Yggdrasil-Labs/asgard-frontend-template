@@ -28,23 +28,38 @@ $colors: (
 // 企业控制台壳层色板
 // -----------------------------------------------------------------------------
 $shell-colors: (
-  bg: #f4f7fb,
-  bg-strong: #edf2f8,
-  surface: rgba(255, 255, 255, 0.88),
+  // 背景 — 中性偏暖灰，不冷不燥
+  bg: #f5f6f8,
+  bg-strong: #eef0f3,
+
+  // 表面 — 纯白为主
+  surface: #ffffff,
   surface-strong: #ffffff,
-  surface-muted: rgba(242, 246, 252, 0.94),
-  border: rgba(15, 23, 42, 0.08),
-  border-strong: rgba(15, 23, 42, 0.14),
-  text: #0f172a,
-  text-muted: #64748b,
-  text-soft: #94a3b8,
-  accent: #2f6feb,
-  accent-soft: rgba(47, 111, 235, 0.12),
-  accent-strong: #1d4ed8,
-  success: #0f766e,
-  warning: #b45309,
-  shadow: 0 18px 50px rgba(15, 23, 42, 0.08),
-  shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.06),
+  surface-muted: #f8f9fa,
+
+  // 边框 — 使用实色确保一致性
+  border: #e8eaed,
+  border-strong: #d3d7de,
+
+  // 文字 — 三级层次清晰
+  text: #1a1f36,
+  text-muted: #5e6578,
+  text-soft: #8f95a3,
+
+  // 主色 — 更鲜明的蓝色
+  accent: #4f6ef7,
+  accent-soft: rgba(79, 110, 247, 0.1),
+  accent-strong: #3b5ce4,
+
+  // 语义色 — 现代且可区分
+  success: #16a34a,
+  warning: #d97706,
+  error: #dc2626,
+  info: #0ea5e9,
+
+  // 阴影
+  shadow: 0 1px 3px rgba(0, 0, 0, 0.06),
+  shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04)
 );
 
 // 字体系统
@@ -127,10 +142,10 @@ $border-radius: (
 // 壳层圆角
 // -----------------------------------------------------------------------------
 $shell-radius: (
-  sm: 12px,
-  md: 18px,
-  lg: 24px,
-  xl: 32px,
+  sm: 8px,
+  md: 12px,
+  lg: 16px,
+  xl: 20px,
   full: 9999px,
 );
 
@@ -145,18 +160,34 @@ $shell-spacing: (
   6: 32px,
 );
 
+// 壳层字号阶梯
+// -----------------------------------------------------------------------------
+$shell-font-sizes: (
+  '2xs': 0.625rem,
+  // 10px — 徽标、极小辅助
+  'xs': 0.75rem,
+  // 12px — 次要标签、meta
+  'sm': 0.875rem,
+  // 14px — 紧凑正文、标签页标题
+  'base': 0.9375rem,
+  // 15px — 壳层默认正文
+  'lg': 1rem,
+  // 16px — 壳层标题
+  'xl': 1.125rem, // 18px — 壳层大标题
+);
+
 $shell-layout: (
   frame-padding: 12px,
   panel-gap: 12px,
   content-gap: 16px,
   control-height: 36px,
-  header-height: 68px,
+  header-height: 56px,
   tabs-height: 36px,
-  sider-width: 252px,
-  sider-collapsed-width: 82px,
+  sider-width: 240px,
+  sider-collapsed-width: 72px,
   page-max-width: 1280px,
-  page-padding-inline: 8px,
-  page-padding-block: 8px,
+  page-padding-inline: 24px,
+  page-padding-block: 20px,
   page-section-gap: 24px,
 );
 

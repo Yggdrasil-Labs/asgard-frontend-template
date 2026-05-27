@@ -125,10 +125,8 @@ const brandInitial = computed(() => {
   min-height: var(--shell-header-height);
   padding: var(--shell-space-3) var(--shell-space-4);
   border: 1px solid var(--shell-border);
-  border-radius: var(--shell-radius-xl);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), var(--shell-surface));
-  box-shadow: var(--shell-shadow-soft);
-  backdrop-filter: blur(18px);
+  border-radius: var(--shell-radius-sm);
+  background: var(--shell-surface-strong);
 }
 
 .app-header__brand {
@@ -154,11 +152,11 @@ const brandInitial = computed(() => {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   background: linear-gradient(135deg, var(--shell-accent), var(--shell-accent-strong));
-  box-shadow: 0 12px 22px rgba(47, 111, 235, 0.18);
+  box-shadow: 0 2px 8px rgba(79, 110, 247, 0.25);
   color: #ffffff;
-  font-size: 0.9rem;
+  font-size: var(--shell-text-sm);
   font-weight: 700;
   letter-spacing: 0.04em;
   flex: none;
@@ -175,14 +173,14 @@ const brandInitial = computed(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.95rem;
+  font-size: var(--shell-text-base);
   font-weight: 700;
   letter-spacing: 0.01em;
 }
 
 .app-header__brand-meta {
   color: var(--shell-text-muted);
-  font-size: 0.72rem;
+  font-size: var(--shell-text-xs);
   font-weight: 500;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -199,7 +197,7 @@ const brandInitial = computed(() => {
   color: var(--shell-text-muted);
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.84rem;
+  font-size: var(--shell-text-sm);
   font-weight: 600;
 }
 
@@ -215,33 +213,32 @@ const brandInitial = computed(() => {
   align-items: center;
   justify-content: center;
   border: 1px solid var(--shell-border);
-  border-radius: var(--shell-radius-full);
-  background: linear-gradient(180deg, #ffffff, var(--shell-surface-muted));
+  border-radius: 6px;
+  background: var(--shell-surface-strong);
   width: var(--shell-control-height);
   height: var(--shell-control-height);
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   color: var(--shell-text);
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
   transition:
-    transform 160ms ease,
     border-color 160ms ease,
-    box-shadow 160ms ease;
+    background-color 160ms ease;
 }
 
 .app-header__nav-toggle:hover {
-  transform: translateY(-1px);
   border-color: var(--shell-border-strong);
-  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+  background: var(--shell-surface-muted);
 }
 
 .app-header__nav-toggle:focus-visible {
-  outline: 2px solid var(--shell-accent-soft);
+  outline: 2px solid var(--shell-accent);
   outline-offset: 2px;
 }
 
 .app-header__nav-toggle :deep(.app-icon) {
-  font-size: 0.95rem;
+  font-size: var(--shell-text-base);
 }
 
 .app-header__locale-trigger {
@@ -254,7 +251,7 @@ const brandInitial = computed(() => {
 
 .app-header__arrow {
   margin-left: 0.35rem;
-  font-size: 0.6rem;
+  font-size: var(--shell-text-2xs);
   opacity: 0.8;
 }
 
@@ -262,7 +259,7 @@ const brandInitial = computed(() => {
   .app-header {
     min-height: 60px;
     padding: var(--shell-space-3);
-    border-radius: calc(var(--shell-radius-lg) + 2px);
+    border-radius: var(--shell-radius-sm);
   }
 
   .app-header__brand-meta,

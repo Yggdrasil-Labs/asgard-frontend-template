@@ -11,10 +11,10 @@ body {
   font-family: $font-family-base;
   font-size: font-size(base);
   font-weight: font-weight(normal);
-  color: get-color(gray-900);
+  color: var(--shell-text, #{get-color(gray-900)});
   background-color: get-color(white);
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 // 标题样式
@@ -27,8 +27,8 @@ h5,
 h6 {
   margin: 0 0 spacing(4) 0;
   font-weight: font-weight(semibold);
-  line-height: 1.2;
-  color: get-color(gray-900);
+  line-height: 1.3;
+  color: var(--shell-text, #{get-color(gray-900)});
 }
 
 h1 {

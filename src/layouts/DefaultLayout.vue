@@ -172,6 +172,14 @@ function getTabCacheKey(routeName: string, fullPath: string) {
           @close-drawer="appShellStore.closeDrawer()"
         />
 
+        <Transition name="fade">
+          <div
+            v-if="isMobile && isDrawerVisible"
+            class="default-layout__backdrop"
+            @click="appShellStore.closeDrawer()"
+          />
+        </Transition>
+
         <div class="default-layout__content" data-scroll-boundary="viewport" data-density="compact">
           <AppTabs
             v-if="!isMobile"
@@ -199,13 +207,10 @@ function getTabCacheKey(routeName: string, fullPath: string) {
 <style scoped lang="scss">
 .default-layout {
   display: flex;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   padding: var(--shell-frame-padding);
-  background:
-    radial-gradient(circle at top left, rgba(47, 111, 235, 0.08), transparent 28%),
-    radial-gradient(circle at top right, rgba(15, 118, 110, 0.06), transparent 24%),
-    linear-gradient(180deg, var(--shell-bg) 0%, var(--shell-bg-strong) 100%);
+  background: var(--shell-bg);
   color: var(--shell-text);
 }
 
@@ -234,34 +239,45 @@ function getTabCacheKey(routeName: string, fullPath: string) {
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--shell-border);
-  border-radius: var(--shell-radius-xl);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.9));
-  box-shadow: var(--shell-shadow);
+  border-radius: var(--shell-radius-sm);
+  background: var(--shell-surface-strong);
 }
 
 .default-layout__main {
   flex: 1;
   min-height: 0;
-  padding: var(--shell-space-2) var(--shell-content-gap);
   overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.3) transparent;
+}
+
+.default-layout__main::-webkit-scrollbar {
+  width: 6px;
+}
+
+.default-layout__main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.default-layout__main::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 3px;
+}
+
+.default-layout__main::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
 }
 
 .default-layout__main-surface {
   min-height: 100%;
-  border: 1px solid var(--shell-border);
-  border-radius: calc(var(--shell-radius-xl) - 10px);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), var(--shell-surface));
-  box-shadow: var(--shell-shadow-soft);
 }
 
 .default-layout__page-container {
-  display: flex;
   min-height: 100%;
   width: 100%;
   max-width: var(--shell-page-max-width);
   margin: 0 auto;
-  padding: var(--shell-page-padding-block) var(--shell-page-padding-inline);
-  justify-content: center;
+  padding: 20px 24px;
 }
 
 @media (max-width: 768px) {
@@ -270,15 +286,28 @@ function getTabCacheKey(routeName: string, fullPath: string) {
   }
 
   .default-layout__content {
-    border-radius: calc(var(--shell-radius-lg) + 2px);
+    border-radius: var(--shell-radius-sm);
   }
 
-  .default-layout__main {
-    padding: var(--shell-space-2) var(--shell-content-gap);
+  .default-layout__page-container {
+    padding: 16px;
   }
+}
 
-  .default-layout__main-surface {
-    border-radius: var(--shell-radius-lg);
-  }
+.default-layout__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 200ms ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

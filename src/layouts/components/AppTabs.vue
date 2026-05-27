@@ -43,7 +43,7 @@ function handleRefresh() {
 <template>
   <section class="app-tabs" data-spacing="inset">
     <div class="app-tabs__bar" data-layout="inline">
-      <div class="app-tabs__list" role="tablist" aria-label="页面标签" data-overflow="x">
+      <TransitionGroup name="tab-item" tag="div" class="app-tabs__list" role="tablist" aria-label="页面标签" data-overflow="x">
         <div
           v-for="item in items"
           :key="item.key"
@@ -89,7 +89,7 @@ function handleRefresh() {
             <AppIcon name="close" aria-hidden="true" />
           </button>
         </div>
-      </div>
+      </TransitionGroup>
       <div class="app-tabs__actions">
         <button
           type="button"
@@ -125,6 +125,7 @@ function handleRefresh() {
   display: block;
   min-height: 0;
   padding: var(--shell-space-2) var(--shell-content-gap);
+  border-bottom: 1px solid var(--shell-border);
 }
 
 .app-tabs__bar {
@@ -146,18 +147,18 @@ function handleRefresh() {
   align-items: center;
   justify-content: center;
   border: 1px solid var(--shell-border);
-  border-radius: var(--shell-radius-full);
-  background: linear-gradient(180deg, #ffffff, var(--shell-surface-muted));
+  border-radius: 6px;
+  background: var(--shell-surface-strong);
   width: var(--shell-control-height);
   height: var(--shell-control-height);
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   color: var(--shell-text);
   cursor: pointer;
-  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
   transition:
-    transform 160ms ease,
     border-color 160ms ease,
-    box-shadow 160ms ease;
+    background-color 160ms ease;
 }
 
 .app-tabs__action:disabled {
@@ -166,7 +167,7 @@ function handleRefresh() {
 }
 
 .app-tabs__action :deep(.app-icon) {
-  font-size: 0.86rem;
+  font-size: var(--shell-text-sm);
 }
 
 .app-tabs__list {
@@ -190,25 +191,19 @@ function handleRefresh() {
   gap: var(--shell-space-1);
   min-width: 0;
   border: 1px solid var(--shell-border);
-  border-radius: calc(var(--shell-radius-md) - 2px);
-  background: rgba(255, 255, 255, 0.82);
+  border-radius: 6px;
+  background: var(--shell-surface-strong);
   min-height: var(--shell-tabs-height);
   max-width: min(18rem, 70vw);
   padding: var(--shell-space-1) var(--shell-space-1) var(--shell-space-1) var(--shell-space-3);
-  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
   transition:
-    transform 160ms ease,
     border-color 160ms ease,
-    box-shadow 160ms ease,
     background-color 160ms ease;
 }
 
 .app-tabs__item.is-active {
   border-color: var(--shell-accent);
-  background: linear-gradient(135deg, rgba(47, 111, 235, 0.12), rgba(47, 111, 235, 0.04));
-  box-shadow:
-    inset 0 0 0 1px rgba(47, 111, 235, 0.38),
-    0 10px 20px rgba(47, 111, 235, 0.08);
+  background: var(--shell-accent-soft);
 }
 
 .app-tabs__item-trigger {
@@ -230,7 +225,7 @@ function handleRefresh() {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 600;
-  font-size: 0.86rem;
+  font-size: var(--shell-text-sm);
   line-height: 1.2;
 }
 
@@ -238,28 +233,36 @@ function handleRefresh() {
   border-radius: var(--shell-radius-full);
   padding: 0 0.25rem;
   color: var(--shell-accent-strong);
-  font-size: 0.64rem;
+  font-size: var(--shell-text-2xs);
   font-weight: 700;
 }
 
 .app-tabs__badge :deep(.app-icon) {
-  font-size: 0.72rem;
+  font-size: var(--shell-text-xs);
 }
 
 .app-tabs__close {
+  position: relative;
   border: 0;
   border-radius: var(--shell-radius-full);
   color: var(--shell-text-muted);
   width: 1.25rem;
   height: 1.25rem;
   padding: 0;
-  font-size: 0.8rem;
+  font-size: var(--shell-text-xs);
   line-height: 1;
   cursor: pointer;
   transition:
     background-color 160ms ease,
     color 160ms ease,
     transform 160ms ease;
+}
+
+.app-tabs__close::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: var(--shell-radius-full);
 }
 
 .app-tabs__close:hover {
@@ -269,22 +272,20 @@ function handleRefresh() {
 }
 
 .app-tabs__action:hover {
-  transform: translateY(-1px);
   border-color: var(--shell-border-strong);
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+  background: var(--shell-surface-muted);
 }
 
 .app-tabs__action:focus-visible,
 .app-tabs__item-trigger:focus-visible,
 .app-tabs__close:focus-visible {
-  outline: 2px solid var(--shell-accent-soft);
+  outline: 2px solid var(--shell-accent);
   outline-offset: 2px;
 }
 
 .app-tabs__item:hover {
-  transform: translateY(-1px);
   border-color: var(--shell-border-strong);
-  background: rgba(255, 255, 255, 0.96);
+  background: var(--shell-surface-muted);
 }
 
 .app-tabs__list::-webkit-scrollbar {
@@ -320,5 +321,28 @@ function handleRefresh() {
   .app-tabs__title {
     max-width: 9rem;
   }
+}
+
+// Tab close/enter animation
+.tab-item-enter-active {
+  transition: all 180ms ease-out;
+}
+
+.tab-item-leave-active {
+  transition: all 150ms ease-in;
+}
+
+.tab-item-enter-from {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.tab-item-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.tab-item-move {
+  transition: transform 200ms ease;
 }
 </style>

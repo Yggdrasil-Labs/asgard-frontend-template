@@ -88,14 +88,11 @@ function handleSelect(key: string) {
             >
               <AppIcon :name="item.icon" />
             </span>
-            <span
-              v-if="!collapsed"
-              class="app-sider__title"
-            >
+            <span class="app-sider__title">
               {{ item.title }}
             </span>
             <span
-              v-if="item.children?.length && !collapsed"
+              v-if="item.children?.length"
               class="app-sider__chevron"
               aria-hidden="true"
             >
@@ -128,10 +125,7 @@ function handleSelect(key: string) {
                 >
                   <AppIcon :name="child.icon" />
                 </span>
-                <span
-                  v-if="!collapsed"
-                  class="app-sider__title"
-                >
+                <span class="app-sider__title">
                   {{ child.title }}
                 </span>
               </button>
@@ -152,16 +146,12 @@ function handleSelect(key: string) {
   min-width: var(--shell-sider-width);
   padding: var(--shell-space-3);
   border: 1px solid var(--shell-border);
-  border-radius: var(--shell-radius-xl);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), var(--shell-surface));
-  box-shadow: var(--shell-shadow-soft);
-  backdrop-filter: blur(18px);
+  border-radius: var(--shell-radius-sm);
+  background: var(--shell-surface-strong);
   transition:
     width 220ms ease,
     min-width 220ms ease,
-    padding 220ms ease,
-    border-radius 220ms ease,
-    box-shadow 220ms ease;
+    padding 220ms ease;
 }
 
 .app-sider.is-mobile {
@@ -173,8 +163,8 @@ function handleSelect(key: string) {
   width: min(88vw, 332px);
   min-width: min(88vw, 332px);
   overflow-y: auto;
-  border-radius: calc(var(--shell-radius-xl) - 2px);
-  box-shadow: 0 22px 48px rgba(15, 23, 42, 0.18);
+  border-radius: var(--shell-radius-sm);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
 }
 
 .app-sider.is-collapsed {
@@ -196,13 +186,6 @@ function handleSelect(key: string) {
   padding-inline: var(--shell-space-2);
 }
 
-.app-sider.is-collapsed .app-sider__item::before {
-  left: 50%;
-  top: auto;
-  bottom: 0.45rem;
-  transform: translateX(-50%);
-}
-
 .app-sider.is-collapsed .app-sider__item--child {
   margin-left: 0;
 }
@@ -221,21 +204,21 @@ function handleSelect(key: string) {
 .app-sider__toggle {
   display: inline-flex;
   border: 1px solid var(--shell-border);
-  border-radius: var(--shell-radius-full);
-  background: linear-gradient(180deg, #ffffff, var(--shell-surface-muted));
+  border-radius: 6px;
+  background: var(--shell-surface-strong);
   align-items: center;
   justify-content: center;
   width: var(--shell-control-height);
   height: var(--shell-control-height);
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   color: var(--shell-text);
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.04);
   transition:
-    transform 160ms ease,
     border-color 160ms ease,
-    box-shadow 160ms ease;
+    background-color 160ms ease;
 }
 
 .app-sider__toggle--ghost {
@@ -243,18 +226,17 @@ function handleSelect(key: string) {
 }
 
 .app-sider__toggle:hover {
-  transform: translateY(-1px);
   border-color: var(--shell-border-strong);
-  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+  background: var(--shell-surface-muted);
 }
 
 .app-sider__toggle:focus-visible {
-  outline: 2px solid var(--shell-accent-soft);
+  outline: 2px solid var(--shell-accent);
   outline-offset: 2px;
 }
 
 .app-sider__toggle-icon {
-  font-size: 1rem;
+  font-size: var(--shell-text-lg);
   transition: transform 160ms ease;
 }
 
@@ -291,53 +273,36 @@ function handleSelect(key: string) {
   justify-content: flex-start;
   gap: var(--shell-space-2);
   border: 1px solid transparent;
-  border-radius: var(--shell-radius-md);
-  background: rgba(255, 255, 255, 0.74);
-  min-height: 44px;
-  padding: 0.625rem var(--shell-space-3) 0.625rem var(--shell-space-4);
+  border-radius: 6px;
+  background: transparent;
+  min-height: 40px;
+  padding: 0.5rem var(--shell-space-3) 0.5rem var(--shell-space-3);
   color: var(--shell-text);
+  font-size: var(--shell-text-sm);
   text-align: left;
   cursor: pointer;
-  font: inherit;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+  font-family: inherit;
   transition:
     background-color 160ms ease,
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    transform 160ms ease;
-}
-
-.app-sider__item::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: var(--shell-space-2);
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 999px;
-  background: transparent;
-  transform: translateY(-50%);
-  transition:
-    box-shadow 160ms ease,
-    background-color 160ms ease;
-}
-
-.app-sider__item.is-active {
-  border-color: var(--shell-border-strong);
-  background: linear-gradient(135deg, rgba(47, 111, 235, 0.12), rgba(47, 111, 235, 0.04));
-  color: var(--shell-text);
-  box-shadow: 0 8px 16px rgba(47, 111, 235, 0.08);
+    border-color 160ms ease;
 }
 
 .app-sider__item--child {
   margin-left: var(--shell-space-3);
-  border-radius: calc(var(--shell-radius-md) - 2px);
-  min-height: 40px;
-  padding: 0.5rem var(--shell-space-3) 0.5rem var(--shell-space-4);
+  border-radius: 6px;
+  min-height: 36px;
+  padding: 0.4rem var(--shell-space-3) 0.4rem var(--shell-space-3);
 }
 
-.app-sider__item--child::before {
-  left: 6px;
+.app-sider__item.is-active {
+  border-color: var(--shell-border-strong);
+  background: var(--shell-accent-soft);
+  color: var(--shell-accent);
+  font-weight: 500;
+}
+
+.app-sider__item.is-active .app-sider__icon {
+  color: var(--shell-accent);
 }
 
 .app-sider__icon {
@@ -358,25 +323,27 @@ function handleSelect(key: string) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transform-origin: left center;
-  transition:
-    opacity 160ms ease,
-    transform 220ms ease;
+  opacity: 1;
+  transition: opacity 180ms ease;
 }
 
 .app-sider__chevron {
   flex: none;
   color: var(--shell-text-soft);
-  transition:
-    opacity 160ms ease,
-    transform 220ms ease,
-    color 220ms ease;
+  opacity: 1;
+  transition: opacity 180ms ease;
+}
+
+.app-sider.is-collapsed .app-sider__title,
+.app-sider.is-collapsed .app-sider__chevron {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .app-sider__item:hover {
-  transform: translateX(1px);
-  border-color: var(--shell-border);
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--shell-surface-muted);
 }
 
 .app-sider.is-collapsed .app-sider__hero {
@@ -389,7 +356,7 @@ function handleSelect(key: string) {
 }
 
 .app-sider.is-collapsed .app-sider__headline {
-  font-size: 0.95rem;
+  font-size: var(--shell-text-base);
 }
 
 .app-sider.is-collapsed .app-sider__item {
@@ -397,24 +364,11 @@ function handleSelect(key: string) {
   padding-inline: var(--shell-space-3);
 }
 
-.app-sider.is-collapsed .app-sider__item::before {
-  left: var(--shell-space-2);
-}
-
-.app-sider.is-collapsed .app-sider__title {
-  max-width: 100%;
-  text-align: center;
-}
-
-.app-sider.is-collapsed .app-sider__chevron {
-  display: none;
-}
-
 @media (max-width: 768px) {
   .app-sider {
     width: auto;
     min-width: 0;
-    border-radius: calc(var(--shell-radius-lg) + 2px);
+    border-radius: var(--shell-radius-sm);
   }
 
   .app-sider.is-mobile {

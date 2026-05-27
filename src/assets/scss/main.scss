@@ -21,7 +21,9 @@
 @import 'element-plus/theme-chalk/index.css';
 
 :root {
-  --shell-font-family: 'Avenir Next', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --shell-font-family:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    sans-serif;
   --shell-bg: #{map.get($shell-colors, bg)};
   --shell-bg-strong: #{map.get($shell-colors, bg-strong)};
   --shell-surface: #{map.get($shell-colors, surface)};
@@ -37,6 +39,8 @@
   --shell-accent-strong: #{map.get($shell-colors, accent-strong)};
   --shell-success: #{map.get($shell-colors, success)};
   --shell-warning: #{map.get($shell-colors, warning)};
+  --shell-error: #{map.get($shell-colors, error)};
+  --shell-info: #{map.get($shell-colors, info)};
   --shell-shadow: #{map.get($shell-colors, shadow)};
   --shell-shadow-soft: #{map.get($shell-colors, shadow-soft)};
   --shell-radius-sm: #{map.get($shell-radius, sm)};
@@ -62,9 +66,12 @@
   --shell-page-padding-inline: #{map.get($shell-layout, page-padding-inline)};
   --shell-page-padding-block: #{map.get($shell-layout, page-padding-block)};
   --shell-page-section-gap: #{map.get($shell-layout, page-section-gap)};
-  --el-color-primary: var(--shell-accent);
-  --el-color-success: var(--shell-success);
-  --el-color-warning: var(--shell-warning);
+  --shell-text-2xs: #{map.get($shell-font-sizes, '2xs')};
+  --shell-text-xs: #{map.get($shell-font-sizes, 'xs')};
+  --shell-text-sm: #{map.get($shell-font-sizes, 'sm')};
+  --shell-text-base: #{map.get($shell-font-sizes, 'base')};
+  --shell-text-lg: #{map.get($shell-font-sizes, 'lg')};
+  --shell-text-xl: #{map.get($shell-font-sizes, 'xl')};
 }
 
 html,
@@ -75,9 +82,7 @@ body,
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at top left, rgba(47, 111, 235, 0.06), transparent 30%),
-    radial-gradient(circle at top right, rgba(15, 118, 110, 0.05), transparent 26%), var(--shell-bg);
+  background: var(--shell-bg);
   color: var(--shell-text);
   font-family: var(--shell-font-family);
   line-height: 1.5;
@@ -101,7 +106,7 @@ textarea {
 }
 
 ::selection {
-  background: var(--shell-accent-soft);
+  background: rgba(79, 110, 247, 0.2);
   color: var(--shell-text);
 }
 
@@ -114,4 +119,28 @@ textarea {
     --shell-page-padding-block: var(--shell-space-2);
     --shell-page-section-gap: var(--shell-space-4);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// 页面级共享容器 — demo 页使用
+// -----------------------------------------------------------------------------
+.demo-page {
+  width: 100%;
+  min-width: 0;
+  padding: 24px;
+}
+
+.demo-page--centered {
+  max-width: 960px;
+  margin: 0 auto;
 }

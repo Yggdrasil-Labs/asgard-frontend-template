@@ -297,7 +297,6 @@ const columns = computed<TableColumnSchema[]>(() => [
 
 <style scoped lang="scss">
 .pro-table-demo {
-  padding: 24px;
   width: 100%;
   min-width: 0;
 }

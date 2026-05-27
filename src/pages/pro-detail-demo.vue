@@ -204,7 +204,6 @@ const schema = computed<FormFieldSchema[]>(() => [
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
   gap: 24px;
-  padding: 24px;
   align-items: flex-start;
 }
 

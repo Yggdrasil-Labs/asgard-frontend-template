@@ -400,23 +400,6 @@ function handleFormSubmit(values: Record<string, unknown>) {
 <style scoped lang="scss">
 .dialog-demo {
   position: relative;
-  padding: 28px 24px 40px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at top left, rgba(102, 126, 234, 0.18), transparent 34%),
-    radial-gradient(circle at top right, rgba(118, 75, 162, 0.16), transparent 30%),
-    linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(255, 255, 255, 0.98));
-}
-
-.dialog-demo::before {
-  content: '';
-  position: absolute;
-  inset: 80px auto auto -60px;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: rgba(102, 126, 234, 0.18);
-  filter: blur(4px);
 }
 
 .dialog-demo__hero {
@@ -424,11 +407,10 @@ function handleFormSubmit(values: Record<string, unknown>) {
   z-index: 1;
   margin: 0 auto 24px;
   max-width: 1200px;
-  padding: 28px 28px 26px;
-  border-radius: 24px;
+  padding: 24px;
+  border-radius: 8px;
   color: #fff;
-  background: linear-gradient(135deg, #2f3a8f 0%, #5b4b8a 45%, #6b5ca5 100%);
-  box-shadow: 0 24px 60px rgba(47, 58, 143, 0.22);
+  background: linear-gradient(135deg, var(--shell-accent-strong) 0%, var(--shell-accent) 100%);
 }
 
 .dialog-demo__hero-inner {
@@ -436,31 +418,32 @@ function handleFormSubmit(values: Record<string, unknown>) {
 }
 
 .dialog-demo__eyebrow {
-  margin: 0 0 10px;
-  letter-spacing: 0.12em;
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.78;
+  opacity: 0.75;
 }
 
 .dialog-demo__title {
   margin: 0;
-  font-size: clamp(2rem, 4vw, 3.2rem);
-  line-height: 1.1;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.2;
 }
 
 .dialog-demo__subtitle {
-  margin: 14px 0 0;
+  margin: 10px 0 0;
   max-width: 700px;
-  font-size: 1rem;
-  line-height: 1.8;
-  opacity: 0.92;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  opacity: 0.9;
 }
 
 .dialog-demo__hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 22px;
+  margin-top: 18px;
 }
 
 .dialog-demo__cards {
@@ -468,14 +451,14 @@ function handleFormSubmit(values: Record<string, unknown>) {
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 16px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .dialog-demo__card {
-  border: 0;
-  border-radius: 20px;
+  border: 1px solid var(--shell-border);
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -486,50 +469,50 @@ function handleFormSubmit(values: Record<string, unknown>) {
   gap: 16px;
 
   h2 {
-    margin: 0 0 6px;
-    font-size: 18px;
+    margin: 0 0 4px;
+    font-size: 1rem;
   }
 
   p {
     margin: 0;
-    color: var(--el-text-color-secondary);
-    font-size: 13px;
+    color: var(--shell-text-muted);
+    font-size: 0.8rem;
   }
 }
 
 .dialog-demo__inline-code {
-  padding: 0 0.35rem;
-  border-radius: 6px;
-  background: rgba(99, 102, 241, 0.12);
-  color: #3949ab;
-  font-size: 0.92em;
+  padding: 0 0.3rem;
+  border-radius: 4px;
+  background: var(--shell-accent-soft);
+  color: var(--shell-accent-strong);
+  font-size: 0.85em;
 }
 
 .dialog-demo__card-copy {
   margin: 0;
-  line-height: 1.8;
-  color: var(--el-text-color-regular);
+  line-height: 1.7;
+  color: var(--shell-text-muted);
 }
 
 .dialog-demo__muted {
   margin: 0;
-  color: var(--el-text-color-secondary);
-  font-size: 13px;
+  color: var(--shell-text-muted);
+  font-size: 0.8rem;
 }
 
 .dialog-demo__footer-hint {
-  color: var(--el-text-color-secondary);
-  font-size: 13px;
+  color: var(--shell-text-muted);
+  font-size: 0.8rem;
 }
 
 .dialog-demo__detail-header h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: 1rem;
 }
 
 .dialog-demo__detail-header p {
-  margin: 8px 0 0;
-  color: var(--el-text-color-secondary);
+  margin: 6px 0 0;
+  color: var(--shell-text-muted);
 }
 
 .dialog-demo__detail-footer {
@@ -545,13 +528,8 @@ function handleFormSubmit(values: Record<string, unknown>) {
 }
 
 @media (max-width: 768px) {
-  .dialog-demo {
-    padding: 18px 14px 28px;
-  }
-
   .dialog-demo__hero {
-    padding: 22px 18px 20px;
-    border-radius: 20px;
+    padding: 20px 16px;
   }
 }
 </style>
