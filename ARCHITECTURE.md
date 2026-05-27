@@ -26,6 +26,7 @@ flowchart LR
 ```
 
 **依赖规则：**
+
 - 示例页可依赖路由协议和组件，但不定义 shell 策略
 - Shell 运行时只读取 route metadata 和 store，不反向依赖页面
 - 可复用组件不依赖 shell 状态或路由实现
@@ -43,16 +44,16 @@ flowchart LR
 
 ## 技术栈
 
-| 层级 | 技术 | 备注 |
-|------|------|------|
-| 框架 | Vue 3.5 + TypeScript 5.9 | Composition API + `<script setup>` |
-| 构建 | Vite 7 | 开发 / 生产 |
-| 状态 | Pinia 3 | UI 与 shell 状态 |
-| 路由 | Vue Router 5 | schema 驱动 |
-| UI 库 | Element Plus | 基础组件 |
-| 国际化 | Vue I18n 11 | 中英双语 |
-| 测试 | Vitest | 单元测试 |
-| 包管理 | pnpm 10 | Node >= 22.14 |
+| 层级   | 技术                     | 备注                               |
+| ------ | ------------------------ | ---------------------------------- |
+| 框架   | Vue 3.5 + TypeScript 5.9 | Composition API + `<script setup>` |
+| 构建   | Vite 7                   | 开发 / 生产                        |
+| 状态   | Pinia 3                  | UI 与 shell 状态                   |
+| 路由   | Vue Router 5             | schema 驱动                        |
+| UI 库  | Element Plus             | 基础组件                           |
+| 国际化 | Vue I18n 11              | 中英双语                           |
+| 测试   | Vitest                   | 单元测试                           |
+| 包管理 | pnpm 10                  | Node >= 22.14                      |
 
 ## 架构原则
 
