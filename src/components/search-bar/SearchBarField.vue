@@ -203,7 +203,7 @@ watch(
 .search-bar-field__control {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
   width: 100%;
 
   :deep(.el-input),
@@ -215,7 +215,7 @@ watch(
 }
 
 .search-bar-field__missing-component {
-  color: var(--el-color-danger, #f56c6c);
+  color: var(--el-color-danger, #dc2626);
   font-size: 12px;
 }
 </style>

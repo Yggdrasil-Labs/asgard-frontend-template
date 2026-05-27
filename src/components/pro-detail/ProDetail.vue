@@ -257,7 +257,15 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
   font-size: 12px;
   border: 1px solid var(--el-border-color, #e8eaed);
   color: var(--el-text-color-secondary, #5e6578);
-  cursor: default;
+  cursor: help;
+  transition:
+    color 150ms ease,
+    border-color 150ms ease;
+}
+
+.pro-detail__label-tooltip:hover {
+  color: var(--el-color-primary, #4f6ef7);
+  border-color: var(--el-color-primary, #4f6ef7);
 }
 
 .pro-detail__empty {

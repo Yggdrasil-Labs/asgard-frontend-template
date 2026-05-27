@@ -463,10 +463,18 @@ defineExpose({
   border-radius: 50%;
   font-size: 11px;
   line-height: 1;
-  cursor: default;
+  cursor: help;
   color: var(--el-color-info);
   border: 1px solid var(--el-border-color);
   vertical-align: middle;
+  transition:
+    color 150ms ease,
+    border-color 150ms ease;
+}
+
+.pro-table__th-tip:hover {
+  color: var(--el-color-primary);
+  border-color: var(--el-color-primary);
 }
 
 .pro-table__th-icon {

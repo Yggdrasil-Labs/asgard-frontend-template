@@ -340,16 +340,25 @@ defineExpose<ProDialogExpose>({
   width: 32px;
   height: 32px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 6px;
   background: transparent;
   color: var(--el-text-color-regular, #5e6578);
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1;
   cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .dialog-close:hover {
   background: rgba(0, 0, 0, 0.06);
+  color: var(--el-text-color-primary, #1a1f36);
+}
+
+.dialog-close:focus-visible {
+  outline: 2px solid var(--el-color-primary, #4f6ef7);
+  outline-offset: 2px;
 }
 
 .dialog-body__scrollbar {
