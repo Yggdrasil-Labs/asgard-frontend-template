@@ -209,9 +209,9 @@ const schema = computed<FormFieldSchema[]>(() => [
 
 .pro-detail-demo__left,
 .pro-detail-demo__right {
-  background-color: var(--el-bg-color, #fff);
+  background-color: var(--shell-surface-strong, #fff);
+  border: 1px solid var(--shell-border, #e8eaed);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .pro-detail-demo__title {
@@ -227,8 +227,8 @@ const schema = computed<FormFieldSchema[]>(() => [
 
 .pro-detail-demo__sub-title {
   margin: 4px 0 0;
-  font-size: 13px;
-  color: var(--el-text-color-secondary, #909399);
+  font-size: 12px;
+  color: var(--shell-text-muted, #5e6578);
 }
 
 @media (max-width: 1200px) {

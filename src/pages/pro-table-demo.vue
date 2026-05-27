@@ -303,7 +303,7 @@ const columns = computed<TableColumnSchema[]>(() => [
 
 .pro-table-demo__title {
   margin: 0 0 16px;
-  font-size: 1.25rem;
+  font-size: 18px;
 }
 
 .pro-table-demo__toolbar {
@@ -321,7 +321,7 @@ const columns = computed<TableColumnSchema[]>(() => [
 
 .pro-table-demo__hint {
   font-size: 12px;
-  color: var(--el-text-color-secondary);
+  color: var(--shell-text-muted, #5e6578);
 }
 
 @media (max-width: 768px) {

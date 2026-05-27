@@ -419,7 +419,7 @@ function handleFormSubmit(values: Record<string, unknown>) {
 
 .dialog-demo__eyebrow {
   margin: 0 0 8px;
-  font-size: 0.8rem;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   opacity: 0.75;
@@ -427,14 +427,14 @@ function handleFormSubmit(values: Record<string, unknown>) {
 
 .dialog-demo__title {
   margin: 0;
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-size: clamp(20px, 3vw, 28px);
   line-height: 1.2;
 }
 
 .dialog-demo__subtitle {
   margin: 10px 0 0;
   max-width: 700px;
-  font-size: 0.9rem;
+  font-size: 14px;
   line-height: 1.7;
   opacity: 0.9;
 }
@@ -470,22 +470,22 @@ function handleFormSubmit(values: Record<string, unknown>) {
 
   h2 {
     margin: 0 0 4px;
-    font-size: 1rem;
+    font-size: 15px;
   }
 
   p {
     margin: 0;
     color: var(--shell-text-muted);
-    font-size: 0.8rem;
+    font-size: 12px;
   }
 }
 
 .dialog-demo__inline-code {
-  padding: 0 0.3rem;
+  padding: 0 4px;
   border-radius: 4px;
   background: var(--shell-accent-soft);
   color: var(--shell-accent-strong);
-  font-size: 0.85em;
+  font-size: 13px;
 }
 
 .dialog-demo__card-copy {
@@ -497,17 +497,17 @@ function handleFormSubmit(values: Record<string, unknown>) {
 .dialog-demo__muted {
   margin: 0;
   color: var(--shell-text-muted);
-  font-size: 0.8rem;
+  font-size: 12px;
 }
 
 .dialog-demo__footer-hint {
   color: var(--shell-text-muted);
-  font-size: 0.8rem;
+  font-size: 12px;
 }
 
 .dialog-demo__detail-header h3 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 15px;
 }
 
 .dialog-demo__detail-header p {

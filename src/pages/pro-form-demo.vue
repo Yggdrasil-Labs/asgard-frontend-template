@@ -488,15 +488,16 @@ function triggerLoading() {
 
 .form-header-tip {
   margin: 0;
-  font-size: 13px;
-  color: var(--el-text-color-secondary);
+  font-size: 12px;
+  color: var(--shell-text-muted, #5e6578);
 }
 
 .submit-result {
   margin-top: 24px;
   padding: 16px;
-  background: var(--el-fill-color-light);
-  border-radius: 4px;
+  background: var(--shell-surface-muted, #f8f9fa);
+  border: 1px solid var(--shell-border, #e8eaed);
+  border-radius: 6px;
 }
 
 .submit-result h3 {

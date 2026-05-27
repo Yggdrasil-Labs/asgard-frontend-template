@@ -387,15 +387,15 @@ async function handleSortChange(nextValue: ProTableSortState) {
 <style scoped lang="scss">
 .search-bar-demo {
   display: grid;
-  gap: 1.25rem;
+  gap: 20px;
   min-height: 100%;
 }
 
 .search-bar-demo__hero {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 1.5rem;
+  gap: 16px;
+  padding: 24px;
   border-radius: 8px;
   color: var(--shell-text);
   background: var(--shell-surface-strong);
@@ -403,8 +403,8 @@ async function handleSortChange(nextValue: ProTableSortState) {
 }
 
 .search-bar-demo__hero h1 {
-  margin: 0.25rem 0 0.75rem;
-  font-size: 1.5rem;
+  margin: 4px 0 12px;
+  font-size: 20px;
 }
 
 .search-bar-demo__hero p {
@@ -415,7 +415,7 @@ async function handleSortChange(nextValue: ProTableSortState) {
 }
 
 .search-bar-demo__eyebrow {
-  font-size: 0.8rem;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -431,27 +431,27 @@ async function handleSortChange(nextValue: ProTableSortState) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .search-bar-demo__payload {
   margin: 0;
-  padding: 1rem;
+  padding: 16px;
   border-radius: 6px;
   background: #1e293b;
   color: #e2e8f0;
   overflow: auto;
-  font-size: 0.8rem;
+  font-size: 12px;
 }
 
 @media (max-width: 768px) {
   .search-bar-demo__hero {
-    padding: 1.25rem;
+    padding: 20px;
     flex-direction: column;
   }
 
   .search-bar-demo__hero h1 {
-    font-size: 1.25rem;
+    font-size: 18px;
   }
 }
 </style>
