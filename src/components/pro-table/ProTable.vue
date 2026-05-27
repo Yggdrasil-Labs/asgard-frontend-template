@@ -493,6 +493,25 @@ defineExpose({
   max-width: 100%;
   min-width: 0;
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.3) transparent;
+}
+
+.pro-table__scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.pro-table__scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.pro-table__scroll::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 3px;
+}
+
+.pro-table__scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.5);
 }
 
 @media (max-width: 768px) {

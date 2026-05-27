@@ -486,6 +486,8 @@ watch(
 
 .pro-form__footer {
   margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--el-border-color-light, #e8eaed);
 }
 
 @media (max-width: 768px) {

@@ -194,6 +194,8 @@ const mergedFieldProps = computed(() => ({
 
 .pro-form-field__label-text {
   cursor: help;
+  text-decoration: underline dotted var(--el-border-color, #e8eaed);
+  text-underline-offset: 3px;
 }
 
 .pro-form-field__missing-component {

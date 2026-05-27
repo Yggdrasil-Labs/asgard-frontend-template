@@ -65,21 +65,20 @@ if (import.meta.env.DEV) {
 </template>
 
 <style scoped lang="scss">
-.pro-table-cell-link--router {
+.pro-table-cell-link--router,
+.pro-table-cell-link--external {
   color: var(--el-color-primary);
   text-decoration: none;
+  transition: color 150ms ease;
 
   &:hover {
     text-decoration: underline;
   }
-}
 
-.pro-table-cell-link--external {
-  color: var(--el-color-primary);
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
+  &:focus-visible {
+    outline: 2px solid var(--el-color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 }
 </style>

@@ -82,8 +82,8 @@ const moreActions = computed(() => visibleActions.value.slice(INLINE_MAX))
   gap: 4px;
 }
 
-.is-danger-link {
-  color: var(--el-color-danger) !important;
+.pro-table-cell-actions .is-danger-link {
+  --el-button-text-color: var(--el-color-danger);
 }
 
 .text-danger {

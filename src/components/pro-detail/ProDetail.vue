@@ -269,8 +269,10 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
 }
 
 .pro-detail__empty {
-  padding: 16px 8px;
+  padding: 32px 16px;
   color: var(--el-text-color-secondary, #5e6578);
+  text-align: center;
+  font-size: 14px;
 }
 
 @media (max-width: 768px) {

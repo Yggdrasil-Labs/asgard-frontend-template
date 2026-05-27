@@ -198,6 +198,8 @@ watch(
 
 .search-bar-field__label-text {
   cursor: help;
+  text-decoration: underline dotted var(--el-border-color, #e8eaed);
+  text-underline-offset: 3px;
 }
 
 .search-bar-field__control {
