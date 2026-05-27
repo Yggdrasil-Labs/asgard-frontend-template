@@ -91,6 +91,7 @@ export default defineConfig(({ mode, command }) => {
       host: true, // 允许局域网访问
       port: Number(envVars.VITE_PORT) || 5173,
       open: false,
+      allowedHosts: true, // 允许所有 host（Docker 内部服务名访问）
       // 启用 HTTPS（可选）
       // https: isDev && envVars.VITE_HTTPS === 'true',
       // 代理配置
