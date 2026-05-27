@@ -202,14 +202,14 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
 
 <style scoped>
 .pro-detail {
-  padding: 24px;
+  padding: var(--shell-space-5);
 }
 
 .pro-detail__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: var(--shell-space-4);
 }
 
 .pro-detail__header-main {
@@ -218,7 +218,7 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
 }
 
 .pro-detail__header-extra {
-  margin-left: 16px;
+  margin-left: var(--shell-space-4);
 }
 
 .pro-detail__collapse {
@@ -243,16 +243,16 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
 }
 
 .pro-detail__group-title {
-  font-size: 14px;
+  font-size: var(--shell-text-sm);
   font-weight: 600;
 }
 
 .pro-detail__group-extra {
-  margin-left: 16px;
+  margin-left: var(--shell-space-4);
 }
 
 .pro-detail__descriptions {
-  margin-top: 8px;
+  margin-top: var(--shell-space-2);
 }
 
 .pro-detail__label-tooltip {
@@ -263,7 +263,7 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
   height: 16px;
   margin-left: 4px;
   border-radius: 50%;
-  font-size: 12px;
+  font-size: var(--shell-text-xs);
   border: 1px solid var(--el-border-color, #e8eaed);
   color: var(--el-text-color-secondary, #5e6578);
   cursor: help;
@@ -278,21 +278,21 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
 }
 
 .pro-detail__empty {
-  padding: 32px 16px;
+  padding: var(--shell-space-6) var(--shell-space-4);
   color: var(--el-text-color-secondary, #5e6578);
   text-align: center;
-  font-size: 14px;
+  font-size: var(--shell-text-sm);
 }
 
 @media (max-width: 768px) {
   .pro-detail {
-    padding: 16px;
+    padding: var(--shell-space-4);
   }
 
   .pro-detail__header,
   .pro-detail__group-header {
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--shell-space-2);
   }
 
   .pro-detail__header-extra,

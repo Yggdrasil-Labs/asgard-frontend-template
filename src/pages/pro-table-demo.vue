@@ -302,31 +302,31 @@ const columns = computed<TableColumnSchema[]>(() => [
 }
 
 .pro-table-demo__title {
-  margin: 0 0 16px;
-  font-size: 18px;
+  margin: 0 0 var(--shell-space-4);
+  font-size: var(--shell-text-xl);
 }
 
 .pro-table-demo__toolbar {
-  margin-bottom: 16px;
+  margin-bottom: var(--shell-space-4);
   min-width: 0;
 }
 
 .pro-table-demo__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--shell-space-2);
   align-items: center;
   min-width: 0;
 }
 
 .pro-table-demo__hint {
-  font-size: 12px;
+  font-size: var(--shell-text-xs);
   color: var(--shell-text-muted, #5e6578);
 }
 
 @media (max-width: 768px) {
   .pro-table-demo {
-    padding: 16px;
+    padding: var(--shell-space-4);
   }
 
   .pro-table-demo__actions {

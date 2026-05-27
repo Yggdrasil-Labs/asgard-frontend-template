@@ -203,7 +203,7 @@ const schema = computed<FormFieldSchema[]>(() => [
 .pro-detail-demo {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
-  gap: 24px;
+  gap: var(--shell-space-5);
   align-items: flex-start;
 }
 
@@ -216,18 +216,18 @@ const schema = computed<FormFieldSchema[]>(() => [
 
 .pro-detail-demo__title {
   margin: 0;
-  padding: 16px 24px 0;
-  font-size: 16px;
+  padding: var(--shell-space-4) var(--shell-space-5) 0;
+  font-size: var(--shell-text-lg);
   font-weight: 600;
 }
 
 .pro-detail-demo__header {
-  margin-bottom: 8px;
+  margin-bottom: var(--shell-space-2);
 }
 
 .pro-detail-demo__sub-title {
-  margin: 4px 0 0;
-  font-size: 12px;
+  margin: var(--shell-space-1) 0 0;
+  font-size: var(--shell-text-xs);
   color: var(--shell-text-muted, #5e6578);
 }
 

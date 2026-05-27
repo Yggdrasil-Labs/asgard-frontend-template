@@ -422,11 +422,11 @@ watch(
 <style scoped>
 /* 表单内边距，符合常见 UI 规范（20–24px） */
 .pro-form {
-  padding: 24px;
+  padding: var(--shell-space-5);
 }
 
 .pro-form__header {
-  margin-bottom: 16px;
+  margin-bottom: var(--shell-space-4);
 }
 
 .pro-form__collapse {
@@ -436,7 +436,7 @@ watch(
 .pro-form__collapse :deep(.el-collapse-item__header) {
   height: auto;
   min-height: 48px;
-  padding: 0 4px;
+  padding: 0 var(--shell-space-1);
   border-radius: 6px;
   transition: background-color 150ms ease;
 }
@@ -450,10 +450,10 @@ watch(
 }
 
 .pro-form__collapse :deep(.el-collapse-item__content) {
-  padding: 20px 24px 24px;
+  padding: 20px var(--shell-space-5) var(--shell-space-5);
   background-color: var(--el-fill-color-lighter, #f8f9fa);
   border-radius: 6px;
-  margin-top: 4px;
+  margin-top: var(--shell-space-1);
 }
 
 .pro-form__group-header {
@@ -461,16 +461,16 @@ watch(
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0 8px 0 0;
+  padding: 0 var(--shell-space-2) 0 0;
 }
 
 .pro-form__group-title {
-  font-size: 14px;
+  font-size: var(--shell-text-sm);
   font-weight: 600;
 }
 
 .pro-form__group-extra {
-  margin-left: 16px;
+  margin-left: var(--shell-space-4);
 }
 
 /* 行内多列时，ElRow gutter 已提供水平间距，此处保证表单项底部间距 */
@@ -491,18 +491,18 @@ watch(
 }
 
 .pro-form__footer {
-  margin-top: 24px;
+  margin-top: var(--shell-space-5);
   padding-top: 20px;
   border-top: 1px solid var(--el-border-color-light, #e8eaed);
 }
 
 @media (max-width: 768px) {
   .pro-form {
-    padding: 16px;
+    padding: var(--shell-space-4);
   }
 
   .pro-form__collapse :deep(.el-collapse-item__content) {
-    padding: 16px 16px 20px;
+    padding: var(--shell-space-4) var(--shell-space-4) 20px;
   }
 
   .pro-form__row {
@@ -510,7 +510,7 @@ watch(
   }
 
   .pro-form__row :deep(.el-form-item) {
-    margin-bottom: 16px;
+    margin-bottom: var(--shell-space-4);
   }
 
   .pro-form__footer {

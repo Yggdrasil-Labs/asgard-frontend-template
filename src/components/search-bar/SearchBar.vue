@@ -330,8 +330,8 @@ defineExpose<SearchBarExpose>({
 .search-bar {
   background: var(--shell-surface-strong, #ffffff);
   border: 1px solid var(--shell-border, #e8eaed);
-  border-radius: 8px;
-  padding: 16px 16px 4px;
+  border-radius: var(--shell-radius-sm);
+  padding: var(--shell-space-4) var(--shell-space-4) var(--shell-space-1);
 }
 
 .search-bar__form {
@@ -341,7 +341,7 @@ defineExpose<SearchBarExpose>({
 .search-bar__body {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: var(--shell-space-4);
 }
 
 .search-bar__fields {
@@ -353,7 +353,7 @@ defineExpose<SearchBarExpose>({
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 8px;
+  gap: var(--shell-space-2);
   flex-wrap: wrap;
   min-width: 200px;
   padding-top: 2px;
@@ -367,13 +367,13 @@ defineExpose<SearchBarExpose>({
   .search-bar__actions {
     width: 100%;
     justify-content: flex-start;
-    padding: 0 0 12px;
+    padding: 0 0 var(--shell-space-3);
   }
 }
 
 @media (max-width: 768px) {
   .search-bar {
-    padding: 12px 12px 4px;
+    padding: var(--shell-space-3) var(--shell-space-3) var(--shell-space-1);
   }
 
   .search-bar__fields :deep(.el-row) {
@@ -381,7 +381,7 @@ defineExpose<SearchBarExpose>({
   }
 
   .search-bar__actions {
-    gap: 8px;
+    gap: var(--shell-space-2);
   }
 
   .search-bar__actions :deep(.el-button) {

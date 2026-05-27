@@ -394,16 +394,16 @@ async function handleSortChange(nextValue: ProTableSortState) {
 .search-bar-demo__hero {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
-  padding: 24px;
-  border-radius: 8px;
+  gap: var(--shell-space-4);
+  padding: var(--shell-space-5);
+  border-radius: var(--shell-radius-sm);
   color: var(--shell-text);
   background: var(--shell-surface-strong);
   border: 1px solid var(--shell-border);
 }
 
 .search-bar-demo__hero h1 {
-  margin: 4px 0 12px;
+  margin: var(--shell-space-1) 0 var(--shell-space-3);
   font-size: 20px;
 }
 
@@ -415,7 +415,7 @@ async function handleSortChange(nextValue: ProTableSortState) {
 }
 
 .search-bar-demo__eyebrow {
-  font-size: 12px;
+  font-size: var(--shell-text-xs);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -423,7 +423,7 @@ async function handleSortChange(nextValue: ProTableSortState) {
 }
 
 .search-bar-demo__panel {
-  border-radius: 8px;
+  border-radius: var(--shell-radius-sm);
   overflow: hidden;
 }
 
@@ -431,17 +431,17 @@ async function handleSortChange(nextValue: ProTableSortState) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--shell-space-3);
 }
 
 .search-bar-demo__payload {
   margin: 0;
-  padding: 16px;
+  padding: var(--shell-space-4);
   border-radius: 6px;
   background: #1e293b;
   color: #e2e8f0;
   overflow: auto;
-  font-size: 12px;
+  font-size: var(--shell-text-xs);
 }
 
 @media (max-width: 768px) {
@@ -451,7 +451,7 @@ async function handleSortChange(nextValue: ProTableSortState) {
   }
 
   .search-bar-demo__hero h1 {
-    font-size: 18px;
+    font-size: var(--shell-text-xl);
   }
 }
 </style>

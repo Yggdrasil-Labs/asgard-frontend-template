@@ -454,20 +454,20 @@ function triggerLoading() {
 }
 
 .page-title {
-  margin: 0 0 8px;
+  margin: 0 0 var(--shell-space-2);
   font-size: 20px;
 }
 
 .page-desc {
-  margin: 0 0 16px;
+  margin: 0 0 var(--shell-space-4);
   color: var(--el-text-color-secondary);
-  font-size: 14px;
+  font-size: var(--shell-text-sm);
 }
 
 .demo-toolbar {
-  margin-bottom: 16px;
+  margin-bottom: var(--shell-space-4);
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--shell-space-2);
 }
 
 .demo-toolbar .el-button + .el-button {
@@ -493,21 +493,21 @@ function triggerLoading() {
 }
 
 .submit-result {
-  margin-top: 24px;
-  padding: 16px;
+  margin-top: var(--shell-space-5);
+  padding: var(--shell-space-4);
   background: var(--shell-surface-muted, #f8f9fa);
   border: 1px solid var(--shell-border, #e8eaed);
   border-radius: 6px;
 }
 
 .submit-result h3 {
-  margin: 0 0 8px;
-  font-size: 14px;
+  margin: 0 0 var(--shell-space-2);
+  font-size: var(--shell-text-sm);
 }
 
 .submit-result pre {
   margin: 0;
-  font-size: 12px;
+  font-size: var(--shell-text-xs);
   overflow: auto;
 }
 </style>

@@ -399,7 +399,7 @@ defineExpose({
 .pro-table {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--shell-space-3);
   min-width: 0;
 }
 
@@ -408,7 +408,7 @@ defineExpose({
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--shell-space-2);
 }
 
 .pro-table__toolbar-prefix,
@@ -416,7 +416,7 @@ defineExpose({
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: var(--shell-space-2);
 }
 
 .pro-table__main {
@@ -425,13 +425,13 @@ defineExpose({
 }
 
 .pro-table__error-alert {
-  margin-bottom: 12px;
+  margin-bottom: var(--shell-space-3);
   border-radius: 6px;
 }
 
 .pro-table__error-title {
-  margin-bottom: 4px;
-  font-size: 14px;
+  margin-bottom: var(--shell-space-1);
+  font-size: var(--shell-text-sm);
   font-weight: 600;
 }
 
@@ -439,11 +439,11 @@ defineExpose({
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: var(--shell-space-3);
 }
 
 .pro-table__error-desc {
-  font-size: 12px;
+  font-size: var(--shell-text-xs);
   color: var(--el-text-color-regular);
 }
 
@@ -488,7 +488,7 @@ defineExpose({
   display: flex;
   justify-content: flex-end;
   min-width: 0;
-  padding-top: 12px;
+  padding-top: var(--shell-space-3);
 }
 
 .pro-table__scroll {

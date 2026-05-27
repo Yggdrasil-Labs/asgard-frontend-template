@@ -316,7 +316,7 @@ defineExpose<ProDialogExpose>({
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--shell-space-4);
   width: 100%;
 }
 
@@ -328,7 +328,7 @@ defineExpose<ProDialogExpose>({
 .dialog-title {
   margin: 0;
   color: var(--el-text-color-primary, #1a1f36);
-  font-size: 18px;
+  font-size: var(--shell-text-xl);
   font-weight: 600;
   line-height: 1.4;
 }
@@ -378,7 +378,7 @@ defineExpose<ProDialogExpose>({
 .dialog-body {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--shell-space-3);
   min-height: 0;
 }
 
@@ -389,7 +389,7 @@ defineExpose<ProDialogExpose>({
 .dialog-footer {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--shell-space-3);
 }
 
 .dialog-footer--left {
@@ -410,6 +410,6 @@ defineExpose<ProDialogExpose>({
 
 .dialog-footer__actions {
   display: inline-flex;
-  gap: 12px;
+  gap: var(--shell-space-3);
 }
 </style>
