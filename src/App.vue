@@ -19,11 +19,11 @@ const elementLocale = computed(() => getElementLocale(locale.value as Locale))
 
 <style lang="scss" scoped>
 .app {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .app-layout-renderer {
   display: block;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 </style>
