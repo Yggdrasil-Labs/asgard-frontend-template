@@ -44,16 +44,16 @@ flowchart LR
 
 ## 技术栈
 
-| 层级   | 技术                     | 备注                               |
-| ------ | ------------------------ | ---------------------------------- |
-| 框架   | Vue 3.5 + TypeScript 6   | Composition API + `<script setup>` |
-| 构建   | Vite 7                   | 开发 / 生产                        |
-| 状态   | Pinia 3                  | UI 与 shell 状态                   |
-| 路由   | Vue Router 5             | schema 驱动                        |
-| UI 库  | Element Plus             | 基础组件                           |
-| 国际化 | Vue I18n 11              | 中英双语                           |
-| 测试   | Vitest                   | 单元测试                           |
-| 包管理 | pnpm 10                  | Node >= 22.14                      |
+| 层级   | 技术                   | 备注                               |
+| ------ | ---------------------- | ---------------------------------- |
+| 框架   | Vue 3.5 + TypeScript 6 | Composition API + `<script setup>` |
+| 构建   | Vite 7                 | 开发 / 生产                        |
+| 状态   | Pinia 3                | UI 与 shell 状态                   |
+| 路由   | Vue Router 5           | schema 驱动                        |
+| UI 库  | Element Plus           | 基础组件                           |
+| 国际化 | Vue I18n 11            | 中英双语                           |
+| 测试   | Vitest                 | 单元测试                           |
+| 包管理 | pnpm 10                | Node >= 22.14                      |
 
 ## 架构原则
 

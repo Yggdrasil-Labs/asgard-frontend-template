@@ -27,7 +27,7 @@ export default antfu({
   },
   rules: {
     'no-console': ['warn', {
-      allow: ['log', 'warn', 'error'], // 允许常用的 console 方法
+      allow: ['warn', 'error'],
     }],
   },
   // 为测试文件添加特殊配置

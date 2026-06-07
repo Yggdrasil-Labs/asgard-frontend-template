@@ -15,7 +15,7 @@
     "preview": "vite preview",
     "preview:test": "vite preview --mode test",
     "test": "vitest run",
-    "lint": "eslint . --ext .ts,.vue,.json",
+    "lint": "eslint .",
     "lint:fix": "pnpm lint --fix",
     "type-check": "vue-tsc --noEmit",
     "dep:check": "pnpm dlx npm-check-updates",

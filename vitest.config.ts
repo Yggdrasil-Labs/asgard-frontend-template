@@ -32,6 +32,12 @@ export default defineConfig({
     // 默认仍以 Playwright E2E 为主；仅开启 unit spec 以支持局部验证
     include: ['tests/unit/**/*.spec.ts'],
     exclude: ['**/node_modules/**', '**/dist/**', '**/.{git,cache,output,temp}/**'],
+    setupFiles: ['tests/setup/vitest-setup.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+      include: ['src/**'],
+    },
   },
   css: {
     preprocessorOptions: {

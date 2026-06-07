@@ -115,7 +115,7 @@ export default defineConfig(({ mode, command }) => {
       },
     },
     build: {
-      target: 'esnext',
+      target: ['es2022', 'chrome100', 'firefox100', 'safari15'],
       outDir: 'dist',
       assetsDir: 'static',
       sourcemap: isDev,
@@ -130,20 +130,19 @@ export default defineConfig(({ mode, command }) => {
           chunkFileNames: 'static/js/[name]-[hash].js',
           entryFileNames: 'static/js/[name]-[hash].js',
           assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
-          // 优化的代码分割策略
-          manualChunks: {
-            // Vue 核心库
-            'vue-vendor': ['vue', 'vue-router'],
-            // UI 库
-            'ui-vendor': ['@vueuse/core'],
-            // HTTP 库
-            'http-vendor': ['axios'],
-            // 国际化
-            'i18n-vendor': ['vue-i18n'],
-            // 状态管理
-            'store-vendor': ['pinia', 'pinia-plugin-persistedstate'],
-            // 公共工具
-            'common': ['src/utils', 'src/composables'],
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('vue') || id.includes('vue-router'))
+                return 'vue-vendor'
+              if (id.includes('@vueuse'))
+                return 'ui-vendor'
+              if (id.includes('vue-i18n'))
+                return 'i18n-vendor'
+              if (id.includes('pinia'))
+                return 'store-vendor'
+              if (id.includes('axios'))
+                return 'http-vendor'
+            }
           },
         },
         // 外部依赖（如果需要）
