@@ -114,12 +114,14 @@ describe('app sider', () => {
   it('renders collapsed navigation as an icon rail with accessible labels', async () => {
     const app = await mountSider({ collapsed: true })
 
+    const sider = app.container.querySelector('.app-sider')
     const items = app.container.querySelectorAll<HTMLButtonElement>('.app-sider__item')
     const homeItem = items[0]
     const activeItem = items[1]
     const toggle = app.container.querySelector<HTMLButtonElement>('[data-testid="sider-toggle"]')
 
-    expect(homeItem?.querySelector('.app-sider__title')).toBeNull()
+    expect(sider?.classList.contains('is-collapsed')).toBe(true)
+    expect(homeItem?.querySelector('.app-sider__title')).not.toBeNull()
     expect(homeItem?.getAttribute('title')).toBe('首页')
     expect(homeItem?.getAttribute('aria-label')).toBe('首页')
     expect(activeItem?.classList.contains('is-active')).toBe(true)
