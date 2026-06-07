@@ -17,8 +17,7 @@
 
 // Element Plus 主题变量覆盖
 @use 'theme/_element-overrides' as *;
-// Element Plus 全量主题（表单、Message、MessageBox 等所有组件）
-@import 'element-plus/theme-chalk/index.css';
+// Element Plus 样式由 unplugin-vue-components 按需注入（importStyle: 'sass'）
 
 :root {
   --shell-font-family:

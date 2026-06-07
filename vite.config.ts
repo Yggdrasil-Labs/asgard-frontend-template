@@ -45,7 +45,7 @@ export default defineConfig(({ mode, command }) => {
         dts: 'src/types/components.d.ts',
         dirs: ['src/components'],
         // 自动导入组件（Element Plus 按需）
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
         // 包含的文件类型
         include: [VUE_FILE_RE, VUE_QUERY_RE],
         // 排除的文件
@@ -134,8 +134,6 @@ export default defineConfig(({ mode, command }) => {
           manualChunks: {
             // Vue 核心库
             'vue-vendor': ['vue', 'vue-router'],
-            // Element Plus
-            'element-plus': ['element-plus'],
             // UI 库
             'ui-vendor': ['@vueuse/core'],
             // HTTP 库
