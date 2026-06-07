@@ -97,9 +97,10 @@ export default defineConfig(({ mode, command }) => {
       // 代理配置
       proxy: {
         '/api': {
-          target: envVars.VITE_API_BASE_URL || 'http://localhost:8080',
+          target: envVars.VITE_API_BASE_URL || 'http://localhost:8081',
           changeOrigin: true,
-          rewrite: path => path.replace(API_PREFIX_RE, ''),
+          // 后端 Controller 路径已包含 /api，不需要 rewrite
+          // rewrite: path => path.replace(API_PREFIX_RE, ''),
           // 配置代理超时
           timeout: 10000,
         },

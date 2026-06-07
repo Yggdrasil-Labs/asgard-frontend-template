@@ -73,4 +73,16 @@ export const appRouteSchema: AppRouteRecord[] = [
       keepAlive: { enabled: false, strategy: 'routeName' },
     },
   },
+  {
+    name: 'Customer',
+    path: '/customer',
+    component: 'customer',
+    meta: {
+      title: '客户管理',
+      icon: 'menu-system',
+      layout: 'default',
+      tab: { enabled: true, closable: true, pinned: false, singleton: true },
+      keepAlive: { enabled: false, strategy: 'routeName' },
+    },
+  },
 ]
