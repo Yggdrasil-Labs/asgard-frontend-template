@@ -7,8 +7,7 @@
 ## 全局规范
 
 1. 项目约束优先于智能体默认行为。
-2. 项目级 skill（`docs/skills/`）优先于用户级 skill。
-3. Git 提交：`<type>(<scope>): <中文描述>`（Conventional Commits）。
+2. Git 提交：`<type>(<scope>): <中文描述>`（Conventional Commits）。
 
 ## 导航：我该去哪里找信息？
 
@@ -29,7 +28,6 @@
 ### C. 元规范（方法论）
 
 - 产品思维：`docs/PRODUCT_SENSE.md`
-- 需求工作流：`docs/skills/project-workflow/SKILL.md`
 - 质量评分：`docs/QUALITY_SCORE.md`
 
 ### D. 参考与产物
@@ -37,10 +35,6 @@
 - 外部参考（只读）：`docs/references/`
 - 自动生成文档（禁止手改）：`docs/generated/`
 - 公共组件契约：`docs/components/`
-
-### E. 项目级 Skills
-
-- 文档驱动迭代：`docs/skills/project-workflow/SKILL.md`
 
 ## 标准工作流（单任务）
 
@@ -56,7 +50,6 @@
 ## 开发命令
 
 ```bash
-source ~/.nvm/nvm.sh
 pnpm install
 pnpm lint            # ESLint
 pnpm type-check      # vue-tsc

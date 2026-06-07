@@ -28,7 +28,6 @@ verified: 2026-05-26
 - `docs/generated/`：自动生成物
 - `docs/references/`：外部参考
 - `docs/components/`：组件契约
-- `docs/skills/`：项目级工作流 skill
 
 ## 为什么这种形状更适合 AI
 

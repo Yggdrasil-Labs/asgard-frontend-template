@@ -13,7 +13,7 @@ General frontend template. Asgard——kingdom of gods.
 ## 📋 环境要求
 
 - **Node.js**: >= 22.14.0
-- **pnpm**: >= 10.28.0（建议与 `package.json` 中 `packageManager` 一致）
+- **pnpm**: >= 10.32.0（与 `package.json` 中 `packageManager` 一致）
 - **操作系统**: Windows、macOS、Linux
 
 ## 📁 项目结构
@@ -28,14 +28,9 @@ asgard-frontend-template
 │   │   └── release.yml             # 发布构建
 │   ├── release-please-config.json  # Release Please 配置
 │   └── .release-please-manifest.json # 版本追踪
-├── .cursor/            # Cursor 编辑器规则
 ├── .husky/             # Git Hooks
 ├── public/             # 静态资源（favicon、manifest 等）
 ├── src/
-│   ├── api/            # 请求封装与接口模块
-│   │   ├── http.ts     # Axios 封装
-│   │   ├── request.ts  # 全局拦截器
-│   │   └── modules/    # 各业务模块 API
 │   ├── assets/         # 静态资源
 │   │   └── scss/       # 样式文件
 │   ├── app/            # 应用级 shell 与页面承载
@@ -53,9 +48,6 @@ asgard-frontend-template
 │   ├── App.vue         # 根组件
 │   └── main.ts         # 应用入口
 ├── tests/              # 测试文件
-│   ├── e2e/            # 端到端测试（Playwright）
-│   │   ├── pages/      # Page Object 模式
-│   │   └── specs/      # 测试用例
 │   └── setup/          # 测试配置
 ├── .env.example        # 环境变量示例
 ├── .gitignore
@@ -63,7 +55,6 @@ asgard-frontend-template
 ├── eslint.config.js    # ESLint 配置
 ├── index.html          # HTML 入口
 ├── package.json        # 项目依赖
-├── playwright.config.ts # Playwright 配置
 ├── tsconfig.json       # TypeScript 配置
 ├── vite.config.ts      # Vite 配置
 └── vitest.config.ts    # Vitest 配置
@@ -73,9 +64,9 @@ asgard-frontend-template
 
 ### 核心技术
 
-- ⚡ **现代化技术栈**: Vue 3.5 + TypeScript 5.9 + Vite 7
+- ⚡ **现代化技术栈**: Vue 3.5 + TypeScript 6 + Vite 7
 - 🔧 **开箱即用**: 预配置 ESLint、Prettier、Husky、Commitlint
-- 🧪 **完整测试**: Playwright 端到端测试 + Page Object 模式
+- 🧪 **单元测试**: Vitest 单元测试覆盖核心逻辑；E2E 测试在独立仓库 bifrost-e2e
 - 🌍 **国际化支持**: Vue I18n 多语言支持，内置中英文切换
 - 📦 **自动导入**: 组件和 API 自动导入，无需手动 import
 - 🧭 **Shell 布局体系**: `AppLayoutRenderer + Default/Blank Layout + AppPageRenderer`
@@ -99,46 +90,37 @@ asgard-frontend-template
 - 🏷️ **版本管理**: Release Please 自动化版本管理和变更日志
 - 🧹 **代码质量**: Pre-commit hooks 确保代码质量
 - 🔍 **多环境支持**: 开发、测试、生产环境配置
-- 📊 **测试**: Playwright E2E 测试，关键流程可在本地或 CI 中运行
+- 📊 **测试**: Vitest 单元测试；E2E 验收在独立仓库 bifrost-e2e 中运行
 
-## 🏗️ Layout Shell 架构
+## 🏗️ 架构概要
 
-当前模板的页面承载已经从单一 `MainLayout + RouterView` 升级为 schema 驱动的后台壳层：
+模板采用 schema 驱动的 shell 布局体系：页面的菜单、标签页、缓存、布局选择等行为通过 route metadata 集中表达，而非散落在各页面组件中。
 
-- `src/router/types.ts`：定义 `AppRouteRecord / AppRouteMeta`
-- `src/router/app-route-schema.ts`：声明本地页面 schema
-- `src/router/route-normalizer.ts`：补齐 layout / menu / tab / keepAlive 默认值
-- `src/router/app-routes.ts`：把标准化路由转换为 Vue Router records
-- `src/app/shell/AppLayoutRenderer.vue`：根据当前路由选择 `DefaultLayout` 或 `BlankLayout`
-- `src/app/shell/AppPageRenderer.vue`：集中处理 `RouterView + KeepAlive`
-- `src/stores/*`：统一管理菜单、Tabs、缓存和响应式壳层状态
-
-这套结构的目标是让页面行为通过协议集中表达，而不是把菜单高亮、Tabs、缓存和响应式逻辑散落在页面组件里。
+详细的分层模型、依赖方向、各层职责与常见修改路径见 [`ARCHITECTURE.md`](./ARCHITECTURE.md)。
 
 ## 📦 核心依赖
 
 ### 生产依赖
 
-- [Vue](https://cn.vuejs.org/) `^3.5.26` - 渐进式 JavaScript 框架
-- [Vue Router](https://router.vuejs.org/zh/) `^5.x` - Vue 官方路由管理器（含文件系统路由）
-- [Pinia](https://pinia.vuejs.org/zh/) `^3.0.4` - Vue 状态管理库
-- [pinia-plugin-persistedstate](https://github.com/prazdevs/pinia-plugin-persistedstate) `^4.7.1` - Pinia 持久化插件
-- [Vue I18n](https://vue-i18n.intlify.dev/) `^11.2.8` - Vue 国际化插件
-- [@vueuse/core](https://vueuse.org/) `^14.1.0` - Vue 组合式函数工具库
-- [Axios](https://axios-http.com/zh/docs/intro) `^1.13.2` - HTTP 客户端库
+- [Vue 3](https://cn.vuejs.org/) - 渐进式 JavaScript 框架
+- [Vue Router](https://router.vuejs.org/zh/) - 官方路由管理器（schema 驱动）
+- [Pinia](https://pinia.vuejs.org/zh/) - 状态管理库
+- [pinia-plugin-persistedstate](https://github.com/prazdevs/pinia-plugin-persistedstate) - Pinia 持久化插件
+- [Vue I18n](https://vue-i18n.intlify.dev/) - 国际化插件
+- [@vueuse/core](https://vueuse.org/) - 组合式函数工具库
+- [Element Plus](https://element-plus.org/) - 基础 UI 组件库
+- [Axios](https://axios-http.com/zh/docs/intro) - HTTP 客户端
 
 ### 开发依赖
 
-- [TypeScript](https://www.typescriptlang.org/) `~5.9.3` - JavaScript 超集
-- [Vite](https://cn.vitejs.dev/) `^7.3.1` - 下一代前端构建工具
-- [Vitest](https://vitest.dev/) `^4.0.16` - 单元测试框架
-- [Playwright](https://playwright.dev/) `^1.57.0` - 端到端测试工具
-- [ESLint](https://eslint.org/) `^9.39.2` - 代码检查工具
-- [@antfu/eslint-config](https://github.com/antfu/eslint-config) `^6.7.3` - ESLint 配置
-- [Sass](https://sass-lang.com/) `^1.97.2` - CSS 预处理器
-- [Vue Router](https://router.vuejs.org/) `^5.0.3` - Vue.js 官方路由管理器（内置文件系统路由）
-- [unplugin-auto-import](https://github.com/unplugin/unplugin-auto-import) `^20.3.0` - API 自动导入
-- [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components) `^30.0.0` - 组件自动导入
+- [TypeScript](https://www.typescriptlang.org/) - 类型系统
+- [Vite](https://cn.vitejs.dev/) - 构建工具
+- [Vitest](https://vitest.dev/) - 单元测试框架
+- [ESLint](https://eslint.org/) + [@antfu/eslint-config](https://github.com/antfu/eslint-config) - 代码检查
+- [Sass](https://sass-lang.com/) - CSS 预处理器
+- [unplugin-auto-import](https://github.com/unplugin/unplugin-auto-import) / [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components) - 自动导入
+
+具体版本号以 `package.json` 为准。
 
 ## 🚀 快速开始
 
@@ -187,14 +169,11 @@ pnpm type-check
 ### 测试
 
 ```bash
-# 运行 E2E 测试
+# 运行单元测试（Vitest）
 pnpm test
-# 或
-pnpm test:e2e
-
-# 以 UI 模式运行 E2E 测试
-pnpm test:e2e:ui
 ```
+
+E2E 测试已迁移至独立仓库 [bifrost-e2e](../bifrost-e2e)。
 
 ### 依赖管理
 
@@ -297,6 +276,9 @@ VITE_API_BASE_URL=https://api.example.com
 
 ## 📚 相关文档
 
+- 架构与分层约束：[`ARCHITECTURE.md`](./ARCHITECTURE.md)
+- AI Agent 导航：[`AGENTS.md`](./AGENTS.md)
+- 公共组件契约：`docs/components/`
 - [Vue 3 文档](https://cn.vuejs.org/)
 - [Vite 文档](https://cn.vitejs.dev/)
 - [TypeScript 文档](https://www.typescriptlang.org/zh/)

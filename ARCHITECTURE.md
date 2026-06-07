@@ -46,7 +46,7 @@ flowchart LR
 
 | 层级   | 技术                     | 备注                               |
 | ------ | ------------------------ | ---------------------------------- |
-| 框架   | Vue 3.5 + TypeScript 5.9 | Composition API + `<script setup>` |
+| 框架   | Vue 3.5 + TypeScript 6   | Composition API + `<script setup>` |
 | 构建   | Vite 7                   | 开发 / 生产                        |
 | 状态   | Pinia 3                  | UI 与 shell 状态                   |
 | 路由   | Vue Router 5             | schema 驱动                        |
@@ -213,15 +213,13 @@ store 边界：
 
 - `eslint.config.js`
 - `vitest.config.ts`
-- `playwright.config.ts`
 - `tests/unit/**`
-- `tests/e2e/**`
 - `.github/workflows/ci.yml`
 
 质量模型：
 
 - 单元测试保护路由协议、shell store、共享工具与组件逻辑
-- E2E 测试保护关键用户旅程与壳层行为
+- E2E 测试已迁移至独立仓库 `bifrost-e2e`
 - lint 与 type-check 提供基础正确性约束
 - CI 是仓库质量的自动化边界
 
