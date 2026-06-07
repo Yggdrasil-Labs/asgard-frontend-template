@@ -132,14 +132,14 @@ export default defineConfig(({ mode, command }) => {
           assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              if (id.includes('vue') || id.includes('vue-router'))
-                return 'vue-vendor'
-              if (id.includes('@vueuse'))
-                return 'ui-vendor'
               if (id.includes('vue-i18n'))
                 return 'i18n-vendor'
+              if (id.includes('@vueuse'))
+                return 'ui-vendor'
               if (id.includes('pinia'))
                 return 'store-vendor'
+              if (id.includes('vue') || id.includes('vue-router'))
+                return 'vue-vendor'
               if (id.includes('axios'))
                 return 'http-vendor'
             }
