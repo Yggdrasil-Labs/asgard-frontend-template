@@ -23,7 +23,7 @@ request.interceptors.request.use(
       }
     }
 
-    console.log('请求发送:', {
+    console.warn('请求发送:', {
       url: config.url,
       method: config.method,
       params: config.params,
@@ -43,7 +43,7 @@ request.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     const { data } = response
 
-    console.log('响应接收:', {
+    console.warn('响应接收:', {
       url: response.config.url,
       status: response.status,
       data,

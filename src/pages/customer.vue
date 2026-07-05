@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import type { CreateCustomerRequest, UpdateCustomerRequest } from '@/api/modules/customer'
 import type { FormFieldSchema } from '@/types/pro-form'
 import type { ProTablePaginationState, TableColumnSchema } from '@/types/pro-table'
-import type { CustomerCO, CreateCustomerRequest, UpdateCustomerRequest } from '@/api/modules/customer'
 import { ref } from 'vue'
-import { ProTable, registerDefaultColumnComponents } from '@/components/pro-table'
+import { createCustomer, deleteCustomer, listCustomers, updateCustomer } from '@/api/modules/customer'
 import { ProDialog } from '@/components/pro-dialog'
 import { ProForm, registerDefaultFieldComponents } from '@/components/pro-form'
+import { ProTable, registerDefaultColumnComponents } from '@/components/pro-table'
 import { showSuccess } from '@/utils/message'
-import { createCustomer, deleteCustomer, listCustomers, updateCustomer } from '@/api/modules/customer'
 
 registerDefaultColumnComponents()
 registerDefaultFieldComponents()
@@ -52,7 +52,8 @@ const columns: TableColumnSchema[] = [
     ui: { component: 'Tag', width: 100, align: 'center' },
     runtime: {
       tagType: (v) => {
-        if (String(v) === 'ACTIVE') return 'success'
+        if (String(v) === 'ACTIVE')
+          return 'success'
         return 'info'
       },
     },

@@ -28,7 +28,7 @@ export function getCustomer(id: number) {
   return http.get(`/api/customers/${id}`)
 }
 
-export function listCustomers(params: { page: number; size: number }) {
+export function listCustomers(params: { page: number, size: number }) {
   return http.get('/api/customers', params)
 }
 
