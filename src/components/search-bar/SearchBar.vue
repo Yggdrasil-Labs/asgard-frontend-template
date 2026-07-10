@@ -265,7 +265,7 @@ defineExpose<SearchBarExpose>({
 </script>
 
 <template>
-  <div class="search-bar">
+  <div class="search-bar" data-testid="search-bar">
     <slot name="searchbar-prefix" />
 
     <ElForm
@@ -273,6 +273,7 @@ defineExpose<SearchBarExpose>({
       :label-width="labelWidth"
       :label-position="effectiveLabelPosition"
       class="search-bar__form"
+      data-testid="search-bar-form"
     >
       <div class="search-bar__body">
         <div class="search-bar__fields">
@@ -303,11 +304,11 @@ defineExpose<SearchBarExpose>({
           </ElRow>
         </div>
 
-        <div class="search-bar__actions">
-          <ElButton type="primary" :loading="loading" @click="() => search()">
+        <div class="search-bar__actions" data-testid="search-bar-actions">
+          <ElButton type="primary" :loading="loading" data-testid="search-bar-submit" @click="() => search()">
             查询
           </ElButton>
-          <ElButton :disabled="loading" @click="() => reset()">
+          <ElButton :disabled="loading" data-testid="search-bar-reset" @click="() => reset()">
             重置
           </ElButton>
           <ElButton
@@ -315,6 +316,7 @@ defineExpose<SearchBarExpose>({
             link
             type="primary"
             :disabled="loading"
+            data-testid="search-bar-toggle"
             @click="() => toggleExpand()"
           >
             {{ expanded ? '收起' : '展开' }}

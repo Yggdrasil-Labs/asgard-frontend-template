@@ -86,10 +86,11 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
 </script>
 
 <template>
-  <section class="pro-detail">
+  <section class="pro-detail" data-testid="detail-root">
     <header
       v-if="slots['detail-header'] || slots['detail-header-extra']"
       class="pro-detail__header"
+      data-testid="detail-header"
     >
       <div class="pro-detail__header-main">
         <slot name="detail-header" />
@@ -104,6 +105,7 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
       v-model="expandedGroupKeys"
       class="pro-detail__collapse"
       expand-icon-position="left"
+      data-testid="detail-collapse"
     >
       <ElCollapseItem
         v-for="group in groupedSchema"
@@ -194,6 +196,7 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
     <div
       v-else
       class="pro-detail__empty"
+      data-testid="detail-empty"
     >
       暂无可展示字段
     </div>

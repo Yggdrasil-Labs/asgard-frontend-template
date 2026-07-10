@@ -136,3 +136,35 @@
 - [ProTable](./pro-table.md)
 - [SearchBar](./search-bar.md)
 - [ProDialog](./pro-dialog.md)
+
+---
+
+## data-testid 命名规范
+
+公共组件必须在关键交互节点添加 `data-testid`，为 E2E 测试（bifrost-e2e）提供稳定定位锚点。
+
+### 命名规则
+
+```
+{组件语义前缀}-{区域/元素}
+```
+
+- 前缀使用**组件语义名**（去掉 `Pro` 前缀），如 `dialog`、`detail`、`search-bar`、`form`、`table`
+- 区域/元素使用英文短横线连接
+
+### 已有约定
+
+| 组件 | 前缀 | 示例 |
+|------|------|------|
+| ProDialog | `dialog-` | `dialog-title`, `dialog-close`, `dialog-body`, `dialog-footer`, `dialog-cancel`, `dialog-confirm` |
+| ProDetail | `detail-` | `detail-root`, `detail-header`, `detail-collapse`, `detail-empty` |
+| SearchBar | `search-bar-` | `search-bar`, `search-bar-form`, `search-bar-actions`, `search-bar-submit`, `search-bar-reset`, `search-bar-toggle` |
+
+### 放置原则
+
+1. 根容器（用于整体可见性断言）
+2. 主要结构区域（header、body、footer）
+3. 所有用户交互按钮
+4. 状态切换节点（空状态、loading 等）
+
+不需要为纯装饰元素添加 testid。
