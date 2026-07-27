@@ -2,15 +2,18 @@
 import type { CreateCustomerRequest, UpdateCustomerRequest } from '@/api/modules/customer'
 import type { FormFieldSchema } from '@/types/pro-form'
 import type { ProTablePaginationState, TableColumnSchema } from '@/types/pro-table'
+import type { SearchFieldSchema } from '@/types/search-bar'
 import { ref } from 'vue'
 import { createCustomer, deleteCustomer, listCustomers, updateCustomer } from '@/api/modules/customer'
 import { ProDialog } from '@/components/pro-dialog'
 import { ProForm, registerDefaultFieldComponents } from '@/components/pro-form'
 import { ProTable, registerDefaultColumnComponents } from '@/components/pro-table'
-import { showSuccess } from '@/utils/message'
+import { registerDefaultSearchFieldComponents, SearchBar } from '@/components/search-bar'
+import { confirm, showError, showSuccess } from '@/utils/message'
 
 registerDefaultColumnComponents()
 registerDefaultFieldComponents()
+registerDefaultSearchFieldComponents()
 
 definePage({
   name: 'Customer',
@@ -20,6 +23,8 @@ definePage({
 const loading = ref(false)
 const tableData = ref<Record<string, unknown>[]>([])
 const pagination = ref<ProTablePaginationState>({ page: 1, pageSize: 10, total: 0 })
+
+const searchValues = ref<Record<string, unknown>>({})
 
 const dialogVisible = ref(false)
 const dialogTitle = ref('新建客户')
@@ -39,6 +44,29 @@ const formSchema: FormFieldSchema[] = [
   {
     meta: { field: 'phone', label: '电话', valueType: 'string', required: false, defaultValue: '' },
     ui: { component: 'Input', props: { placeholder: '请输入电话', clearable: true }, layout: { span: 24 } },
+  },
+]
+
+const searchSchema: SearchFieldSchema[] = [
+  {
+    meta: { field: 'keyword', label: '关键词', valueType: 'string', defaultValue: '' },
+    ui: {
+      component: 'Input',
+      props: { placeholder: '按姓名或邮箱搜索', clearable: true },
+      layout: { group: 'basic', span: 12 },
+    },
+  },
+  {
+    meta: { field: 'status', label: '状态', valueType: 'string', defaultValue: '' },
+    ui: {
+      component: 'Select',
+      props: { clearable: true, placeholder: '请选择状态' },
+      layout: { group: 'basic', span: 12 },
+      options: [
+        { label: '活跃', value: 'ACTIVE' },
+        { label: '停用', value: 'INACTIVE' },
+      ],
+    },
   },
 ]
 
@@ -73,13 +101,46 @@ const columns: TableColumnSchema[] = [
 async function fetchData() {
   loading.value = true
   try {
-    const res = await listCustomers({ page: pagination.value.page, size: pagination.value.pageSize })
-    const data = res.data as any
-    tableData.value = data.content ?? data.records ?? (Array.isArray(data) ? data : [])
-    pagination.value.total = data.totalElements ?? data.total ?? tableData.value.length
+    // http 包装层在响应拦截器里返回的是完整 AxiosResponse，
+    // 因此业务数据在 res.data（cola 响应信封）的 data 字段中。
+    const keyword = String(searchValues.value.keyword ?? '').trim()
+    const status = String(searchValues.value.status ?? '').trim()
+    const resp = await listCustomers({
+      page: pagination.value.page,
+      size: pagination.value.pageSize,
+      keyword: keyword || undefined,
+      status: status || undefined,
+    })
+    const envelope = resp.data as any
+    const raw = envelope?.data ?? envelope?.content ?? envelope?.records
+    tableData.value = Array.isArray(raw) ? raw : []
+    const total = envelope?.totalCount ?? envelope?.total ?? envelope?.totalElements
+    pagination.value.total = typeof total === 'number' ? total : tableData.value.length
   }
   finally {
     loading.value = false
+  }
+}
+
+function handleSearch() {
+  fetchFromFirstPage()
+}
+
+function handleReset() {
+  fetchFromFirstPage()
+}
+
+/**
+ * 从第一页重新获取数据。
+ * 如果当前已在第一页，直接请求；否则重置页码（watch 会触发请求）。
+ */
+function fetchFromFirstPage() {
+  if (pagination.value.page === 1) {
+    fetchData()
+  }
+  else {
+    pagination.value = { ...pagination.value, page: 1 }
+    // watch 会自动触发 fetchData
   }
 }
 
@@ -99,12 +160,22 @@ function openEdit(row: Record<string, unknown>) {
 
 async function handleDelete(row: Record<string, unknown>) {
   try {
-    await ElMessageBox.confirm('确认删除该客户？', '提示', { type: 'warning' })
-    await deleteCustomer(row.id as number)
-    showSuccess('删除成功')
-    fetchData()
+    await confirm({ message: '确认删除该客户？', title: '提示' })
   }
-  catch { /* cancelled */ }
+  catch {
+    return
+  }
+
+  try {
+    await deleteCustomer(row.id as number)
+  }
+  catch {
+    showError('删除失败，请稍后重试')
+    return
+  }
+
+  showSuccess('删除成功')
+  fetchData()
 }
 
 function handleFormConfirm() {
@@ -127,13 +198,25 @@ async function handleFormSubmit(values: Record<string, unknown>) {
 fetchData()
 
 watch(
-  () => pagination.value.page,
+  [
+    () => pagination.value.page,
+    () => pagination.value.pageSize,
+  ],
   () => fetchData(),
 )
 </script>
 
 <template>
   <div class="customer-page">
+    <SearchBar
+      v-model="searchValues"
+      :schema="searchSchema"
+      :loading="loading"
+      :default-visible-count="2"
+      @search="handleSearch"
+      @reset="handleReset"
+    />
+
     <ProTable
       v-model:pagination="pagination"
       :columns="columns"

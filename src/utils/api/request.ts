@@ -49,6 +49,11 @@ request.interceptors.response.use(
       data,
     })
 
+    // DELETE 等成功的无响应体请求不包含 COLA 信封。
+    if (response.status === 204) {
+      return response
+    }
+
     // cola5.0 统一处理响应数据
     if (data.success === true) {
       // 请求成功，直接返回响应

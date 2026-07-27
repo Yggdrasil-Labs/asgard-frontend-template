@@ -20,6 +20,13 @@ export interface UpdateCustomerRequest {
   phone?: string
 }
 
+export interface CustomerListParams {
+  page: number
+  size: number
+  keyword?: string
+  status?: string
+}
+
 export function createCustomer(data: CreateCustomerRequest) {
   return http.post('/api/customers', data)
 }
@@ -28,7 +35,7 @@ export function getCustomer(id: number) {
   return http.get(`/api/customers/${id}`)
 }
 
-export function listCustomers(params: { page: number, size: number }) {
+export function listCustomers(params: CustomerListParams) {
   return http.get('/api/customers', params)
 }
 
