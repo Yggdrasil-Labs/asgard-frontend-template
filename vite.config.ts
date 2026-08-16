@@ -97,7 +97,7 @@ export default defineConfig(({ mode, command }) => {
       // 代理配置
       proxy: {
         '/api': {
-          target: envVars.VITE_API_BASE_URL || 'http://localhost:8081',
+          target: envVars.VITE_API_BASE_URL || 'http://localhost:8080',
           changeOrigin: true,
           // 后端 Controller 路径已包含 /api，不需要 rewrite
           // rewrite: path => path.replace(API_PREFIX_RE, ''),

@@ -15,28 +15,41 @@ declare global {
   interface ImportMetaEnv {
     readonly VITE_APP_NAME?: string
     readonly VITE_API_BASE_URL?: string
+    readonly VITE_PORT?: string
   }
 }
 
 // 环境变量默认值配置
+// 注意：API_BASE_URL 只到 origin（不含 /api），接口路径自带 /api 前缀。
+// 生产环境不提供 API_BASE_URL 默认值：缺失时构建产物会在加载期抛错（fail-closed），
+// 避免静默指向错误环境。
 const ENV_DEFAULTS = {
   development: {
-    API_BASE_URL: 'http://localhost:8080/api',
+    API_BASE_URL: 'http://localhost:8080',
     APP_NAME: 'Asgard Frontend (Development)',
   },
   test: {
-    API_BASE_URL: 'https://test-api.yggdrasil-labs.com/api',
+    API_BASE_URL: 'http://localhost:8080',
     APP_NAME: 'Asgard Frontend (Test)',
   },
   production: {
-    API_BASE_URL: 'https://api.yggdrasil-labs.com/api',
-    APP_NAME: 'Asgard Frontend (Production)',
+    API_BASE_URL: undefined,
+    APP_NAME: 'Asgard Frontend',
   },
 } as const
 
-// 环境变量获取函数（允许使用默认值）
-function validateEnvVar<T>(value: T | undefined, fallback: T, _name: string): T {
-  return value === undefined || value === '' ? fallback : value
+// 环境变量获取函数
+// 值缺失时回退到默认值；连默认值都没有（如生产 API_BASE_URL）则抛错，fail-closed。
+function resolveEnvVar(
+  name: 'VITE_API_BASE_URL' | 'VITE_APP_NAME',
+  value: string | undefined,
+  fallback: string | undefined,
+): string {
+  const resolved = value && value !== '' ? value : fallback
+  if (!resolved) {
+    throw new Error(`[env] 缺少必需的环境变量 ${name}（当前 MODE=${import.meta.env.MODE}）`)
+  }
+  return resolved
 }
 
 // 获取当前模式（MODE 决定加载哪套配置）
@@ -61,19 +74,19 @@ const APP_ENV: AppEnv = {
 }[MODE] as AppEnv
 
 // 获取环境变量值（如果未设置则使用对应 MODE 的默认值）
-const APP_NAME = validateEnvVar(
+const APP_NAME = resolveEnvVar(
+  'VITE_APP_NAME',
   import.meta.env.VITE_APP_NAME,
   envDefaults.APP_NAME,
-  'VITE_APP_NAME',
 )
 
 // 版本号来自构建时注入的常量 __APP_VERSION__
 const APP_VERSION: string = __APP_VERSION__
 
-const API_BASE_URL = validateEnvVar(
+const API_BASE_URL = resolveEnvVar(
+  'VITE_API_BASE_URL',
   import.meta.env.VITE_API_BASE_URL,
   envDefaults.API_BASE_URL,
-  'VITE_API_BASE_URL',
 )
 
 // 环境判断（PROD / DEV 决定代码行为，直接使用 Vite 提供的值）
