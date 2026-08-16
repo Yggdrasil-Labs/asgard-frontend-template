@@ -2,6 +2,7 @@
 
 | id | 需求名 | status | owner | tags | 路径 |
 |----|--------|--------|-------|------|------|
+| security-deps-audit-fix | 修复 CI 依赖审计失败（high 漏洞锁定修复版本） | active | - | security, ci | docs/active/security-deps-audit-fix |
 
 ## 如何添加新需求
 
