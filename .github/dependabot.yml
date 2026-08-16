@@ -37,6 +37,11 @@ updates:
           - "webpack*"
           - "rollup*"
           - "vite*"
+    ignore:
+      # TypeScript 7 为破坏性升级：当前 typescript-eslint 工具链尚不支持（ESLint 崩溃）。
+      # 待 @antfu/eslint-config / typescript-eslint 官方支持 TS 7 后解除此规则。
+      - dependency-name: "typescript"
+        versions: [">=7.0.0"]
 
   # ===== Python (pip/poetry/pipenv) =====
   - package-ecosystem: "pip"
@@ -202,6 +207,10 @@ updates:
       - "📦 deps"
     reviewers:
       - "Yggdrasil-Labs/reviewers"
+    ignore:
+      # release-please-action v5 为破坏性大改版，需完成配置迁移（独立任务）后再解除此规则。
+      - dependency-name: "googleapis/release-please-action"
+        versions: [">=5.0.0"]
 
   # ===== Dockerfiles (repo root) =====
   - package-ecosystem: "docker"
