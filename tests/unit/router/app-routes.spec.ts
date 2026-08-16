@@ -1,5 +1,5 @@
-import type { Component } from 'vue'
 import { describe, expect, it } from 'vitest'
+import { getKeepAliveIncludeName } from '@/app/shell/route-cache'
 import { createRouteRecords } from '@/router/app-routes'
 
 describe('createRouteRecords', () => {
@@ -16,20 +16,16 @@ describe('createRouteRecords', () => {
     expect(typeof proDialog?.component).toBe('function')
   })
 
-  it('页面组件 name 与路由名一致（KeepAlive include 可命中）', async () => {
-    const routes = createRouteRecords()
-    const home = routes.find(route => route.name === 'Home')
+  it('keepAlive include 名映射为页面文件名（与组件 __name 一致，HMR 免疫）', () => {
+    expect(getKeepAliveIncludeName('Home')).toBe('index')
+    expect(getKeepAliveIncludeName('ProFormDemo')).toBe('pro-form-demo')
+    expect(getKeepAliveIncludeName('Customer')).toBe('customer')
 
-    expect(home).toBeTruthy()
-    expect(typeof home?.component).toBe('function')
+    // fullPath 策略键只取路由名段再做映射
+    expect(getKeepAliveIncludeName('Home:/detail?id=1')).toBe('index')
 
-    const resolved = await (home!.component as () => Promise<Component>)()
-    expect((resolved as { name?: string }).name).toBe('Home')
-
-    const customer = routes.find(route => route.name === 'Customer')
-    expect(customer).toBeTruthy()
-    const resolvedCustomer = await (customer!.component as () => Promise<Component>)()
-    expect((resolvedCustomer as { name?: string }).name).toBe('Customer')
+    // 未知路由名原样回退，不吞键
+    expect(getKeepAliveIncludeName('UnknownRoute')).toBe('UnknownRoute')
   })
 
   it('preserves nested child routes from the schema', () => {

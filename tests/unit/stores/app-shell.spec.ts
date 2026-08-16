@@ -15,19 +15,6 @@ describe('useAppShellStore', () => {
     expect(store.drawerVisible).toBe(false)
   })
 
-  it('setDevice sets the device type', () => {
-    const store = useAppShellStore()
-
-    store.setDevice('mobile')
-    expect(store.device).toBe('mobile')
-
-    store.setDevice('tablet')
-    expect(store.device).toBe('tablet')
-
-    store.setDevice('desktop')
-    expect(store.device).toBe('desktop')
-  })
-
   describe('setViewportWidth', () => {
     it('sets mobile state when width < 768', () => {
       const store = useAppShellStore()
@@ -83,6 +70,11 @@ describe('useAppShellStore', () => {
       store.setSiderCollapsed(false)
       store.setViewportWidth(1000)
       expect(store.siderCollapsed).toBe(false)
+
+      // 同带内打开抽屉后 resize，抽屉状态同样保持
+      store.openDrawer()
+      store.setViewportWidth(1100)
+      expect(store.drawerVisible).toBe(true)
     })
 
     it('跨断点时按形态重置折叠状态', () => {
@@ -172,7 +164,7 @@ describe('useAppShellStore', () => {
   it('$reset restores initial state', () => {
     const store = useAppShellStore()
 
-    store.setDevice('mobile')
+    store.setViewportWidth(500)
     store.setSiderCollapsed(true)
     store.openDrawer()
 

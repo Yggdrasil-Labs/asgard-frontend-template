@@ -18,17 +18,6 @@
   }
 }
 
-@mixin respond-below($breakpoint) {
-  @if map.has-key($breakpoints, $breakpoint) {
-    $value: map.get($breakpoints, $breakpoint);
-    @media (max-width: calc($value - 1px)) {
-      @content;
-    }
-  } @else {
-    @warn "Unknown breakpoint: #{$breakpoint}";
-  }
-}
-
 // 布局混入 - 只保留最常用的
 // -----------------------------------------------------------------------------
 @mixin flex-center {

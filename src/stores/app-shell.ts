@@ -9,10 +9,6 @@ export const useAppShellStore = defineStore('app-shell', () => {
   const siderCollapsed = shallowRef(false)
   const drawerVisible = shallowRef(false)
 
-  function setDevice(nextDevice: AppDeviceType) {
-    device.value = nextDevice
-  }
-
   function setViewportWidth(width: number) {
     const nextDevice = getDeviceForWidth(width)
 
@@ -60,7 +56,6 @@ export const useAppShellStore = defineStore('app-shell', () => {
     device,
     siderCollapsed,
     drawerVisible,
-    setDevice,
     setViewportWidth,
     setSiderCollapsed,
     toggleSiderCollapsed,
