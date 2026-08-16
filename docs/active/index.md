@@ -4,6 +4,7 @@
 |----|--------|--------|-------|------|------|
 | security-deps-audit-fix | 修复 CI 依赖审计失败（high 漏洞锁定修复版本） | active | - | security, ci | docs/active/security-deps-audit-fix |
 | code-governance-round-1 | 门禁重建与安全止血（type-check/HTTP 契约/日志/env） | active | - | governance, security | docs/active/code-governance-round-1 |
+| code-governance-round-2 | 路由与壳层正确性（keep-alive/路由单源/响应式断点） | active | - | governance, router | docs/active/code-governance-round-2 |
 
 ## 如何添加新需求
 
