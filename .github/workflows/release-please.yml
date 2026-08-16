@@ -3,9 +3,6 @@ name: Release Please
 on:
   push:
     branches: [main]
-  pull_request:
-    types: [opened, synchronize, closed]
-    branches: [main]
   workflow_dispatch: {}
 
 permissions:
@@ -15,15 +12,10 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    # 避免重复执行：
-    # - 当 PR 合并时，会同时触发 push 和 pull_request 事件
-    # - 我们只在 push 事件时执行，忽略 pull_request closed 事件（因为会触发 push）
-    # - 但保留 pull_request opened/synchronize 事件（用于更新 release PR）
-    if: |
-      github.event_name == 'push' ||
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'pull_request' && github.event.action != 'closed') ||
-      (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false)
+    # 仅由 push / workflow_dispatch 触发（release-please-action 官方推荐模式）：
+    # 移除 pull_request 触发，因为 release-please 每次运行都会 force-push 自己的
+    # release 分支，若同时监听 pull_request.synchronize，会形成自触发循环，
+    # 且此类运行需要人工批准，导致 release PR 永远无法转绿。
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
