@@ -93,7 +93,18 @@ request.interceptors.response.use(
     let errorMessage = '网络错误，请稍后重试'
     let errorCode = 'NETWORK_ERROR'
 
-    if (error.response) {
+    // 取消：组件卸载等场景的主动取消，原样透传不包装，避免被当成失败
+    if (error.code === 'ERR_CANCELED') {
+      return Promise.reject(error)
+    }
+
+    // 超时：error.request 同时为真，必须先于 response/request 判断，
+    // 否则会误报为「网络连接失败」
+    if (error.code === 'ECONNABORTED') {
+      errorMessage = '请求超时'
+      errorCode = 'TIMEOUT'
+    }
+    else if (error.response) {
       const { status, data } = error.response
       const apiData = data as ApiResponse
 
@@ -142,10 +153,6 @@ request.interceptors.response.use(
     else if (error.request) {
       errorMessage = '网络连接失败，请检查网络'
       errorCode = 'NETWORK_ERROR'
-    }
-    else if (error.code === 'ECONNABORTED') {
-      errorMessage = '请求超时'
-      errorCode = 'TIMEOUT'
     }
 
     // 可以在这里添加全局错误提示
