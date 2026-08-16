@@ -2,6 +2,7 @@ import type { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConf
 import type { ApiResponse } from '@/types/api'
 import axios from 'axios'
 import { env } from '@/config/env'
+import { ApiError } from './error'
 
 // 创建axios实例
 const request: AxiosInstance = axios.create({
@@ -23,17 +24,19 @@ request.interceptors.request.use(
       }
     }
 
-    console.warn('请求发送:', {
-      url: config.url,
-      method: config.method,
-      params: config.params,
-      data: config.data,
-    })
+    if (env.isDev) {
+      console.warn('[request] 请求发送:', {
+        url: config.url,
+        method: config.method,
+      })
+    }
 
     return config
   },
   (error: AxiosError) => {
-    console.error('请求拦截器错误:', error)
+    if (env.isDev) {
+      console.error('[request] 请求拦截器错误:', error.message)
+    }
     return Promise.reject(error)
   },
 )
@@ -43,11 +46,12 @@ request.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     const { data } = response
 
-    console.warn('响应接收:', {
-      url: response.config.url,
-      status: response.status,
-      data,
-    })
+    if (env.isDev) {
+      console.warn('[request] 响应接收:', {
+        url: response.config.url,
+        status: response.status,
+      })
+    }
 
     // DELETE 等成功的无响应体请求不包含 COLA 信封。
     if (response.status === 204) {
@@ -64,24 +68,27 @@ request.interceptors.response.use(
       const errorMessage = data.errMessage || '请求失败'
       const errorCode = data.errCode || 'UNKNOWN_ERROR'
 
-      console.error('业务错误:', {
-        errCode: errorCode,
-        errMessage: errorMessage,
-      })
+      if (env.isDev) {
+        console.error('[request] 业务错误:', {
+          errCode: errorCode,
+          errMessage: errorMessage,
+        })
+      }
 
       // 可以在这里添加全局错误提示
       // ElMessage.error(errorMessage)
 
-      // 创建带错误码的错误对象
-      const error = new Error(errorMessage)
-      ;(error as any).code = errorCode
-      ;(error as any).response = response
-
-      return Promise.reject(error)
+      return Promise.reject(new ApiError(errorMessage, {
+        code: errorCode,
+        status: response.status,
+        response,
+      }))
     }
   },
   (error: AxiosError) => {
-    console.error('响应拦截器错误:', error)
+    if (env.isDev) {
+      console.error('[request] 响应拦截器错误:', error.message)
+    }
 
     let errorMessage = '网络错误，请稍后重试'
     let errorCode = 'NETWORK_ERROR'
@@ -144,12 +151,12 @@ request.interceptors.response.use(
     // 可以在这里添加全局错误提示
     // ElMessage.error(errorMessage)
 
-    // 创建带错误码的错误对象
-    const customError = new Error(errorMessage)
-    ;(customError as any).code = errorCode
-    ;(customError as any).originalError = error
-
-    return Promise.reject(customError)
+    return Promise.reject(new ApiError(errorMessage, {
+      code: errorCode,
+      status: error.response?.status,
+      response: error.response,
+      cause: error,
+    }))
   },
 )
 

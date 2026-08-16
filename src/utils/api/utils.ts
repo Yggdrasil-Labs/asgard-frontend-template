@@ -5,6 +5,7 @@
 
 import type { AxiosResponse } from 'axios'
 import type { ApiResponse, PaginatedResponse } from '@/types/api'
+import { ApiError } from './error'
 
 /**
  * 从 Axios 响应中提取 data 字段
@@ -84,8 +85,8 @@ export function getErrorMessage(error: unknown): string {
  * @returns 错误码
  */
 export function getErrorCode(error: unknown): string {
-  if (error && typeof error === 'object' && 'code' in error) {
-    return String((error as any).code)
+  if (error instanceof ApiError) {
+    return error.code
   }
   return 'UNKNOWN_ERROR'
 }

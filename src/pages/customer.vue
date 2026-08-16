@@ -9,6 +9,7 @@ import { ProDialog } from '@/components/pro-dialog'
 import { ProForm, registerDefaultFieldComponents } from '@/components/pro-form'
 import { ProTable, registerDefaultColumnComponents } from '@/components/pro-table'
 import { registerDefaultSearchFieldComponents, SearchBar } from '@/components/search-bar'
+import { extractPaginatedData } from '@/utils/api/utils'
 import { confirm, showError, showSuccess } from '@/utils/message'
 
 registerDefaultColumnComponents()
@@ -101,8 +102,6 @@ const columns: TableColumnSchema[] = [
 async function fetchData() {
   loading.value = true
   try {
-    // http 包装层在响应拦截器里返回的是完整 AxiosResponse，
-    // 因此业务数据在 res.data（cola 响应信封）的 data 字段中。
     const keyword = String(searchValues.value.keyword ?? '').trim()
     const status = String(searchValues.value.status ?? '').trim()
     const resp = await listCustomers({
@@ -111,11 +110,9 @@ async function fetchData() {
       keyword: keyword || undefined,
       status: status || undefined,
     })
-    const envelope = resp.data as any
-    const raw = envelope?.data ?? envelope?.content ?? envelope?.records
-    tableData.value = Array.isArray(raw) ? raw : []
-    const total = envelope?.totalCount ?? envelope?.total ?? envelope?.totalElements
-    pagination.value.total = typeof total === 'number' ? total : tableData.value.length
+    const page = extractPaginatedData(resp)
+    tableData.value = page.data as Record<string, unknown>[]
+    pagination.value.total = page.totalCount
   }
   finally {
     loading.value = false
@@ -184,11 +181,21 @@ function handleFormConfirm() {
 
 async function handleFormSubmit(values: Record<string, unknown>) {
   if (editingId.value) {
-    await updateCustomer(editingId.value, values as UpdateCustomerRequest)
+    const payload: UpdateCustomerRequest = {
+      name: values.name != null ? String(values.name) : undefined,
+      email: values.email != null ? String(values.email) : undefined,
+      phone: values.phone != null ? String(values.phone) : undefined,
+    }
+    await updateCustomer(editingId.value, payload)
     showSuccess('更新成功')
   }
   else {
-    await createCustomer(values as CreateCustomerRequest)
+    const payload: CreateCustomerRequest = {
+      name: String(values.name ?? ''),
+      email: String(values.email ?? ''),
+      phone: values.phone != null ? String(values.phone) : undefined,
+    }
+    await createCustomer(payload)
     showSuccess('创建成功')
   }
   dialogVisible.value = false
@@ -243,7 +250,7 @@ watch(
         ref="formRef"
         v-model="formValues"
         :schema="formSchema"
-        :mode="editingId ? 'edit' : 'create'"
+        mode="edit"
         :layout="{ labelWidth: '80px' }"
         @submit="handleFormSubmit"
       />

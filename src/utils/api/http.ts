@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import type { ApiResponse } from '@/types/api'
 import request from './request'
 
@@ -14,7 +14,7 @@ class Http {
     url: string,
     params?: Record<string, any>,
     config?: AxiosRequestConfig,
-  ): Promise<ApiResponse<T>> {
+  ): Promise<AxiosResponse<ApiResponse<T>>> {
     return request.get(url, { params, ...config })
   }
 
@@ -28,7 +28,7 @@ class Http {
     url: string,
     data?: any,
     config?: AxiosRequestConfig,
-  ): Promise<ApiResponse<T>> {
+  ): Promise<AxiosResponse<ApiResponse<T>>> {
     return request.post(url, data, config)
   }
 
@@ -42,7 +42,7 @@ class Http {
     url: string,
     data?: any,
     config?: AxiosRequestConfig,
-  ): Promise<ApiResponse<T>> {
+  ): Promise<AxiosResponse<ApiResponse<T>>> {
     return request.put(url, data, config)
   }
 
@@ -54,7 +54,7 @@ class Http {
   delete<T = any>(
     url: string,
     config?: AxiosRequestConfig,
-  ): Promise<ApiResponse<T>> {
+  ): Promise<AxiosResponse<ApiResponse<T>>> {
     return request.delete(url, config)
   }
 
@@ -68,7 +68,7 @@ class Http {
     url: string,
     data?: any,
     config?: AxiosRequestConfig,
-  ): Promise<ApiResponse<T>> {
+  ): Promise<AxiosResponse<ApiResponse<T>>> {
     return request.patch(url, data, config)
   }
 
@@ -80,7 +80,7 @@ class Http {
   head<T = any>(
     url: string,
     config?: AxiosRequestConfig,
-  ): Promise<ApiResponse<T>> {
+  ): Promise<AxiosResponse<ApiResponse<T>>> {
     return request.head(url, config)
   }
 
@@ -92,7 +92,7 @@ class Http {
   options<T = any>(
     url: string,
     config?: AxiosRequestConfig,
-  ): Promise<ApiResponse<T>> {
+  ): Promise<AxiosResponse<ApiResponse<T>>> {
     return request.options(url, config)
   }
 
@@ -108,7 +108,7 @@ class Http {
     file: File | FormData,
     onProgress?: (progressEvent: any) => void,
     config?: AxiosRequestConfig,
-  ): Promise<ApiResponse<T>> {
+  ): Promise<AxiosResponse<ApiResponse<T>>> {
     const formData = file instanceof FormData ? file : new FormData()
     if (file instanceof File) {
       formData.append('file', file)
@@ -154,7 +154,7 @@ class Http {
    * 并发请求
    * @param requests 请求数组
    */
-  all<T = any>(requests: Array<Promise<ApiResponse<T>>>): Promise<ApiResponse<T>[]> {
+  all<T = any>(requests: Array<Promise<AxiosResponse<ApiResponse<T>>>>): Promise<AxiosResponse<ApiResponse<T>>[]> {
     return Promise.all(requests)
   }
 
@@ -162,7 +162,7 @@ class Http {
    * 并发请求（有一个成功就返回）
    * @param requests 请求数组
    */
-  race<T = any>(requests: Array<Promise<ApiResponse<T>>>): Promise<ApiResponse<T>> {
+  race<T = any>(requests: Array<Promise<AxiosResponse<ApiResponse<T>>>>): Promise<AxiosResponse<ApiResponse<T>>> {
     return Promise.race(requests)
   }
 
@@ -170,7 +170,7 @@ class Http {
    * 并发请求（所有请求都完成，无论成功失败）
    * @param requests 请求数组
    */
-  allSettled<T = any>(requests: Array<Promise<ApiResponse<T>>>): Promise<PromiseSettledResult<ApiResponse<T>>[]> {
+  allSettled<T = any>(requests: Array<Promise<AxiosResponse<ApiResponse<T>>>>): Promise<PromiseSettledResult<AxiosResponse<ApiResponse<T>>>[]> {
     return Promise.allSettled(requests)
   }
 }
