@@ -20,7 +20,7 @@ function findRouteByPath(path: string) {
 }
 
 function buildTabRecord(route: RouteLocationNormalizedLoaded) {
-  const routeKey = String(route.name ?? route.path)
+  const routeKey = String(route.name)
 
   return {
     key: routeKey,
@@ -36,7 +36,7 @@ function buildTabRecord(route: RouteLocationNormalizedLoaded) {
 function syncShellState(to: RouteLocationNormalizedLoaded) {
   const menuStore = useMenuStore()
   const tabsStore = useTabsStore()
-  const currentKey = String(to.name ?? to.path)
+  const currentKey = String(to.name)
 
   menuStore.syncRoute(String(to.meta.menu?.activeMenu ?? currentKey))
 

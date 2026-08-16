@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { TableInstance } from 'element-plus'
 import type { VNode } from 'vue'
 import type { SemanticIconName } from '@/components/icon/icon.types'
 import type {
@@ -60,7 +61,7 @@ function headerTooltipIcon(icon?: string): SemanticIconName | undefined {
 }
 
 const slots = useSlots()
-const tableRef = ref<InstanceType<typeof ElTable> | null>(null)
+const tableRef = ref<TableInstance | null>(null)
 
 /** 稳定引用，供 `#cell` 的 `defaultRender` 与 `component :is` 使用 */
 const DynamicCellHost = markRaw(ProTableDynamicCellHost)

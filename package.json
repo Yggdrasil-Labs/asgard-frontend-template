@@ -17,7 +17,7 @@
     "test": "vitest run",
     "lint": "eslint .",
     "lint:fix": "pnpm lint --fix",
-    "type-check": "vue-tsc --noEmit",
+    "type-check": "vue-tsc --noEmit -p tsconfig.app.json",
     "dep:check": "pnpm dlx npm-check-updates",
     "dep:update": "pnpm dlx npm-check-updates -u && pnpm install",
     "prepare": "husky"

@@ -1,19 +1,25 @@
-import type { FormFieldSchema, ProFormContext } from '@/types/pro-form'
+import type { FormFieldMeta, FormFieldRuntime, FormFieldSchema, FormFieldUi, ProFormContext } from '@/types/pro-form'
 import { describe, expect, it } from 'vitest'
 import { buildElFormRules } from '@/components/pro-form/validation'
 
-function makeField(partial: Partial<FormFieldSchema>): FormFieldSchema {
+interface FieldPartial {
+  meta?: Partial<FormFieldMeta>
+  ui?: Partial<FormFieldUi>
+  runtime?: FormFieldRuntime
+}
+
+function makeField(partial: FieldPartial = {}): FormFieldSchema {
   return {
     meta: {
-      field: 'f',
-      label: '字段',
-      valueType: 'string',
-      required: false,
       ...partial.meta,
+      field: partial.meta?.field ?? 'f',
+      label: partial.meta?.label ?? '字段',
+      valueType: partial.meta?.valueType ?? 'string',
+      required: partial.meta?.required ?? false,
     },
     ui: {
-      component: 'Input',
       ...partial.ui,
+      component: partial.ui?.component ?? 'Input',
     },
     runtime: partial.runtime,
   }
@@ -104,7 +110,7 @@ describe('pro-form/validation/rules-adapter', () => {
             rules: [
               {
                 message: '已存在',
-                validator: async (_value, _values, ctx) => {
+                validator: async (_value: unknown, _values: Record<string, unknown>, ctx: ProFormContext) => {
                   expect(ctx).toEqual(context)
                   return false
                 },

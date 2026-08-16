@@ -1,10 +1,29 @@
 // @vitest-environment jsdom
+import type { App, Ref } from 'vue'
 import type { ProDialogExpose, ProDialogProps } from '@/components/pro-dialog/types'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createApp, defineComponent, h, nextTick, ref } from 'vue'
 import ProDialog from '@/components/pro-dialog/ProDialog.vue'
 
-const mountedDialogs: Array<ReturnType<typeof mountDialog>> = []
+interface MountedDialog {
+  app: App<Element>
+  container: HTMLDivElement
+  visible: Ref<boolean>
+  dialogRef: Ref<ProDialogExpose | null>
+  events: {
+    open: ReturnType<typeof vi.fn>
+    opened: ReturnType<typeof vi.fn>
+    confirm: ReturnType<typeof vi.fn>
+    cancel: ReturnType<typeof vi.fn>
+    close: ReturnType<typeof vi.fn>
+    closed: ReturnType<typeof vi.fn>
+  }
+  pageClicks: Ref<number>
+  flush: () => Promise<void>
+  unmount: () => void
+}
+
+const mountedDialogs: MountedDialog[] = []
 
 afterEach(() => {
   mountedDialogs.splice(0).forEach((dialog) => {
@@ -21,7 +40,7 @@ function mountDialog(
   props: Partial<ProDialogProps> = {},
   slots: Record<string, () => unknown> = {},
   options: { withPageButton?: boolean } = {},
-) {
+): MountedDialog {
   const container = document.createElement('div')
   document.body.appendChild(container)
 

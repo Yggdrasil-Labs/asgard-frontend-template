@@ -8,7 +8,7 @@ const route = useRoute()
 const keepAliveStore = useKeepAliveStore()
 const tabsStore = useTabsStore()
 
-const routeKey = computed(() => String(route.name ?? route.path))
+const routeKey = computed(() => String(route.name))
 const cacheKey = computed(() => buildRouteCacheKey(route))
 const isCacheable = computed(() => route.meta.keepAlive?.enabled === true)
 const refreshVersion = computed(() => tabsStore.getRefreshVersion(routeKey.value))

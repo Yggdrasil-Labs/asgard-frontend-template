@@ -1,3 +1,4 @@
+import type { AppLayoutName } from '@/router/types'
 // @vitest-environment jsdom
 import { createPinia } from 'pinia'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -52,7 +53,7 @@ afterEach(() => {
   document.body.innerHTML = ''
 })
 
-async function mountLayout(layout: string) {
+async function mountLayout(layout: AppLayoutName) {
   const container = document.createElement('div')
   document.body.appendChild(container)
   mountedContainers.push(container)
