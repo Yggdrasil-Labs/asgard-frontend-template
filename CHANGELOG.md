@@ -1,5 +1,97 @@
 # Changelog
 
+## [1.3.0](https://github.com/Yggdrasil-Labs/asgard-frontend-template/compare/v1.2.0...v1.3.0) (2026-08-16)
+
+
+### ✨ Features
+
+* **components:** 补充 data-testid 与 app-shell store 单测 ([fab92e2](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/fab92e2c45c1d63ff86c39d6befb607988ff97b8))
+* **customer:** 添加 Customer 管理页，对接后端 CRUD API ([e7770f3](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/e7770f33c192df26c36e7bebe52d3e368a9310e0))
+* **customer:** 添加列表搜索过滤功能 ([44fc42f](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/44fc42f638c938df45080a8ccf5625bc4dbd48ac))
+* **docs:** 增加Harness engineering相关文档内容 ([ae38300](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ae38300e8ecacf9c1c4bb10f1ac4d10d60ae4d26))
+
+
+### 🐛 Bug Fixes
+
+* **app:** 使用 100dvh 替代 100vh 修复移动端视口高度 ([e7cba92](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/e7cba9274bb2e7edce63182d1533a035fa96d4e7))
+* **ci:** CI 补充 build + test 步骤并修复 app-sider 测试断言 ([7f64541](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/7f645414b1f75cf035a148253c4e6d3c5920a0ac))
+* **ci:** 对齐 build-and-test job 的 action 版本至 checkout@v7 和 pnpm/action-setup@v6 ([09c9721](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/09c97214650969b60ce3d1d9191ad09fd9cd55dc))
+* **ci:** 移除 release-please 工作流的 pull_request 触发 ([5253442](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/525344201c978c84eb9108feb18200e0c88e89b2))
+* **frontend:** 修复审查 P0/P1 问题 ([6f10653](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/6f10653034f1a6eee4bff8b3ee54560855644029))
+* **lint:** 修复 lint 错误（import 排序、console.log、unused 变量） ([9f79076](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/9f79076699ae7eb5435bac9849469402493d0b0c))
+* **security:** 通过 pnpm.overrides 修复传递依赖安全漏洞 ([69bc846](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/69bc846678affd6e4b700528b0d764340804115c))
+* **security:** 锁定传递依赖修复版本，清除 CI 审计高危漏洞 ([ee8917d](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ee8917d68267f0825853b24d6f5ab52eadb7eab1))
+
+
+### 📝 Documentation
+
+* **architecture:** 修复表格格式对齐 ([01d43fc](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/01d43fcf59265fab18383b6592649c5d38970b44))
+* **harness:** 迁移文档体系到 harness-docs 最佳实践标准 ([7a433da](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/7a433da26f3c277d0097c62e1a90f295960246f2))
+* 文档质量优化与结构治理 ([4d8f78f](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/4d8f78f8d98e10524f71d4426270bbe772edfc81))
+
+
+### ♻️ Code Refactoring
+
+* **e2e:** 将 E2E 测试迁移到独立仓库 bifrost-e2e ([07f7647](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/07f76471320264ecb20c58a1d5fceb97d17ed0c3))
+* **style:** 三轮 token 化，硬编码 px 值引用 shell CSS 变量 ([fe08927](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/fe08927680834bb5d339e9fd8746bc5c3721ca5f))
+
+
+### ⚡ Performance Improvements
+
+* **build:** Element Plus CSS 按需引入，移除全量导入和 manualChunks 阻断 ([2500906](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/2500906c5e9e8fd2959631d7004d0d4546e7a534))
+
+
+### 🔧 Miscellaneous Chores
+
+* **ci:** 为 dependabot 添加 typescript 与 release-please-action 的忽略规则 ([8ea3294](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/8ea3294411397fb2994b48af8aef178ad91c5231))
+* **ci:** 清理 dependabot 配置中的无关生态系统 ([7316903](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/7316903e555feaa1cbcc552b672f420e778e649b))
+* **deps-dev:** bump @types/node from 25.9.5 to 26.2.0 ([4ab042b](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/4ab042b75be357ac0601f30c5b49605be3fbca1f))
+* **deps-dev:** bump @types/node from 25.9.5 to 26.2.0 ([ee5423f](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ee5423ff1cad8a8e20eea22205b1b482118302d2))
+* **deps-dev:** bump the dev-deps group across 1 directory with 2 updates ([38b0987](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/38b09877e42238817b824f82dc3b1537ee3578fd))
+* **deps-dev:** bump unplugin-vue-components from 31.0.0 to 32.0.0 ([9efacd3](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/9efacd37b74db3d880216d79e70b7273d90c311f))
+* **deps:** bump actions/cache from 5.0.4 to 5.0.5 ([a9892e4](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/a9892e44189ec7104cc7124d71c664cc6767e327))
+* **deps:** bump actions/cache from 5.0.5 to 6.1.0 ([151fc2a](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/151fc2adc14116433f7b4750c5497aec30a5ea20))
+* **deps:** bump actions/cache from 5.0.5 to 6.1.0 ([d35671e](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/d35671e211f049b664763c39fb766ef182a44d9e))
+* **deps:** bump actions/checkout from 6 to 7 ([c699827](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/c699827fd9a58e022b52d240969017f3306b3d3c))
+* **deps:** bump actions/checkout from 6 to 7 ([e8cd60b](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/e8cd60b9d47faf2fa210aaa442dd723d084576df))
+* **deps:** bump actions/checkout from 7.0.0 to 7.0.1 ([f933416](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/f9334165ca889f94e25c230ece5a357a97c9b666))
+* **deps:** bump actions/checkout from 7.0.0 to 7.0.1 ([fbd3920](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/fbd3920408d58dd46b26a92b3da819862869060b))
+* **deps:** bump actions/github-script from 8.0.0 to 9.0.0 ([bf69324](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/bf693244c036886a536ea5ea11d22a084dbb53fb))
+* **deps:** bump actions/setup-node from 6 to 7 ([#124](https://github.com/Yggdrasil-Labs/asgard-frontend-template/issues/124)) ([4853bad](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/4853bad6783755711cf3d277b4457821b8a7e304))
+* **deps:** bump actions/upload-artifact from 7.0.0 to 7.0.1 ([b7031a6](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b7031a63f7919e53905d83b20c334ad1a7c688f1))
+* **deps:** bump googleapis/release-please-action from 4.4.0 to 4.4.1 ([b25003d](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b25003d113abe21d09511d48d42af404c7161c40))
+* **deps:** bump node from 22-alpine to 26-alpine ([fccb2e7](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/fccb2e7611d7bf895a0aff26d9d01b349834d996))
+* **deps:** bump node from 22-alpine to 26-alpine ([ac36cee](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ac36cee80b060dec96d9e0b4c933f5d70999b692))
+* **deps:** bump pnpm/action-setup from 5.0.0 to 6.0.9 ([b526e5c](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b526e5c090fd6955e5058b1a162d3538c386602f))
+* **deps:** bump pnpm/action-setup from 5.0.0 to 6.0.9 ([33648c5](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/33648c5dbe28d03a425bd488c9b282790cda4b71))
+* **deps:** bump pnpm/action-setup from 6.0.9 to 6.0.10 ([07ea79e](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/07ea79e5d7558911d777284d5863b7249e037ab7))
+* **deps:** bump pnpm/action-setup from 6.0.9 to 6.0.10 ([deb8eaa](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/deb8eaa6155dc5ca3da3db1d8eaccebe93f1089e))
+* **deps:** bump softprops/action-gh-release from 2.6.1 to 3.0.0 ([4702d6a](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/4702d6aa1cc14f569ad26a9eb810fe1744d26358))
+* **deps:** bump softprops/action-gh-release from 3.0.0 to 3.0.1 ([de90cb1](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/de90cb11f4eabedf19a39c9f9bfd1d8d8b76fa76))
+* **deps:** bump softprops/action-gh-release from 3.0.0 to 3.0.1 ([3606cd0](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/3606cd0c542f8cf81bffd6ae21a8ba7129988059))
+* **deps:** bump softprops/action-gh-release from 3.0.1 to 3.0.2 ([fcb01db](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/fcb01db50c58b723f85567a2197865899a241781))
+* **deps:** bump softprops/action-gh-release from 3.0.1 to 3.0.2 ([0d0c855](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/0d0c855638a934af8527a183ca47795ad2784ee8))
+* **deps:** bump the minor-and-patch group across 1 directory with 11 updates ([04950a6](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/04950a6e88cadc3866681e67ae5b73a13eac439e))
+* **deps:** bump the minor-and-patch group across 1 directory with 12 updates ([c329a47](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/c329a47afe418ca78adf4859e875bc212e623a7d))
+* **deps:** bump the minor-and-patch group across 1 directory with 12 updates ([48d1b60](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/48d1b609f04cb6faed36fea9d9167a2fe31e58ba))
+* **deps:** bump the minor-and-patch group across 1 directory with 13 updates ([17c84b9](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/17c84b95ad9efc3ce474f665816b95c4ebe5aa97))
+* **deps:** bump the minor-and-patch group across 1 directory with 13 updates ([b7a1e97](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b7a1e97f1bf63f9fcd16ac13734983ca1e6288c6))
+* **deps:** 升级低风险 patch/minor 依赖 ([7343944](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/7343944f77162e562a199e838a6bb03d0e2d2215))
+* **deps:** 批量升级开发依赖 ([528c975](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/528c97535f23c8e840067e12e54e4cc32c7ac611))
+* **deps:** 添加 @vitest/coverage-v8 依赖 ([cef2008](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/cef20088b39de186da665ba3d35b22b1a9c70184))
+* **frontend:** 迭代3工程规范改善（build/lint/coverage/audit） ([7b07a48](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/7b07a481d93877ac3d5dc4c1fd8d3664055fcf4a))
+* **vite:** 允许所有 host 访问开发服务器 ([535bff8](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/535bff8ca728f913eecb4080f4c411c3e54344df))
+
+
+### 💄 Code Style
+
+* **components:** 交互细节与一致性打磨 ([df25a16](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/df25a16cfee7a5311680f6b5df95569436d3d568))
+* **components:** 公共组件视觉对齐 shell token 系统 ([fc606d9](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/fc606d91c71b520377cc54fefb824255c9535e9e))
+* **components:** 可用性与细节打磨 ([ca2872b](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/ca2872b872f7d1fad1b855cc2f79ab74300a43aa))
+* **components:** 组件容器与折叠区域精调 ([c141243](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/c1412431911298c4ff429aa2a15384c58387af32))
+* **pages:** 示例页统一 px 单位和 shell token ([b077dfc](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/b077dfc6883fb75f76c9b18e6ef7b8cbfad7a59e))
+* **shell:** 全面优化前端视觉效果 ([85997f8](https://github.com/Yggdrasil-Labs/asgard-frontend-template/commit/85997f82f44c0f81fb36d31231827d0d8f5985bb))
+
 ## [1.2.0](https://github.com/Yggdrasil-Labs/asgard-frontend-template/compare/v1.1.0...v1.2.0) (2026-03-29)
 
 
