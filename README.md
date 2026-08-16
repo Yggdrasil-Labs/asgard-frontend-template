@@ -263,16 +263,19 @@ export default defineConfig({
 创建 `.env.local` 文件（参考 `.env.example`）：
 
 ```env
-# 应用标题
-VITE_APP_TITLE=Asgard Frontend Template
+# 应用名称
+VITE_APP_NAME=Asgard Frontend
 
-# API 基础路径
+# API 基础地址（只到 origin，接口路径自带 /api 前缀）
 VITE_API_BASE_URL=https://api.example.com
 
 # 其他配置...
 ```
 
-**注意**: 只有以 `VITE_` 开头的变量才能在客户端使用。
+**注意**:
+
+- 只有以 `VITE_` 开头的变量才能在客户端使用。
+- **生产构建必须显式设置 `VITE_API_BASE_URL`**：缺失时构建产物会在加载期抛错（fail-closed），`pnpm preview` 会看到空白页；开发/测试模式有 localhost 默认值，可省略。
 
 ## 📚 相关文档
 
