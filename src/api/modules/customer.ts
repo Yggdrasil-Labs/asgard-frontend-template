@@ -1,3 +1,5 @@
+import type { AxiosResponse } from 'axios'
+import type { PaginatedResponse } from '@/types/api'
 import http from '@/utils/api/http'
 
 export interface CustomerCO {
@@ -35,8 +37,8 @@ export function getCustomer(id: number) {
   return http.get(`/api/customers/${id}`)
 }
 
-export function listCustomers(params: CustomerListParams) {
-  return http.get('/api/customers', params)
+export function listCustomers(params: CustomerListParams): Promise<AxiosResponse<PaginatedResponse<CustomerCO>>> {
+  return http.get<CustomerCO[]>('/api/customers', params)
 }
 
 export function updateCustomer(id: number, data: UpdateCustomerRequest) {

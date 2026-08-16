@@ -24,7 +24,7 @@ request.interceptors.request.use(
       }
     }
 
-    if (env.isDev) {
+    if (import.meta.env.DEV) {
       console.warn('[request] 请求发送:', {
         url: config.url,
         method: config.method,
@@ -34,7 +34,7 @@ request.interceptors.request.use(
     return config
   },
   (error: AxiosError) => {
-    if (env.isDev) {
+    if (import.meta.env.DEV) {
       console.error('[request] 请求拦截器错误:', error.message)
     }
     return Promise.reject(error)
@@ -46,7 +46,7 @@ request.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     const { data } = response
 
-    if (env.isDev) {
+    if (import.meta.env.DEV) {
       console.warn('[request] 响应接收:', {
         url: response.config.url,
         status: response.status,
@@ -68,7 +68,7 @@ request.interceptors.response.use(
       const errorMessage = data.errMessage || '请求失败'
       const errorCode = data.errCode || 'UNKNOWN_ERROR'
 
-      if (env.isDev) {
+      if (import.meta.env.DEV) {
         console.error('[request] 业务错误:', {
           errCode: errorCode,
           errMessage: errorMessage,
@@ -86,7 +86,7 @@ request.interceptors.response.use(
     }
   },
   (error: AxiosError) => {
-    if (env.isDev) {
+    if (import.meta.env.DEV) {
       console.error('[request] 响应拦截器错误:', error.message)
     }
 

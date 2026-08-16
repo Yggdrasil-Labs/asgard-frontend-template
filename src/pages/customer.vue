@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CreateCustomerRequest, UpdateCustomerRequest } from '@/api/modules/customer'
+import type { CreateCustomerRequest, CustomerCO, UpdateCustomerRequest } from '@/api/modules/customer'
 import type { FormFieldSchema } from '@/types/pro-form'
 import type { ProTablePaginationState, TableColumnSchema } from '@/types/pro-table'
 import type { SearchFieldSchema } from '@/types/search-bar'
@@ -110,8 +110,9 @@ async function fetchData() {
       keyword: keyword || undefined,
       status: status || undefined,
     })
-    const page = extractPaginatedData(resp)
-    tableData.value = page.data as Record<string, unknown>[]
+    const page = extractPaginatedData<CustomerCO>(resp)
+    // TODO(E4): ProTable data 泛型化后移除该强转，tableData 直接用 CustomerCO[]
+    tableData.value = page.data as unknown as Record<string, unknown>[]
     pagination.value.total = page.totalCount
   }
   finally {

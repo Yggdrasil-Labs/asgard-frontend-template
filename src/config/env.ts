@@ -45,7 +45,7 @@ function resolveEnvVar(
   value: string | undefined,
   fallback: string | undefined,
 ): string {
-  const resolved = value && value !== '' ? value : fallback
+  const resolved = value?.trim() || fallback
   if (!resolved) {
     throw new Error(`[env] 缺少必需的环境变量 ${name}（当前 MODE=${import.meta.env.MODE}）`)
   }

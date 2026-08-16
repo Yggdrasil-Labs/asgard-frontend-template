@@ -31,6 +31,10 @@ export function extractDataOrDefault<T>(
 
 /**
  * 从分页响应中提取数据
+ * 契约：后端分页信封须符合 COLA 5.0 PageResponse 字段名
+ * （data / totalCount / pageSize / pageIndex）。
+ * 若接入其他分页格式（如 Spring Data 的 content/totalElements），
+ * 请在接入层做字段映射后再调用本函数。
  * @param response - 分页响应对象
  * @returns 分页数据对象
  */
@@ -87,6 +91,10 @@ export function getErrorMessage(error: unknown): string {
 export function getErrorCode(error: unknown): string {
   if (error instanceof ApiError) {
     return error.code
+  }
+  // 鸭子类型回退：兼容原生 Error / AxiosError 上携带的 code 字段
+  if (error && typeof error === 'object' && 'code' in error) {
+    return String((error as { code: unknown }).code)
   }
   return 'UNKNOWN_ERROR'
 }
