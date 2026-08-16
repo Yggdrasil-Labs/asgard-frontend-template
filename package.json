@@ -40,7 +40,7 @@
     "@iconify/types": "^2.0.0",
     "@iconify/utils": "^3.1.4",
     "@microsoft/eslint-formatter-sarif": "^3.1.0",
-    "@types/node": "^25.9.5",
+    "@types/node": "^26.2.0",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vitest/coverage-v8": "^4.1.10",
     "@vue/tsconfig": "^0.9.1",
