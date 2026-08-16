@@ -1,6 +1,8 @@
+import type { DeviceFormFactor } from '@/composables/useAppBreakpoint'
 import { acceptHMRUpdate, defineStore } from 'pinia'
+import { getDeviceForWidth } from '@/composables/useAppBreakpoint'
 
-export type AppDeviceType = 'mobile' | 'tablet' | 'desktop'
+export type AppDeviceType = DeviceFormFactor
 
 export const useAppShellStore = defineStore('app-shell', () => {
   const device = shallowRef<AppDeviceType>('desktop')
@@ -12,22 +14,15 @@ export const useAppShellStore = defineStore('app-shell', () => {
   }
 
   function setViewportWidth(width: number) {
-    if (width < 768) {
-      device.value = 'mobile'
-      siderCollapsed.value = false
-      drawerVisible.value = false
-      return
-    }
+    const nextDevice = getDeviceForWidth(width)
 
-    if (width < 1200) {
-      device.value = 'tablet'
-      siderCollapsed.value = true
-      drawerVisible.value = false
+    // 同带内 resize（如拖拽窗口）不触碰折叠/抽屉状态，避免抹掉用户手动操作
+    if (nextDevice === device.value)
       return
-    }
 
-    device.value = 'desktop'
-    siderCollapsed.value = false
+    device.value = nextDevice
+    // 跨断点时按形态重置：移动端抽屉导航、平板图标栏、桌面展开侧栏
+    siderCollapsed.value = nextDevice === 'tablet'
     drawerVisible.value = false
   }
 

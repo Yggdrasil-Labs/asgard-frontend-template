@@ -41,11 +41,21 @@ describe('useAppShellStore', () => {
       expect(store.drawerVisible).toBe(false)
     })
 
-    it('sets tablet state when width is 768~1199', () => {
+    it('768 判定为 mobile（与 CSS 口径一致）', () => {
+      const store = useAppShellStore()
+      store.setSiderCollapsed(true)
+
+      store.setViewportWidth(768)
+
+      expect(store.device).toBe('mobile')
+      expect(store.siderCollapsed).toBe(false)
+    })
+
+    it('sets tablet state when width is 769~1199', () => {
       const store = useAppShellStore()
       store.openDrawer()
 
-      store.setViewportWidth(768)
+      store.setViewportWidth(769)
 
       expect(store.device).toBe('tablet')
       expect(store.siderCollapsed).toBe(true)
@@ -58,9 +68,40 @@ describe('useAppShellStore', () => {
       expect(store.drawerVisible).toBe(false)
     })
 
+    it('同带内 resize 不重置折叠/抽屉状态', () => {
+      const store = useAppShellStore()
+      store.setViewportWidth(1200)
+
+      // 桌面带内手动折叠后，同带内 resize 不抹掉用户操作
+      store.setSiderCollapsed(true)
+      store.setViewportWidth(1400)
+      expect(store.siderCollapsed).toBe(true)
+
+      // 平板带内手动展开后，同带内 resize 保持展开
+      store.setViewportWidth(900)
+      expect(store.device).toBe('tablet')
+      store.setSiderCollapsed(false)
+      store.setViewportWidth(1000)
+      expect(store.siderCollapsed).toBe(false)
+    })
+
+    it('跨断点时按形态重置折叠状态', () => {
+      const store = useAppShellStore()
+      store.setViewportWidth(900)
+      expect(store.siderCollapsed).toBe(true)
+
+      store.setViewportWidth(1200)
+      expect(store.device).toBe('desktop')
+      expect(store.siderCollapsed).toBe(false)
+
+      store.setViewportWidth(768)
+      expect(store.device).toBe('mobile')
+      expect(store.siderCollapsed).toBe(false)
+    })
+
     it('sets desktop state when width >= 1200', () => {
       const store = useAppShellStore()
-      store.setSiderCollapsed(true)
+      store.setViewportWidth(900)
       store.openDrawer()
 
       store.setViewportWidth(1200)
