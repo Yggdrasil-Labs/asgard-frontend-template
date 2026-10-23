@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.2.0",
   "private": true,
-  "packageManager": "pnpm@10.34.5",
+  "packageManager": "pnpm@10.34.7",
   "engines": {
     "node": ">=22.14.0"
   },
@@ -28,8 +28,8 @@
     "element-plus": "^2.14.5",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
-    "vue": "^3.5.43",
-    "vue-i18n": "^11.4.12",
+    "vue": "^3.5.44",
+    "vue-i18n": "^11.4.16",
     "vue-router": "^5.3.1"
   },
   "devDependencies": {
@@ -40,25 +40,25 @@
     "@iconify/types": "^2.0.0",
     "@iconify/utils": "^3.1.7",
     "@microsoft/eslint-formatter-sarif": "^3.1.0",
-    "@types/node": "^26.6.1",
-    "@vitejs/plugin-vue": "^6.0.9",
-    "@vitest/coverage-v8": "^4.1.12",
+    "@types/node": "^26.6.5",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vitest/coverage-v8": "^5.0.5",
     "@vue/tsconfig": "^0.9.1",
     "esbuild": "^0.28.2",
-    "eslint": "^10.10.0",
+    "eslint": "^10.13.0",
     "eslint-plugin-format": "^2.0.1",
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
-    "lint-staged": "^17.5.1",
+    "lint-staged": "^17.6.0",
     "modern-normalize": "^3.0.1",
-    "sass": "^1.104.1",
+    "sass": "^1.106.1",
     "typescript": "~6.0.3",
     "unplugin-auto-import": "^21.1.0",
     "unplugin-icons": "^23.0.1",
     "unplugin-vue-components": "^32.1.0",
     "vite": "^8.3.5",
-    "vitest": "^4.1.12",
-    "vue-tsc": "^3.3.11"
+    "vitest": "^5.0.5",
+    "vue-tsc": "^3.3.13"
   },
   "pnpm": {
     "overrides": {
