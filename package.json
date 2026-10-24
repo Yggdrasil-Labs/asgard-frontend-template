@@ -43,6 +43,7 @@
     "@types/node": "^26.6.5",
     "@vitejs/plugin-vue": "^6.0.10",
     "@vitest/coverage-v8": "^5.0.5",
+    "@vue/compiler-sfc": "3.5.44",
     "@vue/tsconfig": "^0.9.1",
     "esbuild": "^0.28.2",
     "eslint": "^10.13.0",
