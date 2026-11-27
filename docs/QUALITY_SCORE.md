@@ -1,5 +1,5 @@
 ---
-updated: 2026-05-26
+updated: 2026-11-27
 ---
 
 # 质量评分
@@ -53,7 +53,7 @@ updated: 2026-05-26
 - 架构复盘
 - 将模板推荐给其他团队前的自检
 
-如果某次改动导致质量下降，应把问题记录到 `docs/exec-plans/tech-debt-tracker.md`。
+如果某次改动导致质量下降，应把问题记录到 [技术债清单](active/tech-debt-tracker.md)。
 
 ## 记录规则
 

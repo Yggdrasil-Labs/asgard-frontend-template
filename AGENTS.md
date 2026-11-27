@@ -22,7 +22,7 @@
 ### B. 流转文档（每功能一份，可增改）
 
 - 活跃需求：`docs/active/index.md`
-- 已归档版本：`docs/archive/index.md`
+- 已归档版本与历史无版本需求：`docs/archive/index.md`（历史记录位于 `docs/archive/legacy/`）
 - 技术债务清单：`docs/active/tech-debt-tracker.md`
 
 ### C. 元规范（方法论）
@@ -39,7 +39,7 @@
 ## 标准工作流（单任务）
 
 1. **读上下文**：需求文档 + 长期约束
-2. **先出计划**：非平凡任务在 `docs/active/{需求}/plan.md` 产出计划
+2. **先出计划**：非平凡任务在 `docs/active/{version}/{需求}/plan.md` 产出静态计划；版本范围与交付状态记录在同版本 `release.md`
 3. **标注假设与风险**
 4. **小步分层实施**：不违反依赖方向
 5. **行为变化必加测试**

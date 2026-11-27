@@ -5,6 +5,7 @@ owner: ""
 tags: [docs, harness]
 created: 2026-03-28
 verified: 2026-05-26
+updated: 2026-11-27
 ---
 
 # 文档系统
@@ -23,8 +24,11 @@ verified: 2026-05-26
 - `ARCHITECTURE.md`：顶层地图
 - `docs/DOMAINS.md`：业务领域划分
 - `docs/design-docs/`：长期设计决策
-- `docs/active/`：活跃需求与技术债
-- `docs/archive/`：版本归档
+- `docs/active/index.md`：按版本导航活跃工作
+- `docs/active/{version}/release.md`：该版本的范围、需求依赖、交付状态与最终验证摘要
+- `docs/active/{version}/{需求名}/`：需求的静态 plan.md，按需补充 spec.md / design.md
+- `docs/active/tech-debt-tracker.md`：跨版本开放债务，使用稳定锚点供外部引用
+- `docs/archive/`：版本归档；历史无版本记录保存在 `docs/archive/legacy/`，由归档索引导航，不追认版本
 - `docs/generated/`：自动生成物
 - `docs/references/`：外部参考
 - `docs/components/`：组件契约
@@ -46,5 +50,7 @@ verified: 2026-05-26
 - 在合适的地方写明更新触发条件
 
 ## 维护规则
+
+新需求先在对应版本 release.md 登记，再创建需求目录。实施结果记录在 release.md，不持续回写静态计划。版本完成并核验后整体归档；历史无版本需求是迁移例外，保留原计划，另附 delivery.md 说明实际提交、验证来源与未闭合项。归档不消除剩余债务，也不产生提交、推送或发布授权。
 
 当改动落地后，优先更新“拥有该事实”的最窄文档。如果这次改动改变了整个仓库的整体理解，还应同步更新 `ARCHITECTURE.md` 或相应顶层索引页。

@@ -1,11 +1,17 @@
 # 活跃需求索引
 
-| id | 需求名 | status | owner | tags | 路径 |
-|----|--------|--------|-------|------|------|
-| security-deps-audit-fix | 修复 CI 依赖审计失败（high 漏洞锁定修复版本） | active | - | security, ci | docs/active/security-deps-audit-fix |
-| code-governance-round-1 | 门禁重建与安全止血（type-check/HTTP 契约/日志/env） | active | - | governance, security | docs/active/code-governance-round-1 |
-| code-governance-round-2 | 路由与壳层正确性（keep-alive/路由单源/响应式断点） | active | - | governance, router | docs/active/code-governance-round-2 |
+## 活跃版本
+
+| 版本 | 状态 | 版本目标 | 版本记录 |
+|------|------|----------|----------|
+| 1.3.0 | 实施中（治理对齐已完成，其余需求未开始） | 治理对齐、本地质检体系、对接后端 R 契约 | [release.md](1.3.0/release.md) |
+
+## 历史需求
+
+三个无版本需求已完成本次证据核验并迁入 [归档索引](../archive/index.md#legacy-requirements)。历史记录归档不等于当前门禁或远端 CI 验收通过；剩余事项由对应交付说明与技术债继续追踪。
 
 ## 如何添加新需求
 
-在本表新增一行，然后在 `docs/active/{需求名}/` 下按需创建 spec.md / design.md / plan.md。
+在 `docs/active/{version}/release.md` 登记范围、依赖及交付状态，再按需创建 `docs/active/{version}/{需求名}/plan.md`（需要时补 spec.md / design.md）。本索引只导航版本，需求交付状态与最终验证摘要由该版本 release.md 维护。
+
+无版本历史需求保留原归属，不追认发布版本；新的活跃需求使用版本化目录。[技术债清单](tech-debt-tracker.md) 继续位于 active 根目录。
