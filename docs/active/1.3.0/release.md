@@ -3,7 +3,7 @@
 ## 版本摘要
 
 - **版本**：1.3.0
-- **状态**：实施中（governance-alignment 已完成本地文档核验，其余需求未开始）
+- **状态**：实施中（governance-alignment 与 local-quality-system 已本地完成；其余需求未开始，远端 CI 待验证）
 - **目标**：围绕消除技术债提升项目质量：文档治理与后端对齐、建立参考 Mimir 分层设计的本地质检体系、对接后端统一的 `R` 响应契约、核查发布链路。
 - **跨项目协同**：`api-contract-r` 依赖 Midgard 1.3.0 的 `error-contract-r` 与 `data-consistency`。契约规则以后端 [HTTP API 响应与错误契约](../../../../midgard-backend-template/docs/design-docs/arch-api-contract.md) 为唯一来源，本仓库不复制。
 
@@ -14,7 +14,7 @@
 | 需求 | 路径 | 简述 | 依赖 | 状态 |
 |------|------|------|------|------|
 | governance-alignment | [实施计划](governance-alignment/plan.md) | 核验并归档 3 项无版本需求；文档改为版本化结构；修正技术债清单与后端交叉引用 | 无 | 已完成（文档范围；历史运行验收边界见下文） |
-| local-quality-system | `1.3.0/local-quality-system/` | 引入 sonarjs、jscpd、dependency-cruiser、stylelint、knip；`check`/`precheck` 两级入口；覆盖率阈值生效；恢复 husky；`type-check` 与 build 解耦；复核 `pnpm.overrides` | 无 | 未开始 |
+| local-quality-system | [实施计划](local-quality-system/plan.md) | 引入 sonarjs、jscpd、dependency-cruiser、stylelint、knip；`check`/`check:full` 两级入口；覆盖率阈值生效；恢复 husky；`type-check` 与 build 解耦；复核 `pnpm.overrides` | 无 | 已实现，本地全量门禁通过；远端 CI 待验证 |
 | api-contract-r | `1.3.0/api-contract-r/` | 拦截器按 `R` 判定；类型重写；分页与字段级校验错误；编辑回传 `version`；领域错误码交互；后端真实样例驱动测试 | Midgard error-contract-r、data-consistency | 未开始 |
 | release-hardening | `1.3.0/release-hardening/` | 按后端同等标准核查发布流程的凭据、版本单调与并发 | 无 | 未开始 |
 
@@ -34,15 +34,16 @@
 
 - 工具：`eslint-plugin-sonarjs`（叠加 antfu 预设，对应 PMD）、`jscpd`（对应 CPD）、`dependency-cruiser`（对应 ArchUnit）、`stylelint`（scss 与 vue）、`knip`（未使用文件、导出与依赖）。配置文件放在各工具默认位置，不做共享包。
 - 分层规则：`pages` 可依赖 `components`、`api`、`utils`、`stores`；`components` 不依赖 `pages`、不直接调用 `api`；`utils` 不依赖 `pages`、`components`；禁止循环依赖。`src/` 下另有 `app`、`composables`、`config`、`constants`、`layouts`、`locales`、`router`、`types`，实施时逐一确定其层级后定稿。
-- 入口：`pnpm check`（日常：lint:fix 与 type-check，快速、自动修复）；`pnpm precheck`（全量、只检查不修改：lint、type-check、stylelint、jscpd、depcruise、knip、带覆盖率的测试）。
-- `type-check` 与 build 解耦：当前先 build 是因为 `src/types/auto-imports.d.ts`、`components.d.ts` 由 Vite 插件生成且被 gitignore（见提交 `1c53764`）。解耦须提供不经完整构建的声明生成方式，或改为提交这两份声明并由检查校验其未过期；不能简单删除 build 步骤导致类型检查缺失声明。
-- CI 执行 `pnpm precheck`、`pnpm build`、`pnpm audit`，与本地同一入口。
-- 覆盖率：行、分支、函数分别设置阈值，初始值取摸底实测值向下取整，之后只升不降；测试命令带 `--coverage` 使阈值生效。
+- 入口：`pnpm check`（日常：lint:fix 与 type-check，快速、自动修复）；`pnpm check:full`（全量、只检查不修改：lint、type-check、stylelint、jscpd、depcruise、knip、带覆盖率的测试）。
+- 入口命名已于 2026-11-27 确认为 check/check:full：pnpm 10 会把 precheck 作为 check 的前置脚本，不采用该命名。
+- `type-check` 与 build 解耦：当前先 build 是因为 `src/types/auto-imports.d.ts`、`components.d.ts` 由 Vite 插件生成且被 gitignore（见提交 `1c53764`）。解耦须提供不经完整构建的声明生成方式，或改为提交这两份声明并由检查校验其未过期；本方案采用跟踪声明并在全量检查中校验漂移，Vitest 不覆盖生产声明。不能简单删除 build 步骤导致类型检查缺失声明。
+- CI 执行 `pnpm check:full`、`pnpm build`、`pnpm audit`，与本地同一入口。
+- 覆盖率：行、分支、函数分别设置阈值，初始阈值经用户确认取摸底实测值向下取整：行 31%、分支 28%、函数 24%，启用后只升不降；替换当前未在 CI 执行的行 60% 阈值；测试命令带 `--coverage` 使阈值生效。
 - husky：pre-commit 执行 lint-staged（eslint、stylelint），commit-msg 执行 commitlint。
 - 环境：配置 `engines` 与 `packageManager`，与 `mise.toml` 的 Node 22 一致。
 - 存量违规：先摸底记录基线，修复至零违规；误报或刻意写法就近禁用并写明原因；不使用基线文件冻结存量。
 - `pnpm.overrides`：逐个尝试移除，前提是 `pnpm audit` 保持 0 个 high 漏洞；无法移除的保留并写明原因。
-- 验收：临时分支分别引入重复代码、违反分层、复杂度超标、覆盖率不足、未使用导出、不规范提交信息，对应门禁均返回非零；正常代码 `pnpm precheck` 零违规通过。
+- 验收：临时普通副本分别引入重复代码、违反分层、复杂度超标、覆盖率不足、未使用导出、不规范提交信息，对应门禁均返回非零；正常代码 `pnpm check:full` 零违规通过。
 
 <a id="api-contract-r"></a>
 
@@ -73,9 +74,44 @@
 - 本地文档验证：docs-evolve 的 lint-docs.mjs 退出 0（0 错误、0 警告）；检查本批 15 份 Markdown 的 66 个相对链接与锚点均可达，三个原计划与 HEAD 字节一致；git diff --check 通过。docs/generated 仅有注册表，本次没有改变其数据源，未手改生成文档。
 - 验证边界：本批未修改源码、锁文件或 CI，未运行应用门禁、安全审计、浏览器/E2E 或远端 CI；历史验收未闭合项继续由交付说明及技术债追踪。
 
+### local-quality-system 摸底（2026-11-27）
+
+- 基准：前端 HEAD dfe458c，起始工作区干净；WSL、实际 Node 22.23.3、pnpm 10.34.7。现有工具链 ESLint 10.13.0、Vite 8.3.5、Vitest/coverage-v8 5.0.5、vue-tsc 3.3.14；本轮未安装或升级依赖。
+- 原生命令实测：pnpm lint 退出 0（约 6.63 秒）；pnpm type-check 退出 0（约 9.23 秒，含一次成功生产构建）；pnpm test 退出 0，29 文件/95 测试通过（约 3.44 秒）。计时为本机单次观测，不承诺性能目标。
+- 开启 coverage 后仍为 95 项通过，但命令因现有行阈值 60% 未达而退出 1。原 include=src/** 还将 SCSS 送入脚本解析器；以命令行将 include 收窄为 src/**/*.{ts,tsx,vue} 后，解析警告消除，覆盖率为行 31.15%（620/1990）、分支 28.42%（369/1298）、函数 24.93%（197/790）、语句 30.35%（653/2151）。全量入口与阈值尚未实施，不能记为门禁通过。
+- 覆盖率复现：pnpm test --coverage.enabled --coverage.include='src/**/*.{ts,tsx,vue}' --coverage.reportsDirectory=<临时报告目录> --coverage.reporter=text --coverage.reporter=json-summary；相关 CLI 选项见 [Vitest coverage 文档](https://vitest.dev/config/coverage.html)。普通 CI 的 pnpm test 当前不启用覆盖率。
+- 补充只读检查：生产构建的 23 份 JS 中，request.ts 的 5 类 DEV 日志标记均无匹配；这只证明本次产物无这些标记，不代表浏览器运行验收。已有 hooks wrapper 可用，但 pre-commit/commit-msg 只有注释；当前 ESLint 有效配置未启用 sonarjs/复杂度规则。
+- 临时 ESLint cyclomatic complexity>15 探针报告两个热点：route-normalizer.ts=22、utils/api/request.ts=19。该指标与 Sonar 认知复杂度不同，不作为 sonarjs 实际违规数。
+- 静态扫描 95 份 TS/Vue（不含两份生成声明），识别 198 条唯一内部文件边；含/不含类型两图均无循环，现有四类禁止边为 0。模板、动态字符串及转换后图存在方法边界；未运行 dependency-cruiser，不能声称其门禁已验证。
+- pnpm 生命周期最小夹具证实 precheck 会在 check 前自动执行；用户选择 check/check:full。用户另确认覆盖率初始 31/28/24，接入后只升不降。
+- 当前 pnpm audit --registry=https://registry.npmjs.org --json：0 high/critical、1 moderate（minimatch，来自 antfu→typescript-eslint 链；GHSA-g3hv-75wg-m249）。无阈值限制的 audit 退出 1，不写作 0 漏洞。沙箱内最初被代理连接 EPERM 阻断，结果来自获准的沙箱外只读调用；未修改 override。
+- 新检查器及 Vue/SCSS 解析配套尚未安装，真实违规规模与版本兼容性留实施 T1 实测；本次只形成 [计划](local-quality-system/plan.md)，不把静态探针当作新工具报告。运行日志、JSON/LCOV 与探针均在临时目录，不入库；远端 CI、Bifrost E2E 和真实 HTTP 未验证。
+
+### local-quality-system 本地实施与验收（2026-11-27）
+
+- 已接入 SonarJS 4.2.3（antfu 配套规则同时覆盖 Vue 脚本）、jscpd 5.4.3、dependency-cruiser 18.9.0、Stylelint 17.16.0/SCSS 配置 17.0.0、Knip 6.48.0；实际版本以锁文件为准。Stylelint 18 初装存在 peer 不匹配，改选 Node 22 兼容组合并刷新两个 csstools 传递依赖；未升级应用框架。
+- 已建立 check/check:full；type-check 独立于 build，两份生成声明纳入版本管理。types:generate/types:check 在无旧声明的临时副本按生产配置生成/比对；Vitest 和普通 build 不写声明。Node 声明为 ^22.22.2 || ^24.15.0 || >=26.0.0，匹配现有工具链要求；最终验收固定使用 Node 22.23.3、pnpm 10.34.7。
+- 首轮真实存量：Vue 脚本 SonarJS 1 处重复函数；jscpd 3 组重复；Stylelint 在对齐现有 BEM 后 169 条；Knip 结果逐项核对后保留公开模板入口，仅清理无消费者的内部导出、旧 E2E 索引和无用聚合文件。精确例外及理由见 [README](../../../README.md#代码质量)。
+- 修复采用共享字段分组、示例日期字段工厂和 shell 按钮 mixin；字段分组新增 2 项回归，覆盖隐藏字段影响的分组顺序、空组、引用及输入保持。样式保留 Safari 15 媒体查询/前缀和已有无障碍 clip 语义，不更改 R 响应契约。
+- 原生分层图补充 glob/模板组件/已知 locale JSON 边，再执行完整文件图循环检查。最终图为 192 条内部原生边（72 条类型边）、7 条 glob、1 条模板自动组件、2 条 locale 资源，0 违规；不把目录双向引用当文件循环。未知动态表达式明确失败，支持边界见脚本及工程夹具。
+- 最终本地 check、check:full、build 均退出 0，前后受控文件与声明哈希一致；check 未串联全量入口。全量门禁包含 **30 个单测文件 / 97 项测试**及 **18 项工程夹具测试**，全部通过。行覆盖率 **31.68%（623/1966）**、分支 **29.19%（376/1288）**、函数 **25.41%（199/783）**，通过用户确认的 31/28/24 门槛；语句覆盖率 30.89%，未设置额外语句阈值。
+- 临时普通副本逐项负例均命中预期工具并使全量入口非零：SCSS/Vue style、认知复杂度、重复代码、反向依赖、循环、未使用文件/导出/依赖、覆盖不足、声明多余/缺失。完整依赖夹具还覆盖 glob/模板参与的循环。暂存错误样式和仅 warning 的 ESLint 夹具使 pre-commit 失败；非法提交消息被拒绝，合法中文 Conventional Commit 消息通过，未创建提交或改用户索引。
+- 最终 manifest/锁文件在无 node_modules 的临时目录完成离线 frozen-lockfile 安装；干净普通副本无需先 build 即通过 type-check 和 types:check。生产 JS 未包含 request.ts 的五类 DEV 日志标记，此证据不等同浏览器运行验证。
+- 9 条 override 已逐项试移除，7 条在合并验证后移除；KaTeX（移除新增 low）及 tinypool（移除引入 critical）保留，原因及剩余 moderate 由 [技术债第 4 项](../tech-debt-tracker.md#dependency-overrides) 追踪。移除未使用 SARIF formatter、冗余 Iconify 直接依赖；保留有历史修复及当前 Element Plus 源码证据的 @vue/shared。
+- 最终锁文件审计：pnpm audit --registry=https://registry.npmjs.org --json 返回 1 moderate、0 high/critical；退出 1 来自未限制等级的审计策略，不是无漏洞。首次最终请求发生 ECONNRESET，重试取得上述有效报告。
+- 文档校验与 git diff --check 通过；新增/调整相对链接可达。README 原有 MIT License 链接的 LICENSE 目标缺失（HEAD 已有同一失效链接），未创建或修改许可证；这是本批之外的已有文档问题。
+- CI 已统一执行 frozen install → check:full → build → high/critical audit；hook 实际启用。YAML/本地验证不代表远端 CI 已执行；真实浏览器、Bifrost E2E、后端与消费者验收不在本次结果内。
+- 独立审查发现的 Node engines 范围与 lint-staged 警告放行问题均已修正并复核；原始维度均 4/5，无未解决发现。中途沙箱 spawnSync EPERM 通过获准的沙箱外本地验收解决，未改测试策略绕过失败；最终日志和临时夹具保存在 /tmp/asgard-quality-final，不入库。
+
+### 分阶段交付核验（2026-11-28）
+
+- 源码清理阶段使用真实暂存快照和该阶段锁文件，在临时普通目录离线安装后运行 lint、构建型 type-check 及测试；97 项测试通过。工具链阶段的独立暂存快照通过离线安装、check:full 和生产构建，包含 97 项单测与 18 项工程测试。
+- 提交前补充修复：lint-staged 的 ESLint 命令增加 --no-warn-ignored，避免已配置忽略的文档提示被零警告策略误拦截；显式文档检查返回 0，console.log 警告夹具仍返回非零。真实代码 warning 继续阻断提交。
+- CI 配置已核对命令链、触发范围与只读权限；本地提交不代表远端 CI、发布或消费者验收已完成。
+
 ## 风险与遗留债务
 
 - **外部依赖**：api-contract-r 需等待 Midgard 1.3.0 契约落地并导出真实样例。
 - **已接受的跨项目破坏**：契约变更后，Bifrost E2E 现有 Customer CRUD spec 将失败；1.3.0 不修改 Bifrost，验收不包含 E2E 通过（用户于 2026-11-11 规划时确认）。
-- **存量违规规模未知**：local-quality-system 的工作量取决于摸底结果；某类违规数量过大时单独讨论处理方式。
+- **规则覆盖边界**：本批现有存量已清理；新的动态模块表达式或组件解析方式需要扩展明确的图分析支持，不能以本轮零违规推断未来语法均已覆盖。
 - **本版本不处理**：动态路由源、示例页职责拆分、前端规则共享包。

@@ -65,9 +65,10 @@ updated: 2026-11-27
 
 原因：
 
-- 2026-08 的历史修复曾锁定 7 项；后续依赖升级已改变清单，不能继续将旧数量视作现状
-- 2026-11-27 核对 package.json：现有 9 条 override，包含下界范围与精确锁定；精确锁定有滞留风险，范围约束也需复核兼容性与必要性
-- 本次只核对清单与历史提交，未执行当前审计；历史说明见 [安全修复交付核验](../archive/legacy/security-deps-audit-fix/delivery.md)
+- 2026-11-27 质检实施已逐项尝试移除 9 条覆盖。defu、form-data、happy-dom、immutable、lodash、nanoid、picomatch 共 7 条已移除；新锁文件的合并审计仍无 high/critical。
+- 保留 `micromark-extension-math@3.1.0>katex=0.18.2`：单项移除会新增 1 个 low；保留 `oxfmt@0.35.0>tinypool=2.1.2`：单项移除会引入 2 个 critical。两条仍需随上游修复复核，不强行跨主版本更新。
+- 当前尚有 1 个 moderate：minimatch（GHSA-g3hv-75wg-m249），来自 antfu→typescript-eslint 链；本批未以不兼容覆盖替换，保留待上游兼容更新。无 high/critical 不等于无漏洞。
+- 历史修复见 [交付核验](../archive/legacy/security-deps-audit-fix/delivery.md)；本批验证与实际范围见 [1.3.0 版本记录](1.3.0/release.md#local-quality-system)。
 
 目标状态：
 

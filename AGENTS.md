@@ -43,7 +43,7 @@
 3. **标注假设与风险**
 4. **小步分层实施**：不违反依赖方向
 5. **行为变化必加测试**
-6. **收尾验证**：lint / type-check / test
+6. **收尾验证**：按改动执行 `pnpm check:full`；生成声明变化用 `pnpm types:generate` 刷新并同源码提交
 7. **同步文档**
 8. **输出变更摘要**
 
@@ -51,6 +51,9 @@
 
 ```bash
 pnpm install
+pnpm check           # 日常修复 + 独立类型检查
+pnpm check:full      # 完整只读质量门禁
+pnpm types:generate  # 生成受控类型声明
 pnpm lint            # ESLint
 pnpm type-check      # vue-tsc
 pnpm test            # Vitest 单元测试

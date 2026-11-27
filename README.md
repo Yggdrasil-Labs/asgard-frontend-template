@@ -12,8 +12,8 @@ General frontend template. Asgard——kingdom of gods.
 
 ## 📋 环境要求
 
-- **Node.js**: >= 22.14.0
-- **pnpm**: >= 10.32.0（与 `package.json` 中 `packageManager` 一致）
+- **Node.js**: 22.22.2+（推荐 Node 22；其他支持范围见 package.json）
+- **pnpm**: 10.34.7（以 `package.json` 中 `packageManager` 为准）
 - **操作系统**: Windows、macOS、Linux
 
 ## 📁 项目结构
@@ -156,6 +156,18 @@ pnpm preview:test
 ### 代码质量
 
 ```bash
+# 日常检查：ESLint 自动修复 + 独立类型检查
+pnpm check
+
+# 全量只读门禁（与 CI 相同，不修改源码或受控声明）
+pnpm check:full
+
+# 源码/自动导入变化后刷新两份受控类型声明
+pnpm types:generate
+
+# 比对生产配置重新生成的声明，不写回源码
+pnpm types:check
+
 # ESLint 检查
 pnpm lint
 
@@ -172,6 +184,16 @@ pnpm type-check
 # 运行单元测试（Vitest）
 pnpm test
 ```
+
+`check:full` 顺序执行 ESLint（含 Vue 脚本 SonarJS）、类型、Stylelint、重复代码、依赖分层、Knip、覆盖率、声明漂移与工程夹具检查。任一失败返回非零；生成物和报告可写入临时/忽略目录。普通 `pnpm test` 不启用覆盖率，`pnpm test:coverage` 才执行行 31%、分支 28%、函数 24% 的初始门槛；后续只升不降。
+
+`src/types/auto-imports.d.ts` 与 `components.d.ts` 纳入版本管理。日常 type-check 无需 build；生成命令在无旧声明的临时副本使用生产 Vite 配置，检查可发现过期条目，Vitest 和普通 build 不重写这些声明。提交相关源码时一并提交声明变化。
+
+依赖分层由 `.dependency-cruiser.cjs` 定义，`scripts/check-dependencies.mjs` 补充路由 glob 与 Vue 本地自动组件依赖后检查文件环。未知动态模块表达式会失败，需先扩展明确的解析支持；框架外部自动导入、字符串组件选择不推断不存在的内部文件边。
+
+Knip 将五个组件桶、公共字段/API 类型、HTTP/消息工具、Customer CRUD 示例、环境适配和 composables 入口视为模板扩展契约，保留其供消费者使用的导出；其余文件/导出/依赖照常检查。精确依赖例外：`@vue/shared` 为 Element Plus 所需运行时依赖，`modern-normalize` 由 SCSS `@use` 引入。环境模块的默认/具名 env 导出是兼容别名，单独豁免重复导出；不忽略全仓 exports。
+
+pre-commit 执行 lint-staged，ESLint/Stylelint 可修复暂存文件；已配置忽略的文档提示不误拦截，真实代码 warning 仍阻断。commit-msg 执行 commitlint。CI 执行 frozen-lockfile 安装、check:full、build 和 high/critical 审计门禁。
 
 E2E 测试已迁移至独立仓库 [bifrost-e2e](../bifrost-e2e)。
 

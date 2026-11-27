@@ -1,5 +1,5 @@
 ---
-updated: 2026-05-26
+updated: 2026-11-27
 ---
 
 # 稳定性
@@ -16,16 +16,15 @@ updated: 2026-05-26
 
 ## 主要机制
 
-- `pnpm lint`
-  保护代码质量与格式预期
-- `pnpm type-check`
-  保护 TypeScript 与 Vue 类型边界
-- `pnpm test:e2e`
-  保护关键浏览器流程
-- `tests/unit/` 下的单元测试
-  保护路由、store、工具函数与组件不变量
-- GitHub Actions CI
-  保护共享分支上的仓库健康度
+- `pnpm check`：日常 ESLint 修复与独立类型检查。
+- `pnpm check:full`：只读执行 lint、类型、Vue/SCSS 样式、重复代码、依赖分层/循环、未使用代码、覆盖率、受控声明漂移及工程夹具验证。任何子项失败使入口失败；不会自动修复源码。
+- `pnpm test:coverage`：保护路由、store、工具函数与组件不变量；行/分支/函数初始门槛为 31/28/24，后续只升不降。覆盖率不能替代场景断言。
+- `pnpm types:generate` / `pnpm types:check`：按生产配置刷新/核验受控声明；干净检出无需先构建即可进行类型检查。
+- pre-commit / commit-msg：分别执行暂存文件检查与提交信息检查。
+- GitHub Actions CI：使用相同 check:full，再执行生产构建和 high/critical 依赖审计。当前本地结果不等同远端运行通过。
+- 浏览器/E2E：由独立 Bifrost 工程维护；本地静态规则与单元测试不证明实际浏览器交互或真实 HTTP 已验收。
+
+规则位置及精确例外见 [README 代码质量](../README.md#代码质量)；工具版本以 package.json 与锁文件为准。
 
 ## 关键区域
 
