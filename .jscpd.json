@@ -1,0 +1,20 @@
+{
+  "threshold": 0,
+  "minTokens": 100,
+  "minLines": 10,
+  "path": [
+    "src"
+  ],
+  "format": [
+    "typescript",
+    "tsx",
+    "vue",
+    "scss"
+  ],
+  "ignore": [
+    "**/*.d.ts"
+  ],
+  "reporters": [
+    "console"
+  ]
+}

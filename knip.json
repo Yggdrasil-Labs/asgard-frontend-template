@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": [
+    "src/components/{pro-form,pro-table,pro-detail,pro-dialog,search-bar}/index.ts",
+    "src/types/{pro-form,pro-table,search-bar,shared-field,api/response}.ts",
+    "src/utils/api/{http,utils}.ts",
+    "src/utils/message.ts",
+    "src/api/modules/customer.ts",
+    "src/config/env.ts",
+    "src/composables/index.ts"
+  ],
+  "project": [
+    "src/**/*.{ts,tsx,vue,scss,sass}",
+    "tests/**/*.ts",
+    "*.{ts,js,mjs,cjs}",
+    "scripts/**/*.mjs",
+    "tests/engineering/**/*.mjs"
+  ],
+  "ignoreUnresolved": [
+    "~icons/*"
+  ],
+  "ignoreDependencies": [
+    "@vue/shared",
+    "modern-normalize"
+  ],
+  "ignoreIssues": {
+    "src/config/env.ts": [
+      "duplicates"
+    ]
+  }
+}

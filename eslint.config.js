@@ -1,5 +1,9 @@
 // eslint.config.js
-import antfu from '@antfu/eslint-config'
+import antfu, { antislop } from '@antfu/eslint-config'
+
+const sonar = await antislop({ slop: false, sonarjs: true, cognitiveComplexity: 15 })
+// antfu's curated JS rules also apply to Vue script blocks via vue-eslint-parser.
+const sonarRules = sonar.find(config => config.name === 'antfu/antislop/rules/javascript').rules
 
 export default antfu({
   formatters: true,
@@ -38,4 +42,4 @@ export default antfu({
     '@typescript-eslint/no-explicit-any': 'off', // 测试文件中允许 any
     'vue/multi-word-component-names': 'off', // 测试文件中允许单单词组件名
   },
-})
+}, ...sonar, { files: ['**/*.vue'], rules: sonarRules }, { files: ['tests/engineering/**/*.test.mjs'], rules: { 'test/no-import-node-test': 'off' } })

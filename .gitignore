@@ -32,9 +32,7 @@ storageState.json
 *.sln
 *.sw?
 
-# Auto Generated Types
-src/types/auto-imports.d.ts
-src/types/components.d.ts
+# Generated type declarations are tracked; refresh with pnpm types:generate.
 
 # 忽略所有实际环境文件
 .env

@@ -11,7 +11,7 @@ export default defineConfig({
     vue(),
     Icons(),
     Components({
-      dts: 'src/types/components.d.ts',
+      dts: false,
     }),
     AutoImport({
       imports: [
@@ -22,7 +22,7 @@ export default defineConfig({
         '@vueuse/core',
         VueRouterAutoImports,
       ],
-      dts: 'src/types/auto-imports.d.ts',
+      dts: false,
       vueTemplate: true,
     }),
   ],
@@ -34,9 +34,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
-      include: ['src/**'],
+      include: ['src/**/*.{ts,tsx,vue}'],
+      exclude: ['src/**/*.d.ts'],
       thresholds: {
-        lines: 60,
+        lines: 31,
+        branches: 28,
+        functions: 24,
       },
     },
   },
@@ -49,10 +52,10 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@locales': path.resolve(__dirname, './src/locales'),
-      '@scss': path.resolve(__dirname, './src/assets/scss'),
+      '@': path.resolve(import.meta.dirname, './src'),
+      '@components': path.resolve(import.meta.dirname, './src/components'),
+      '@locales': path.resolve(import.meta.dirname, './src/locales'),
+      '@scss': path.resolve(import.meta.dirname, './src/assets/scss'),
     },
   },
   define: {

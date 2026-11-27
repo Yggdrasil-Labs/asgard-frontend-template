@@ -1,4 +1,5 @@
 import path from 'node:path'
+import process from 'node:process'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Icons from 'unplugin-icons/vite'
@@ -35,7 +36,7 @@ export default defineConfig(({ mode, command }) => {
       }),
       // https://github.com/antfu/unplugin-vue-components
       Components({
-        dts: 'src/types/components.d.ts',
+        dts: process.env.GENERATE_TYPES === 'true' ? 'src/types/components.d.ts' : false,
         dirs: ['src/components'],
         // 自动导入组件（Element Plus 按需）
         resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
@@ -55,7 +56,7 @@ export default defineConfig(({ mode, command }) => {
           '@vueuse/core',
           VueRouterAutoImports,
         ],
-        dts: 'src/types/auto-imports.d.ts',
+        dts: process.env.GENERATE_TYPES === 'true' ? 'src/types/auto-imports.d.ts' : false,
         vueTemplate: true, // 允许在 <template> 直接使用自动导入的 API
       }),
       Icons(),
@@ -74,10 +75,10 @@ export default defineConfig(({ mode, command }) => {
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src'),
-        '@components': path.resolve(__dirname, './src/components'),
-        '@locales': path.resolve(__dirname, './src/locales'),
-        '@scss': path.resolve(__dirname, './src/assets/scss'),
+        '@': path.resolve(import.meta.dirname, './src'),
+        '@components': path.resolve(import.meta.dirname, './src/components'),
+        '@locales': path.resolve(import.meta.dirname, './src/locales'),
+        '@scss': path.resolve(import.meta.dirname, './src/assets/scss'),
       },
     },
     server: {
