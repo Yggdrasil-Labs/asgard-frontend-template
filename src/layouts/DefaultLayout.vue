@@ -248,7 +248,7 @@ function getTabCacheKey(routeName: string, fullPath: string) {
   min-height: 0;
   overflow: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(100, 116, 139, 0.3) transparent;
+  scrollbar-color: rgb(100 116 139 / 30%) transparent;
 }
 
 .default-layout__main::-webkit-scrollbar {
@@ -260,12 +260,12 @@ function getTabCacheKey(routeName: string, fullPath: string) {
 }
 
 .default-layout__main::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.3);
+  background: rgb(100 116 139 / 30%);
   border-radius: 3px;
 }
 
 .default-layout__main::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.5);
+  background: rgb(100 116 139 / 50%);
 }
 
 .default-layout__main-surface {
@@ -298,7 +298,7 @@ function getTabCacheKey(routeName: string, fullPath: string) {
   position: fixed;
   inset: 0;
   z-index: 15;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgb(0 0 0 / 40%);
 }
 
 .fade-enter-active,

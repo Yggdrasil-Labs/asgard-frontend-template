@@ -2,7 +2,7 @@ import { useWindowSize } from '@vueuse/core'
 import { computed } from 'vue'
 
 export const APP_MOBILE_BREAKPOINT = 768
-export const APP_TABLET_BREAKPOINT = 1200
+const APP_TABLET_BREAKPOINT = 1200
 
 export type DeviceFormFactor = 'mobile' | 'tablet' | 'desktop'
 

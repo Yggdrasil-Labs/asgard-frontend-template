@@ -1,5 +1,5 @@
 import type { Component } from 'vue'
-import { getFieldComponent, registerDefaultFieldComponents, registerFieldComponent } from '@/components/pro-form/form-registry'
+import { getFieldComponent, registerDefaultFieldComponents } from '@/components/pro-form/form-registry'
 
 const searchFieldRegistry = new Map<string, Component>()
 
@@ -42,5 +42,3 @@ export function registerDefaultSearchFieldComponents() {
       registerSearchFieldComponent(name, component)
   }
 }
-
-export { registerFieldComponent as registerSharedFieldComponent }

@@ -6,6 +6,7 @@ import {
   ProForm,
   registerDefaultFieldComponents,
 } from '@/components/pro-form'
+import { createDemoDateFields } from './shared/date-fields'
 
 registerDefaultFieldComponents()
 
@@ -123,40 +124,7 @@ const schema = computed<FormFieldSchema[]>(() => [
       tooltip: { content: '金额仅用于展示', placement: 'top' },
     },
   },
-  {
-    meta: {
-      field: 'publishDate',
-      label: '发布日期',
-      valueType: 'date',
-      required: false,
-    },
-    ui: {
-      component: 'DatePicker',
-      props: {
-        type: 'date',
-        placeholder: '选择日期',
-        valueFormat: 'YYYY-MM-DD',
-      },
-      layout: { group: '扩展信息', span: 8 },
-    },
-  },
-  {
-    meta: {
-      field: 'expiryDate',
-      label: '有效期至',
-      valueType: 'date',
-      required: false,
-    },
-    ui: {
-      component: 'DatePicker',
-      props: {
-        type: 'date',
-        placeholder: '有效期',
-        valueFormat: 'YYYY-MM-DD',
-      },
-      layout: { group: '扩展信息', span: 8 },
-    },
-  },
+  ...createDemoDateFields('有效期'),
 ])
 </script>
 

@@ -45,15 +45,15 @@
   --el-text-color-placeholder: #{map.get($shell-colors, text-soft)};
 
   // 背景
-  --el-bg-color: #ffffff;
+  --el-bg-color: #fff;
   --el-bg-color-page: #{map.get($shell-colors, bg)};
-  --el-bg-color-overlay: #ffffff;
-  --el-fill-color-blank: #ffffff;
+  --el-bg-color-overlay: #fff;
+  --el-fill-color-blank: #fff;
   --el-fill-color-light: #{map.get($colors, gray-50)};
 
   // 阴影
-  --el-box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
-  --el-box-shadow-light: 0 1px 4px rgba(15, 23, 42, 0.06);
+  --el-box-shadow: 0 2px 12px rgb(15 23 42 / 8%);
+  --el-box-shadow-light: 0 1px 4px rgb(15 23 42 / 6%);
 
   // 控件高度
   --el-component-size: 36px;
@@ -115,7 +115,7 @@
   --el-dialog-border-radius: #{map.get($border-radius, xl)};
   --el-dialog-padding-primary: 24px;
 
-  box-shadow: 0 16px 48px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 16px 48px rgb(15 23 42 / 12%);
 }
 
 .el-drawer {
@@ -146,7 +146,7 @@
   --el-message-border-color: var(--shell-border);
 
   border-radius: #{map.get($border-radius, lg)};
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 4px 16px rgb(15 23 42 / 10%);
 }
 
 // Dropdown
@@ -154,7 +154,7 @@
 .el-dropdown-menu {
   border: 1px solid var(--shell-border);
   border-radius: #{map.get($border-radius, lg)};
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 4px 16px rgb(15 23 42 / 10%);
   padding: 4px;
 }
 

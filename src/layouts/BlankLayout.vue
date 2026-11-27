@@ -13,7 +13,7 @@ import { RouterView } from 'vue-router'
 <style scoped lang="scss">
 .blank-layout {
   min-height: 100dvh;
-  background: #ffffff;
+  background: #fff;
 }
 
 .blank-layout__main {

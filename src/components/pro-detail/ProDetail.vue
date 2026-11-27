@@ -3,7 +3,8 @@ import type { ProDetailContext } from './types'
 import type { FormFieldSchema } from '@/types/pro-form'
 import { ElCollapse, ElCollapseItem, ElDescriptions, ElDescriptionsItem, ElTooltip } from 'element-plus'
 import { computed, ref, useSlots, watch } from 'vue'
-import { useAppBreakpoint } from '@/composables'
+import { useAppBreakpoint } from '@/composables/useAppBreakpoint'
+import { DEFAULT_FIELD_GROUP, groupVisibleFields } from '@/utils/group-fields'
 import ProDetailField from './ProDetailField.vue'
 
 defineOptions({ name: 'ProDetail' })
@@ -25,18 +26,6 @@ interface ProDetailLayout {
 const slots = useSlots()
 const { isMobile } = useAppBreakpoint()
 
-interface DetailGroup {
-  key: string
-  label?: string
-  fields: FormFieldSchema[]
-}
-
-const DEFAULT_GROUP_KEY = '__default__'
-
-function isFieldVisible(field: FormFieldSchema): boolean {
-  return field.runtime?.visible !== false
-}
-
 function getDescSpan(field: FormFieldSchema, col: number): number {
   const span = field.ui.layout?.span ?? 24
   if (span >= 24)
@@ -46,27 +35,7 @@ function getDescSpan(field: FormFieldSchema, col: number): number {
   return 1
 }
 
-const groupedSchema = computed<DetailGroup[]>(() => {
-  const order: string[] = []
-  const map = new Map<string, FormFieldSchema[]>()
-
-  for (const field of props.schema) {
-    const groupKey = field.ui.layout?.group ?? DEFAULT_GROUP_KEY
-    if (!map.has(groupKey)) {
-      map.set(groupKey, [])
-      order.push(groupKey)
-    }
-    map.get(groupKey)!.push(field)
-  }
-
-  return order
-    .map(groupKey => ({
-      key: groupKey,
-      label: groupKey === DEFAULT_GROUP_KEY ? undefined : groupKey,
-      fields: (map.get(groupKey) ?? []).filter(isFieldVisible),
-    }))
-    .filter(group => group.fields.length > 0)
-})
+const groupedSchema = computed(() => groupVisibleFields(props.schema))
 
 const expandedGroupKeys = ref<string[]>([])
 
@@ -124,7 +93,7 @@ const labelWidth = computed(() => props.layout?.labelWidth ?? 120)
             >
               <slot
                 name="group-extra"
-                :group="group.key === DEFAULT_GROUP_KEY ? undefined : group.key"
+                :group="group.key === DEFAULT_FIELD_GROUP ? undefined : group.key"
               />
             </div>
           </header>

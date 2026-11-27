@@ -10,6 +10,7 @@ import {
   registerDefaultFieldComponents,
 } from '@/components/pro-form'
 import { showSuccess } from '@/utils/message'
+import { createDemoDateFields } from './shared/date-fields'
 
 registerDefaultFieldComponents()
 
@@ -124,40 +125,7 @@ const schema: FormFieldSchema[] = [
       layout: { group: '扩展信息', span: 8 },
     },
   },
-  {
-    meta: {
-      field: 'publishDate',
-      label: '发布日期',
-      valueType: 'date',
-      required: false,
-    },
-    ui: {
-      component: 'DatePicker',
-      props: {
-        type: 'date',
-        placeholder: '选择日期',
-        valueFormat: 'YYYY-MM-DD',
-      },
-      layout: { group: '扩展信息', span: 8 },
-    },
-  },
-  {
-    meta: {
-      field: 'expiryDate',
-      label: '有效期至',
-      valueType: 'date',
-      required: false,
-    },
-    ui: {
-      component: 'DatePicker',
-      props: {
-        type: 'date',
-        placeholder: '选择日期',
-        valueFormat: 'YYYY-MM-DD',
-      },
-      layout: { group: '扩展信息', span: 8 },
-    },
-  },
+  ...createDemoDateFields('选择日期'),
 ]
 
 function openSimpleDialog() {

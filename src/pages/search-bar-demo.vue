@@ -298,15 +298,7 @@ async function handleSearch(payload: { rawValues: Record<string, unknown>, seria
   await loadData()
 }
 
-async function handleReset(payload: { rawValues: Record<string, unknown>, serializedValues: Record<string, unknown> }) {
-  searchValues.value = { ...payload.rawValues }
-  lastPayload.value = { ...payload.serializedValues }
-  pagination.value = {
-    ...pagination.value,
-    page: 1,
-  }
-  await loadData()
-}
+const handleReset = handleSearch
 
 async function handlePageChange(nextValue: ProTablePaginationState) {
   pagination.value = nextValue

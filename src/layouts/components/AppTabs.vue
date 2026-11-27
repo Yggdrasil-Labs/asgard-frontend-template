@@ -121,6 +121,8 @@ function handleRefresh() {
 </template>
 
 <style scoped lang="scss">
+@use '@/assets/scss/base/mixins' as *;
+
 .app-tabs {
   display: block;
   min-height: 0;
@@ -143,22 +145,7 @@ function handleRefresh() {
 }
 
 .app-tabs__action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--shell-border);
-  border-radius: 6px;
-  background: var(--shell-surface-strong);
-  width: var(--shell-control-height);
-  height: var(--shell-control-height);
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0;
-  color: var(--shell-text);
-  cursor: pointer;
-  transition:
-    border-color 160ms ease,
-    background-color 160ms ease;
+  @include shell-control-button;
 }
 
 .app-tabs__action:disabled {
@@ -176,8 +163,7 @@ function handleRefresh() {
   flex: 1;
   min-width: 0;
   gap: var(--shell-space-2);
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: auto hidden;
   padding: 0;
   scrollbar-width: thin;
   scrollbar-gutter: stable both-edges;
@@ -266,7 +252,7 @@ function handleRefresh() {
 }
 
 .app-tabs__close:hover {
-  background: rgba(239, 68, 68, 0.12);
+  background: rgb(239 68 68 / 12%);
   color: #b91c1c;
   transform: translateY(-1px);
 }
@@ -293,17 +279,17 @@ function handleRefresh() {
 }
 
 .app-tabs__list::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.06);
+  background: rgb(15 23 42 / 6%);
   border-radius: 999px;
 }
 
 .app-tabs__list::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.42);
+  background: rgb(100 116 139 / 42%);
   border-radius: 999px;
 }
 
 .app-tabs__list::-webkit-scrollbar-thumb:hover {
-  background: rgba(71, 85, 105, 0.6);
+  background: rgb(71 85 105 / 60%);
 }
 
 @media (max-width: 768px) {

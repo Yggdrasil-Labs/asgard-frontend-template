@@ -164,7 +164,7 @@ function handleSelect(key: string) {
   min-width: min(88vw, 332px);
   overflow-y: auto;
   border-radius: var(--shell-radius-sm);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+  box-shadow: 0 16px 40px rgb(15 23 42 / 16%);
 }
 
 .app-sider.is-collapsed {
@@ -222,7 +222,7 @@ function handleSelect(key: string) {
 }
 
 .app-sider__toggle--ghost {
-  background: rgba(15, 23, 42, 0.03);
+  background: rgb(15 23 42 / 3%);
 }
 
 .app-sider__toggle:hover {

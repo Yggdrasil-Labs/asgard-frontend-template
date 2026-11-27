@@ -2,7 +2,8 @@
 import type { FormFieldSchema, ProFormEmits, ProFormProps } from '@/types/pro-form'
 import { ElCol, ElCollapse, ElCollapseItem, ElForm, ElRow } from 'element-plus'
 import { computed, nextTick, onMounted, ref, useSlots, watch } from 'vue'
-import { useAppBreakpoint } from '@/composables'
+import { useAppBreakpoint } from '@/composables/useAppBreakpoint'
+import { DEFAULT_FIELD_GROUP, groupVisibleFields } from '@/utils/group-fields'
 import ProFormField from './ProFormField.vue'
 import { buildElFormRules } from './validation'
 
@@ -41,40 +42,7 @@ const formRules = computed(() =>
   ),
 )
 
-interface FormGroup {
-  key: string
-  label: string | undefined
-  fields: FormFieldSchema[]
-}
-
-const DEFAULT_GROUP_KEY = '__default__'
-
-/** 字段是否可见：与 ProFormField 一致，runtime.visible !== false 即显示 */
-function isFieldVisible(field: FormFieldSchema): boolean {
-  return field.runtime?.visible !== false
-}
-
-const groupedSchema = computed<FormGroup[]>(() => {
-  const order: string[] = []
-  const map = new Map<string, FormFieldSchema[]>()
-
-  for (const field of props.schema) {
-    const groupKey = field.ui.layout?.group ?? DEFAULT_GROUP_KEY
-    if (!map.has(groupKey)) {
-      map.set(groupKey, [])
-      order.push(groupKey)
-    }
-    map.get(groupKey)!.push(field)
-  }
-
-  return order
-    .map(groupKey => ({
-      key: groupKey,
-      label: groupKey === DEFAULT_GROUP_KEY ? undefined : groupKey,
-      fields: (map.get(groupKey) ?? []).filter(isFieldVisible),
-    }))
-    .filter(group => group.fields.length > 0)
-})
+const groupedSchema = computed(() => groupVisibleFields(props.schema))
 
 /** 折叠面板当前展开项，默认全部展开；随分组变化自动包含新分组 */
 const expandedGroupKeys = ref<string[]>([])
@@ -84,7 +52,7 @@ function getGroupKeyByFieldKey(fieldKey: string): string | undefined {
   const field = props.schema.find(f => f.meta.field === fieldKey)
   if (!field)
     return undefined
-  return field.ui.layout?.group ?? DEFAULT_GROUP_KEY
+  return field.ui.layout?.group ?? DEFAULT_FIELD_GROUP
 }
 
 /** 展开所有包含错误字段的折叠面板（保证任意错误所在面板都会展开） */
@@ -335,7 +303,7 @@ watch(
             >
               <slot
                 name="group-extra"
-                :group="group.key === DEFAULT_GROUP_KEY ? undefined : group.key"
+                :group="group.key === DEFAULT_FIELD_GROUP ? undefined : group.key"
               />
             </div>
           </header>

@@ -17,14 +17,3 @@ export function createAppPinia() {
 
   return pinia
 }
-
-/**
- * 重置所有 Store
- * 预留扩展点：模板默认无业务 Store。
- */
-export async function resetStores(): Promise<void> {
-  return Promise.resolve()
-}
-
-// 默认导出
-export default createAppPinia

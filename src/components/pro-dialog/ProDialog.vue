@@ -352,7 +352,7 @@ defineExpose<ProDialogExpose>({
 }
 
 .dialog-close:hover {
-  background: rgba(0, 0, 0, 0.06);
+  background: rgb(0 0 0 / 6%);
   color: var(--el-text-color-primary, #1a1f36);
 }
 

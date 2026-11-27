@@ -10,7 +10,7 @@ import type {
 } from '@/types/search-bar'
 import { ElButton, ElCol, ElForm, ElRow } from 'element-plus'
 import { computed, nextTick, onMounted, ref, useSlots, watch } from 'vue'
-import { useAppBreakpoint } from '@/composables'
+import { useAppBreakpoint } from '@/composables/useAppBreakpoint'
 import {
   collectSearchRouteQueryKeys,
   deserializeSearchValues,
@@ -330,7 +330,7 @@ defineExpose<SearchBarExpose>({
 
 <style scoped lang="scss">
 .search-bar {
-  background: var(--shell-surface-strong, #ffffff);
+  background: var(--shell-surface-strong, #fff);
   border: 1px solid var(--shell-border, #e8eaed);
   border-radius: var(--shell-radius-sm);
   padding: var(--shell-space-4) var(--shell-space-4) var(--shell-space-1);

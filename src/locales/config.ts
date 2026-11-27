@@ -32,7 +32,7 @@ export const SUPPORTED_LOCALES: Locale[] = LANGUAGE_CONFIGS.map(config => config
 export const DEFAULT_LOCALE: Locale = 'zh-CN'
 
 // 语言显示名称映射
-export const LANGUAGE_DISPLAY_NAMES: Record<Locale, string> = LANGUAGE_CONFIGS.reduce(
+const LANGUAGE_DISPLAY_NAMES: Record<Locale, string> = LANGUAGE_CONFIGS.reduce(
   (acc, config) => {
     acc[config.code as Locale] = config.nativeName
     return acc
@@ -40,26 +40,7 @@ export const LANGUAGE_DISPLAY_NAMES: Record<Locale, string> = LANGUAGE_CONFIGS.r
   {} as Record<Locale, string>,
 )
 
-// 语言名称映射（包含英文名）
-export const LANGUAGE_NAMES: Record<Locale, string> = LANGUAGE_CONFIGS.reduce(
-  (acc, config) => {
-    acc[config.code as Locale] = config.name
-    return acc
-  },
-  {} as Record<Locale, string>,
-)
-
-// 获取语言配置
-export function getLanguageConfig(locale: Locale): LanguageConfig | undefined {
-  return LANGUAGE_CONFIGS.filter(config => config.code === locale)[0]
-}
-
 // 获取语言显示名称
 export function getLanguageDisplayName(locale: Locale): string {
   return LANGUAGE_DISPLAY_NAMES[locale] || locale
-}
-
-// 获取语言英文名称
-export function getLanguageName(locale: Locale): string {
-  return LANGUAGE_NAMES[locale] || locale
 }

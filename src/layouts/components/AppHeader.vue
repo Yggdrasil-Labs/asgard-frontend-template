@@ -117,6 +117,8 @@ const brandInitial = computed(() => {
 </template>
 
 <style scoped lang="scss">
+@use '@/assets/scss/base/mixins' as *;
+
 .app-header {
   display: flex;
   align-items: center;
@@ -154,8 +156,8 @@ const brandInitial = computed(() => {
   height: 2rem;
   border-radius: 0.5rem;
   background: linear-gradient(135deg, var(--shell-accent), var(--shell-accent-strong));
-  box-shadow: 0 2px 8px rgba(79, 110, 247, 0.25);
-  color: #ffffff;
+  box-shadow: 0 2px 8px rgb(79 110 247 / 25%);
+  color: #fff;
   font-size: var(--shell-text-sm);
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -209,22 +211,7 @@ const brandInitial = computed(() => {
 }
 
 .app-header__nav-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--shell-border);
-  border-radius: 6px;
-  background: var(--shell-surface-strong);
-  width: var(--shell-control-height);
-  height: var(--shell-control-height);
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0;
-  color: var(--shell-text);
-  cursor: pointer;
-  transition:
-    border-color 160ms ease,
-    background-color 160ms ease;
+  @include shell-control-button;
 }
 
 .app-header__nav-toggle:hover {

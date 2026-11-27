@@ -259,7 +259,7 @@ function handleDemoClick() {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid rgba(79, 110, 247, 0.18);
+  border: 1px solid rgb(79 110 247 / 18%);
   border-radius: 4px;
   background: var(--home-accent-soft);
   padding: 4px 10px;
@@ -292,6 +292,9 @@ function handleDemoClick() {
 
 .gradient-text {
   background: linear-gradient(135deg, #1a1f36 0%, #4f6ef7 100%);
+
+  // Safari 15 requires the prefixed form for gradient text.
+  // stylelint-disable-next-line property-no-vendor-prefix
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -351,17 +354,17 @@ function handleDemoClick() {
 
 // 差异化 stat panel 图标色
 .hero-panel__item:nth-child(1) .hero-panel__icon {
-  background: rgba(79, 110, 247, 0.1);
+  background: rgb(79 110 247 / 10%);
   color: #4f6ef7;
 }
 
 .hero-panel__item:nth-child(2) .hero-panel__icon {
-  background: rgba(22, 163, 74, 0.1);
+  background: rgb(22 163 74 / 10%);
   color: #16a34a;
 }
 
 .hero-panel__item:nth-child(3) .hero-panel__icon {
-  background: rgba(217, 119, 6, 0.1);
+  background: rgb(217 119 6 / 10%);
   color: #d97706;
 }
 

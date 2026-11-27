@@ -3,13 +3,14 @@
 // =============================================================================
 
 @use 'sass:map';
-@use '_variables' as *;
+@use 'variables' as *;
 
 // 响应式断点混入
 // -----------------------------------------------------------------------------
 @mixin respond-to($breakpoint) {
   @if map.has-key($breakpoints, $breakpoint) {
     $value: map.get($breakpoints, $breakpoint);
+
     @media (min-width: $value) {
       @content;
     }
@@ -43,6 +44,7 @@
 
 @mixin flex-column-center {
   @include flex-column;
+
   align-items: center;
   justify-content: center;
 }
@@ -102,7 +104,27 @@
 
 @mixin circle($size) {
   @include square($size);
+
   border-radius: 50%;
+}
+
+@mixin shell-control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--shell-border);
+  border-radius: 6px;
+  background: var(--shell-surface-strong);
+  width: var(--shell-control-height);
+  height: var(--shell-control-height);
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  color: var(--shell-text);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
 }
 
 // 渐变背景
@@ -114,10 +136,10 @@
 // -----------------------------------------------------------------------------
 @mixin fade-in($duration: transition(base)) {
   opacity: 0;
-  animation: fadeIn $duration ease-in-out forwards;
+  animation: fade-in $duration ease-in-out forwards;
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
   to {
     opacity: 1;
   }
@@ -126,10 +148,10 @@
 @mixin slide-in-up($duration: transition(base)) {
   transform: translateY(20px);
   opacity: 0;
-  animation: slideInUp $duration ease-out forwards;
+  animation: slide-in-up $duration ease-out forwards;
 }
 
-@keyframes slideInUp {
+@keyframes slide-in-up {
   to {
     transform: translateY(0);
     opacity: 1;

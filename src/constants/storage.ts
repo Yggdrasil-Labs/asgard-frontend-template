@@ -11,6 +11,3 @@ export const STORAGE_KEYS = {
   /** 主题设置 */
   THEME: 'theme',
 } as const
-
-// 导出类型，方便 TypeScript 类型检查
-export type StorageKey = typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS]

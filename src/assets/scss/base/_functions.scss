@@ -3,7 +3,7 @@
 // =============================================================================
 
 @use 'sass:map';
-@use '_variables' as *;
+@use 'variables' as *;
 
 // 颜色函数
 // -----------------------------------------------------------------------------
@@ -11,6 +11,7 @@
   @if map.has-key($colors, $key) {
     @return map.get($colors, $key);
   }
+
   @warn "Unknown color: #{$key}";
   @return null;
 }
@@ -21,6 +22,7 @@
   @if map.has-key($spacings, $key) {
     @return map.get($spacings, $key);
   }
+
   @warn "Unknown spacing: #{$key}";
   @return null;
 }
@@ -31,6 +33,7 @@
   @if map.has-key($font-sizes, $key) {
     @return map.get($font-sizes, $key);
   }
+
   @warn "Unknown font size: #{$key}";
   @return null;
 }
@@ -39,6 +42,7 @@
   @if map.has-key($font-weights, $key) {
     @return map.get($font-weights, $key);
   }
+
   @warn "Unknown font weight: #{$key}";
   @return null;
 }
@@ -49,6 +53,7 @@
   @if map.has-key($breakpoints, $key) {
     @return map.get($breakpoints, $key);
   }
+
   @warn "Unknown breakpoint: #{$key}";
   @return null;
 }
@@ -59,6 +64,7 @@
   @if map.has-key($border-radius, $key) {
     @return map.get($border-radius, $key);
   }
+
   @warn "Unknown border radius: #{$key}";
   @return null;
 }
@@ -69,6 +75,7 @@
   @if map.has-key($shadows, $key) {
     @return map.get($shadows, $key);
   }
+
   @warn "Unknown shadow: #{$key}";
   @return null;
 }
@@ -79,6 +86,7 @@
   @if map.has-key($z-indexes, $key) {
     @return map.get($z-indexes, $key);
   }
+
   @warn "Unknown z-index: #{$key}";
   @return null;
 }
@@ -89,6 +97,7 @@
   @if map.has-key($transitions, $key) {
     @return map.get($transitions, $key);
   }
+
   @warn "Unknown transition: #{$key}";
   @return null;
 }

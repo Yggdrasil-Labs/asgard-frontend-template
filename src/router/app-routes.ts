@@ -6,7 +6,7 @@ import { getNormalizedAppRoutes } from './app-route-tree'
 
 const views = import.meta.glob<{ default: Component }>('/src/pages/*.vue')
 
-export function resolvePageComponent(component: string) {
+function resolvePageComponent(component: string) {
   const key = `/src/pages/${component}.vue`
   const loader = views[key]
   if (!loader)

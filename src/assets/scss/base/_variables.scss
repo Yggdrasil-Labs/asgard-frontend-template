@@ -9,8 +9,8 @@
 // 颜色系统 - 只保留核心颜色，UI 组件库会提供完整的主题色
 $colors: (
   // 基础色
-  white: #ffffff,
-  black: #000000,
+  white: #fff,
+  black: #000,
 
   // 中性色 - 用于文本和背景
   gray-50: #f8fafc,
@@ -33,8 +33,8 @@ $shell-colors: (
   bg-strong: #eef0f3,
 
   // 表面 — 纯白为主
-  surface: #ffffff,
-  surface-strong: #ffffff,
+  surface: #fff,
+  surface-strong: #fff,
   surface-muted: #f8f9fa,
 
   // 边框 — 使用实色确保一致性
@@ -48,7 +48,7 @@ $shell-colors: (
 
   // 主色 — 更鲜明的蓝色
   accent: #4f6ef7,
-  accent-soft: rgba(79, 110, 247, 0.1),
+  accent-soft: rgb(79 110 247 / 10%),
   accent-strong: #3b5ce4,
 
   // 语义色 — 现代且可区分
@@ -58,16 +58,16 @@ $shell-colors: (
   info: #0ea5e9,
 
   // 阴影
-  shadow: 0 1px 3px rgba(0, 0, 0, 0.06),
-  shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04)
+  shadow: 0 1px 3px rgb(0 0 0 / 6%),
+  shadow-soft: 0 1px 2px rgb(0 0 0 / 4%)
 );
 
 // 字体系统
 // -----------------------------------------------------------------------------
 $font-family-base:
-  -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+  -apple-system, blinkmacsystemfont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
   'Helvetica Neue', sans-serif;
-$font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+$font-family-mono: 'SFMono-Regular', consolas, 'Liberation Mono', menlo, courier, monospace;
 
 // 字体大小 - 只保留常用尺寸
 $font-sizes: (
@@ -175,7 +175,6 @@ $shell-font-sizes: (
   // 16px — 壳层标题
   'xl': 1.125rem, // 18px — 壳层大标题
 );
-
 $shell-layout: (
   frame-padding: 12px,
   panel-gap: 12px,
@@ -194,10 +193,10 @@ $shell-layout: (
 // 阴影 - 简化版
 // -----------------------------------------------------------------------------
 $shadows: (
-  sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05),
-  base: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
-  md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-  lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+  sm: 0 1px 2px 0 rgb(0 0 0 / 5%),
+  base: 0 1px 3px 0 rgb(0 0 0 / 10%),
+  md: 0 4px 6px -1px rgb(0 0 0 / 10%),
+  lg: 0 10px 15px -3px rgb(0 0 0 / 10%),
 );
 
 // Z-index 层级

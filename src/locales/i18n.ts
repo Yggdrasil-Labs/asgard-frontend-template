@@ -5,6 +5,7 @@ import { updateLanguageAttribute } from '@/utils/initApp'
 import { DEFAULT_LOCALE, LANGUAGE_CONFIGS, SUPPORTED_LOCALES } from './config'
 
 // 重新导出配置，保持向后兼容
+/** @public */
 export { DEFAULT_LOCALE, SUPPORTED_LOCALES }
 
 // 语言包缓存
