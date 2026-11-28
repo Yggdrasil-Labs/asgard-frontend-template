@@ -28,9 +28,15 @@ interface Row {
 const baseRows: Row[] = Array.from({ length: 37 }, (_, i) => ({
   id: i + 1,
   name: `项目 ${i + 1}`,
-  status: i % 3 === 0 ? 'draft' : i % 3 === 1 ? 'published' : 'archived',
+  status: i % 3 === 0
+    ? 'draft'
+    : i % 3 === 1
+      ? 'published'
+      : 'archived',
   linkDemo: `详情-${i + 1}`,
-  avatar: i % 5 === 0 ? '' : `https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png`,
+  avatar: i % 5 === 0
+    ? ''
+    : `https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png`,
   updatedAt: `2026-03-${String((i % 28) + 1).padStart(2, '0')}`,
 }))
 
@@ -77,7 +83,9 @@ const sortedRows = computed(() => {
     const av = a[field as keyof Row]
     const bv = b[field as keyof Row]
     const cmp = String(av).localeCompare(String(bv), 'zh')
-    return order === 'asc' ? cmp : -cmp
+    return order === 'asc'
+      ? cmp
+      : -cmp
   })
 })
 
@@ -85,7 +93,9 @@ const pagedData = computed(() => {
   const { page, pageSize } = pagination.value
   const total = forceEmpty.value ? 0 : sortedRows.value.length
   const start = (page - 1) * pageSize
-  const slice = forceEmpty.value ? [] : sortedRows.value.slice(start, start + pageSize)
+  const slice = forceEmpty.value
+    ? []
+    : sortedRows.value.slice(start, start + pageSize)
   return { rows: slice, total }
 })
 

@@ -89,7 +89,9 @@ const errorMessage = computed(() => {
   const e = props.error
   if (e == null)
     return ''
-  return typeof e === 'string' ? e : e.message
+  return typeof e === 'string'
+    ? e
+    : e.message
 })
 
 /** 错误条：与表格同区展示，不卸载 `ElTable`（便于保留父组件传入的 `data`） */
@@ -140,7 +142,9 @@ const paginationState = computed(() =>
 let syncingSelection = false
 
 function normalizeSelectionKeys(keys: Array<string | number>) {
-  return [...new Set(keys.map(key => String(key)))]
+  return [
+    ...new Set(keys.map(key => String(key))),
+  ]
 }
 
 function emitSelectionFromTable(selection: Record<string, unknown>[]) {
@@ -205,7 +209,9 @@ watch(
       tableRef.value.clearSort()
       return
     }
-    tableRef.value.sort(field, order === 'asc' ? 'ascending' : 'descending')
+    tableRef.value.sort(field, order === 'asc'
+      ? 'ascending'
+      : 'descending')
   },
   { immediate: true },
 )

@@ -7,7 +7,14 @@ import request from '@/utils/api/request'
 import { envelope, responseAdapter } from './adapter'
 
 const originalAdapter = request.defaults.adapter
-const customer: CustomerCO = { id: 42, name: '示例客户', email: 'customer@example.test', phone: null, status: 'ACTIVE', version: 3 }
+const customer: CustomerCO = {
+  id: 42,
+  name: '示例客户',
+  email: 'customer@example.test',
+  phone: null,
+  status: 'ACTIVE',
+  version: 3,
+}
 
 afterEach(() => {
   request.defaults.adapter = originalAdapter
@@ -50,10 +57,24 @@ describe('customer API wire contract', () => {
       hasPrevious: true,
     }
     const calls = capture(envelope(page))
-    const response = await listCustomers({ pageIndex: 2, pageSize: 10, keyword: '示例', status: 'ACTIVE' })
+    const response = await listCustomers({
+      pageIndex: 2,
+      pageSize: 10,
+      keyword: '示例',
+      status: 'ACTIVE',
+    })
     expectTypeOf(response).toEqualTypeOf<AxiosResponse<R<PageResult<CustomerCO>>>>()
     expect(response.data.data).toEqual(page)
-    expect(calls[0]).toMatchObject({ url: '/api/customers', method: 'get', params: { pageIndex: 2, pageSize: 10, keyword: '示例', status: 'ACTIVE' } })
+    expect(calls[0]).toMatchObject({
+      url: '/api/customers',
+      method: 'get',
+      params: {
+        pageIndex: 2,
+        pageSize: 10,
+        keyword: '示例',
+        status: 'ACTIVE',
+      },
+    })
     expect(calls[0].params).not.toHaveProperty('page')
     expect(calls[0].params).not.toHaveProperty('size')
     expectTypeOf<CustomerListParams>().toMatchTypeOf<{ pageIndex: number, pageSize: number }>()

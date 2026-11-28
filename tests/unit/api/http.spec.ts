@@ -36,11 +36,23 @@ describe('public HTTP helpers', () => {
   })
 
   it('retains the response types of mixed JSON and raw concurrent requests', async () => {
-    const json = http.get<number>('/test', undefined, { adapter: responseAdapter(envelope(42)) })
-    const blob = http.get('/test', undefined, { responseType: 'blob', adapter: responseAdapter(new Blob(['a'])) })
-    const head = http.head('/test', { adapter: responseAdapter(undefined, 204) })
-    const buffer = http.put('/test', undefined, { responseType: 'arraybuffer', adapter: responseAdapter(new ArrayBuffer(8)) })
-    const options = http.options('/test', { adapter: responseAdapter(undefined, 204) })
+    const json = http.get<number>('/test', undefined, {
+      adapter: responseAdapter(envelope(42)),
+    })
+    const blob = http.get('/test', undefined, {
+      responseType: 'blob',
+      adapter: responseAdapter(new Blob(['a'])),
+    })
+    const head = http.head('/test', {
+      adapter: responseAdapter(undefined, 204),
+    })
+    const buffer = http.put('/test', undefined, {
+      responseType: 'arraybuffer',
+      adapter: responseAdapter(new ArrayBuffer(8)),
+    })
+    const options = http.options('/test', {
+      adapter: responseAdapter(undefined, 204),
+    })
     expectTypeOf(buffer).toEqualTypeOf<Promise<AxiosResponse<ArrayBuffer>>>()
     expectTypeOf(options).toEqualTypeOf<Promise<AxiosResponse<void>>>()
     const results = await http.all([json, blob, head])
@@ -48,7 +60,11 @@ describe('public HTTP helpers', () => {
     expect(results[0].data.data).toBe(42)
     const raced = http.race([json, blob] as const)
     expectTypeOf(raced).toEqualTypeOf<Promise<AxiosResponse<R<number>> | AxiosResponse<Blob>>>()
-    const settled = await http.allSettled([json, blob, Promise.reject(new Error('failed'))])
+    const settled = await http.allSettled([
+      json,
+      blob,
+      Promise.reject(new Error('failed')),
+    ])
     expectTypeOf(settled[0]).toEqualTypeOf<PromiseSettledResult<AxiosResponse<R<number>>>>()
     expect(settled.map(result => result.status)).toEqual(['fulfilled', 'fulfilled', 'rejected'])
     await Promise.all([buffer, options, raced])
@@ -61,7 +77,10 @@ describe('public HTTP helpers', () => {
     Object.defineProperty(window.URL, 'revokeObjectURL', { configurable: true, value: revoke })
     const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
     const blob = new Blob(['download'])
-    await http.download('/test', 'test.txt', { responseType: 'json', adapter: responseAdapter(blob) })
+    await http.download('/test', 'test.txt', {
+      responseType: 'json',
+      adapter: responseAdapter(blob),
+    })
     expect(create).toHaveBeenCalledWith(blob)
     expect(click).toHaveBeenCalledOnce()
     expect(revoke).toHaveBeenCalledWith('blob:test')

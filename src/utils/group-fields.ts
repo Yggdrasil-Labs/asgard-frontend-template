@@ -14,7 +14,9 @@ export function groupVisibleFields(schema: FormFieldSchema[]) {
   }
   return [...groups].filter(([, fields]) => fields.length > 0).map(([key, fields]) => ({
     key,
-    label: key === DEFAULT_FIELD_GROUP ? undefined : key,
+    label: key === DEFAULT_FIELD_GROUP
+      ? undefined
+      : key,
     fields,
   }))
 }

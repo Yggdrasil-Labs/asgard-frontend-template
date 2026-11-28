@@ -7,12 +7,17 @@ import request from '@/utils/api/request'
 import { envelope, responseAdapter } from './adapter'
 
 function get(data: unknown, status = 200, headers: Record<string, string> = {}) {
-  return http.get('/test', undefined, { adapter: responseAdapter(data, status, headers) })
+  return http.get('/test', undefined, {
+    adapter: responseAdapter(data, status, headers),
+  })
 }
 
 describe('r response interceptor', () => {
   it('rejects a business error even when success is true', async () => {
-    await expect(get({ ...envelope(null, '21001'), success: true })).rejects.toMatchObject({
+    await expect(get({
+      ...envelope(null, '21001'),
+      success: true,
+    })).rejects.toMatchObject({
       code: '21001',
       httpStatus: 200,
       message: '契约消息',
@@ -20,14 +25,19 @@ describe('r response interceptor', () => {
   })
 
   it('returns the full response for code 00000 even when success is false', async () => {
-    const response = await get({ ...envelope({ id: 42 }), success: false })
+    const response = await get({
+      ...envelope({ id: 42 }),
+      success: false,
+    })
     expect(response.status).toBe(200)
     expect(response.config.url).toBe('/test')
     expect(response.data.data).toEqual({ id: 42 })
   })
 
   it('accepts delete null data', async () => {
-    const response = await http.delete('/test', { adapter: responseAdapter(envelope()) })
+    const response = await http.delete('/test', {
+      adapter: responseAdapter(envelope()),
+    })
     expect(response.data.data).toBeNull()
   })
 
@@ -38,22 +48,53 @@ describe('r response interceptor', () => {
   it('preserves structured details, future sources, body trace and status alias', async () => {
     const details = {
       errors: [
-        { source: 'FIELD', path: 'name', parameterIndex: 0, constraint: 'Size', message: '姓名长度无效' },
-        { source: 'OBJECT', path: '$', parameterIndex: null, constraint: 'Update', message: '没有更新字段' },
-        { source: 'FUTURE', path: 'x', parameterIndex: null, constraint: 'Future', message: '未来来源' },
+        {
+          source: 'FIELD',
+          path: 'name',
+          parameterIndex: 0,
+          constraint: 'Size',
+          message: '姓名长度无效',
+        },
+        {
+          source: 'OBJECT',
+          path: '$',
+          parameterIndex: null,
+          constraint: 'Update',
+          message: '没有更新字段',
+        },
+        {
+          source: 'FUTURE',
+          path: 'x',
+          parameterIndex: null,
+          constraint: 'Future',
+          message: '未来来源',
+        },
       ],
       totalCount: 3,
       truncated: false,
     }
-    const failure = await get({ ...envelope(details, '00004'), traceId: 'body-trace' }, 400, { 'x-trace-id': 'header-trace' }).catch(error => error)
+    const failure = await get({
+      ...envelope(details, '00004'),
+      traceId: 'body-trace',
+    }, 400, { 'x-trace-id': 'header-trace' }).catch(error => error)
     expect(failure).toBeInstanceOf(ApiError)
-    expect(failure).toMatchObject({ code: '00004', httpStatus: 400, status: 400, traceId: 'body-trace', details })
+    expect(failure).toMatchObject({
+      code: '00004',
+      httpStatus: 400,
+      status: 400,
+      traceId: 'body-trace',
+      details,
+    })
     expect(failure.cause).toBeInstanceOf(AxiosError)
     expect(failure.response.status).toBe(400)
   })
 
   it('ignores malformed validation details and falls back to trace header for null body trace', async () => {
-    await expect(get(envelope({ errors: [{}], totalCount: 1, truncated: false }, '00004'), 400, { 'X-Trace-Id': 'header-trace' }))
+    await expect(get(envelope({
+      errors: [{}],
+      totalCount: 1,
+      truncated: false,
+    }, '00004'), 400, { 'X-Trace-Id': 'header-trace' }))
       .rejects
       .toMatchObject({ details: undefined, traceId: 'header-trace' })
   })
@@ -73,14 +114,29 @@ describe('r response interceptor', () => {
     })).rejects.toMatchObject({ code: '00000', httpStatus: 404 })
   })
 
-  it.each([null, undefined, '', '<html>private response</html>', '{invalid json', {}, { success: true, data: {} }])(
+  it.each([
+    null,
+    undefined,
+    '',
+    '<html>private response</html>',
+    '{invalid json',
+    {},
+    { success: true, data: {} },
+  ])(
     'rejects missing/legacy/malformed JSON envelopes: %j',
     async (data) => {
       await expect(get(data)).rejects.toMatchObject({ code: 'PROTOCOL_ERROR', httpStatus: 200 })
     },
   )
 
-  it.each(['code', 'message', 'data', 'timestamp', 'traceId', 'success'])('requires the %s field', async (field) => {
+  it.each([
+    'code',
+    'message',
+    'data',
+    'timestamp',
+    'traceId',
+    'success',
+  ])('requires the %s field', async (field) => {
     const body: Record<string, unknown> = envelope()
     delete body[field]
     await expect(get(body)).rejects.toMatchObject({ code: 'PROTOCOL_ERROR' })
@@ -94,7 +150,10 @@ describe('r response interceptor', () => {
     { traceId: 123 },
     { success: 'true' },
   ])('validates envelope field shapes: %j', async (invalid) => {
-    await expect(get({ ...envelope(), ...invalid })).rejects.toMatchObject({ code: 'PROTOCOL_ERROR' })
+    await expect(get({
+      ...envelope(),
+      ...invalid,
+    })).rejects.toMatchObject({ code: 'PROTOCOL_ERROR' })
   })
 
   it('rejects ordinary JSON 204 instead of treating it as a successful delete', async () => {
@@ -166,12 +225,16 @@ describe('r response interceptor', () => {
 
 describe('explicit raw responses', () => {
   it.each(['head', 'options'] as const)('passes a successful %s without an R envelope', async (method) => {
-    const response = await http[method]('/test', { adapter: responseAdapter(undefined, 204) })
+    const response = await http[method]('/test', {
+      adapter: responseAdapter(undefined, 204),
+    })
     expect(response.status).toBe(204)
   })
 
   it.each(['head', 'options'] as const)('rejects failed %s with a safe HTTP error', async (method) => {
-    await expect(http[method]('/test', { adapter: responseAdapter('<html>private</html>', 500) })).rejects.toMatchObject({
+    await expect(http[method]('/test', {
+      adapter: responseAdapter('<html>private</html>', 500),
+    })).rejects.toMatchObject({
       code: 'INTERNAL_SERVER_ERROR',
       httpStatus: 500,
     })
@@ -180,8 +243,14 @@ describe('explicit raw responses', () => {
   it('returns blob and arraybuffer payloads untouched', async () => {
     const blob = new Blob(['download'])
     const buffer = new ArrayBuffer(8)
-    expect((await http.get('/test', undefined, { responseType: 'blob', adapter: responseAdapter(blob) })).data).toBe(blob)
-    expect((await http.post('/test', {}, { responseType: 'arraybuffer', adapter: responseAdapter(buffer) })).data).toBe(buffer)
+    expect((await http.get('/test', undefined, {
+      responseType: 'blob',
+      adapter: responseAdapter(blob),
+    })).data).toBe(blob)
+    expect((await http.post('/test', {}, {
+      responseType: 'arraybuffer',
+      adapter: responseAdapter(buffer),
+    })).data).toBe(buffer)
   })
 
   it.each(['blob', 'arraybuffer'] as const)('does not force a failed %s payload into R', async (responseType) => {

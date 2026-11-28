@@ -190,7 +190,9 @@ defineExpose<ProDialogExpose>({
     void attemptClose('programmatic')
   },
   toggle(force?: boolean) {
-    const nextVisible = typeof force === 'boolean' ? force : !props.modelValue
+    const nextVisible = typeof force === 'boolean'
+      ? force
+      : !props.modelValue
     if (nextVisible)
       emitVisibilityChange(true)
     else

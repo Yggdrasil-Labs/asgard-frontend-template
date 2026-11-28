@@ -27,25 +27,87 @@ const { dialogVisible, dialogTitle, formRef, formValues, formKey, busy, conflict
 
 const formSchema: FormFieldSchema[] = [
   {
-    meta: { field: 'name', label: '姓名', valueType: 'string', required: true, defaultValue: '' },
-    ui: { component: 'Input', props: { placeholder: '请输入姓名', clearable: true, maxlength: 50 }, layout: { span: 24 } },
-    runtime: { validation: { rules: [{ validator: (value: unknown) => typeof value === 'string' && value.trim().length >= 2 && value.length <= 50, message: '姓名长度为2至50个字符' }] } },
+    meta: {
+      field: 'name',
+      label: '姓名',
+      valueType: 'string',
+      required: true,
+      defaultValue: '',
+    },
+    ui: {
+      component: 'Input',
+      props: { placeholder: '请输入姓名', clearable: true, maxlength: 50 },
+      layout: { span: 24 },
+    },
+    runtime: {
+      validation: {
+        rules: [
+          {
+            validator: (value: unknown) => typeof value === 'string' && value.trim().length >= 2 && value.length <= 50,
+            message: '姓名长度为2至50个字符',
+          },
+        ],
+      },
+    },
   },
   {
-    meta: { field: 'email', label: '邮箱', valueType: 'string', required: true, defaultValue: '' },
-    runtime: { validation: { rules: [{ validator: (value: unknown) => typeof value === 'string' && value.length <= 100 && /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(value), message: '请输入100个字符以内的合法邮箱' }] } },
-    ui: { component: 'Input', props: { placeholder: '请输入邮箱', clearable: true, maxlength: 100 }, layout: { span: 24 } },
+    meta: {
+      field: 'email',
+      label: '邮箱',
+      valueType: 'string',
+      required: true,
+      defaultValue: '',
+    },
+    runtime: {
+      validation: {
+        rules: [
+          {
+            validator: (value: unknown) => typeof value === 'string' && value.length <= 100 && /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(value),
+            message: '请输入100个字符以内的合法邮箱',
+          },
+        ],
+      },
+    },
+    ui: {
+      component: 'Input',
+      props: { placeholder: '请输入邮箱', clearable: true, maxlength: 100 },
+      layout: { span: 24 },
+    },
   },
   {
-    meta: { field: 'phone', label: '电话', valueType: 'string', required: false, defaultValue: '' },
-    runtime: { validation: { rules: [{ validator: (value: unknown) => value == null || String(value).length <= 20, message: '电话不能超过20个字符' }] } },
-    ui: { component: 'Input', props: { placeholder: '请输入电话', clearable: true, maxlength: 20 }, layout: { span: 24 } },
+    meta: {
+      field: 'phone',
+      label: '电话',
+      valueType: 'string',
+      required: false,
+      defaultValue: '',
+    },
+    runtime: {
+      validation: {
+        rules: [
+          {
+            validator: (value: unknown) => value == null || String(value).length <= 20,
+            message: '电话不能超过20个字符',
+          },
+        ],
+      },
+    },
+    ui: {
+      component: 'Input',
+      props: { placeholder: '请输入电话', clearable: true, maxlength: 20 },
+      layout: { span: 24 },
+    },
   },
 ]
 
 const searchSchema: SearchFieldSchema[] = [
   {
-    meta: { field: 'keyword', label: '关键词', valueType: 'string', defaultValue: '' },
+    meta: {
+      field: 'keyword',
+      label: '关键词',
+      valueType: 'string',
+      defaultValue: '',
+    },
     ui: {
       component: 'Input',
       props: { placeholder: '按姓名或邮箱搜索', clearable: true },
@@ -53,7 +115,12 @@ const searchSchema: SearchFieldSchema[] = [
     },
   },
   {
-    meta: { field: 'status', label: '状态', valueType: 'string', defaultValue: '' },
+    meta: {
+      field: 'status',
+      label: '状态',
+      valueType: 'string',
+      defaultValue: '',
+    },
     ui: {
       component: 'Select',
       props: { clearable: true, placeholder: '请选择状态' },
@@ -67,10 +134,22 @@ const searchSchema: SearchFieldSchema[] = [
 ]
 
 const columns: TableColumnSchema[] = [
-  { meta: { field: 'id', label: 'ID', valueType: 'string' }, ui: { component: 'Text', width: 80 } },
-  { meta: { field: 'name', label: '姓名', valueType: 'string' }, ui: { component: 'Text', minWidth: 120 } },
-  { meta: { field: 'email', label: '邮箱', valueType: 'string' }, ui: { component: 'Text', minWidth: 160 } },
-  { meta: { field: 'phone', label: '电话', valueType: 'string' }, ui: { component: 'Text', width: 140 } },
+  {
+    meta: { field: 'id', label: 'ID', valueType: 'string' },
+    ui: { component: 'Text', width: 80 },
+  },
+  {
+    meta: { field: 'name', label: '姓名', valueType: 'string' },
+    ui: { component: 'Text', minWidth: 120 },
+  },
+  {
+    meta: { field: 'email', label: '邮箱', valueType: 'string' },
+    ui: { component: 'Text', minWidth: 160 },
+  },
+  {
+    meta: { field: 'phone', label: '电话', valueType: 'string' },
+    ui: { component: 'Text', width: 140 },
+  },
   {
     meta: { field: 'status', label: '状态', valueType: 'enum' },
     ui: { component: 'Tag', width: 100, align: 'center' },
@@ -87,8 +166,15 @@ const columns: TableColumnSchema[] = [
     ui: { component: 'Actions', width: 160, fixed: 'right' },
     runtime: {
       actions: [
-        { label: '编辑', onClick: row => openEdit(row) },
-        { label: '删除', danger: true, onClick: row => handleDelete(row) },
+        {
+          label: '编辑',
+          onClick: row => openEdit(row),
+        },
+        {
+          label: '删除',
+          danger: true,
+          onClick: row => handleDelete(row),
+        },
       ],
     },
   },

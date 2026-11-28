@@ -36,8 +36,24 @@ async function mountTabs() {
     setup() {
       return () => h(AppTabs, {
         items: [
-          { key: 'Home', routeName: 'Home', path: '/', fullPath: '/', title: '首页', closable: false, pinned: true },
-          { key: 'ProFormDemo', routeName: 'ProFormDemo', path: '/pro-form-demo', fullPath: '/pro-form-demo', title: 'ProForm 示例', closable: true, pinned: false },
+          {
+            key: 'Home',
+            routeName: 'Home',
+            path: '/',
+            fullPath: '/',
+            title: '首页',
+            closable: false,
+            pinned: true,
+          },
+          {
+            key: 'ProFormDemo',
+            routeName: 'ProFormDemo',
+            path: '/pro-form-demo',
+            fullPath: '/pro-form-demo',
+            title: 'ProForm 示例',
+            closable: true,
+            pinned: false,
+          },
         ],
         activeKey: 'ProFormDemo',
       })

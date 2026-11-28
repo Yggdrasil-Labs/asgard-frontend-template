@@ -27,11 +27,17 @@ interface DemoRow {
 }
 
 const baseRows: DemoRow[] = Array.from({ length: 42 }, (_, index) => {
-  const status = index % 3 === 0 ? 'draft' : index % 3 === 1 ? 'published' : 'archived'
+  const status = index % 3 === 0
+    ? 'draft'
+    : index % 3 === 1
+      ? 'published'
+      : 'archived'
   const category = status === 'draft'
     ? 'planning'
     : status === 'published'
-      ? (index % 2 === 0 ? 'release' : 'growth')
+      ? (index % 2 === 0
+          ? 'release'
+          : 'growth')
       : 'history'
 
   return {
@@ -221,7 +227,9 @@ const sortedRows = computed(() => {
     const left = String(a[sort.value.field as keyof DemoRow] ?? '')
     const right = String(b[sort.value.field as keyof DemoRow] ?? '')
     const result = left.localeCompare(right, 'zh-Hans-CN')
-    return sort.value.order === 'asc' ? result : -result
+    return sort.value.order === 'asc'
+      ? result
+      : -result
   })
 })
 
@@ -246,7 +254,12 @@ watch(
 const columns = computed<TableColumnSchema[]>(() => [
   {
     meta: { field: 'name', label: '名称', valueType: 'string' },
-    ui: { component: 'Text', minWidth: 180, sortable: true, ellipsis: true },
+    ui: {
+      component: 'Text',
+      minWidth: 180,
+      sortable: true,
+      ellipsis: true,
+    },
   },
   {
     meta: { field: 'status', label: '状态', valueType: 'enum' },

@@ -6,7 +6,9 @@ import { resolveLayout } from './layout-registry'
 const route = useRoute()
 
 const layoutComponent = computed(() => {
-  return resolveLayout(typeof route.meta.layout === 'string' ? route.meta.layout : undefined)
+  return resolveLayout(typeof route.meta.layout === 'string'
+    ? route.meta.layout
+    : undefined)
 })
 </script>
 

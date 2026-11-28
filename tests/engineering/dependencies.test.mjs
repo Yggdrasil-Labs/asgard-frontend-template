@@ -16,7 +16,14 @@ function check(files) {
     symlinkSync(join(project, 'node_modules'), join(directory, 'node_modules'), 'dir')
     const fixture = {
       'package.json': '{"type":"module"}',
-      'tsconfig.app.json': JSON.stringify({ compilerOptions: { paths: { '@/*': ['./src/*'] } }, include: ['src/**/*'] }),
+      'tsconfig.app.json': JSON.stringify({
+        compilerOptions: {
+          paths: {
+            '@/*': ['./src/*'],
+          },
+        },
+        include: ['src/**/*'],
+      }),
       'src/env.d.ts': 'export {}',
       ...files,
     }
@@ -75,7 +82,9 @@ test('production layers reject shell, UI, business and initialization back refer
   ]) {
     const result = check({
       [from]: `export { default } from "@/${to.slice(4)}"`,
-      [to]: to.endsWith('.vue') ? '<template><div /></template>' : 'export default 1',
+      [to]: to.endsWith('.vue')
+        ? '<template><div /></template>'
+        : 'export default 1',
     })
     assert.equal(result.status, 1, result.output)
     assert.match(result.output, new RegExp(rule))
@@ -85,13 +94,16 @@ test('production layers reject shell, UI, business and initialization back refer
 })
 
 test('native value and type-only file cycles both fail', () => {
-  for (const files of [{
-    'src/utils/a.ts': 'export { b } from "./b"; export const a = 1',
-    'src/utils/b.ts': 'export { a } from "./a"; export const b = 1',
-  }, {
-    'src/types/a.ts': 'import type { B } from "./b"; export interface A { b: B }',
-    'src/types/b.ts': 'import type { A } from "./a"; export interface B { a: A }',
-  }]) {
+  for (const files of [
+    {
+      'src/utils/a.ts': 'export { b } from "./b"; export const a = 1',
+      'src/utils/b.ts': 'export { a } from "./a"; export const b = 1',
+    },
+    {
+      'src/types/a.ts': 'import type { B } from "./b"; export interface A { b: B }',
+      'src/types/b.ts': 'import type { A } from "./a"; export interface B { a: A }',
+    },
+  ]) {
     const result = check(files)
     assert.equal(result.status, 1, result.output)
     assert.match(result.output, /no-file-cycles/)
@@ -164,7 +176,10 @@ test('icon type exceptions stay exact and never allow runtime imports', () => {
 })
 
 test('shared route type exceptions reject runtime exports', () => {
-  for (const [keyword, status] of [['type ', 0], ['', 1]]) {
+  for (const [keyword, status] of [
+    ['type ', 0],
+    ['', 1],
+  ]) {
     const result = check({
       'src/types/index.ts': `export ${keyword}* from "@/router/types"`,
       'src/router/types.ts': 'export type Route = string; export const runtime = 1',
@@ -232,7 +247,10 @@ test('the known locale template import expands only JSON resource leaves', () =>
 })
 
 test('SVG URL glob resources are leaves and empty icon folders are valid', () => {
-  for (const assets of [{}, { 'src/assets/icons/menu/home.svg': '<svg />' }]) {
+  for (const assets of [
+    {},
+    { 'src/assets/icons/menu/home.svg': '<svg />' },
+  ]) {
     const result = check({
       ...assets,
       'src/components/icon/SvgIcon.vue': '<script setup lang="ts">const icons = import.meta.glob("@/assets/icons/**/*.svg", { eager: true, query: "?url", import: "default" })</script><template><img></template>',

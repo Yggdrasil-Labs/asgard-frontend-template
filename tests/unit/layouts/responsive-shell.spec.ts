@@ -72,7 +72,12 @@ async function mountResponsiveShell(width: number) {
             component: createDummyPage('Home'),
             meta: {
               title: '首页',
-              tab: { enabled: true, closable: false, pinned: true, singleton: true },
+              tab: {
+                enabled: true,
+                closable: false,
+                pinned: true,
+                singleton: true,
+              },
               keepAlive: { enabled: false, strategy: 'routeName' },
             },
           },

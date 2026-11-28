@@ -35,9 +35,21 @@ const envItems: EnvItem[] = [
   { label: '应用名称', value: env.APP_NAME },
   { label: '应用版本', value: env.APP_VERSION },
   { label: 'API 地址', value: env.API_BASE_URL },
-  { label: '开发模式', value: env.isDev ? '是' : '否', success: env.isDev },
-  { label: '生产模式', value: env.isProd ? '是' : '否', success: env.isProd },
-  { label: '测试模式', value: env.isTest ? '是' : '否', success: env.isTest },
+  {
+    label: '开发模式',
+    value: env.isDev ? '是' : '否',
+    success: env.isDev,
+  },
+  {
+    label: '生产模式',
+    value: env.isProd ? '是' : '否',
+    success: env.isProd,
+  },
+  {
+    label: '测试模式',
+    value: env.isTest ? '是' : '否',
+    success: env.isTest,
+  },
 ]
 
 const statItems: StatItem[] = [

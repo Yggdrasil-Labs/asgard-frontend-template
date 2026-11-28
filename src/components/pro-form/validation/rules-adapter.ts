@@ -88,7 +88,9 @@ function buildRuleValidator(
       enabled = resolveWhen(rule.when, formValues, context)
     }
     catch (e) {
-      callback(e instanceof Error ? e : new Error(String(e)))
+      callback(e instanceof Error
+        ? e
+        : new Error(String(e)))
       return
     }
 
@@ -104,7 +106,9 @@ function buildRuleValidator(
       else callback(new Error(rule.message))
     }
     catch (e) {
-      callback(e instanceof Error ? e : new Error(String(e)))
+      callback(e instanceof Error
+        ? e
+        : new Error(String(e)))
     }
   }
 }

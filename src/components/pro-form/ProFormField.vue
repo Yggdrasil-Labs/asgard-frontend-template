@@ -77,7 +77,9 @@ const selectOptions = computed<FormFieldOption[]>(() => {
   if (typeof runtimeOpts !== 'function')
     return []
   const result = runtimeOpts(props.modelValue, props.context ?? {})
-  return Array.isArray(result) ? result : []
+  return Array.isArray(result)
+    ? result
+    : []
 })
 
 function optionValue(opt: FormFieldOption): string | number | boolean {
@@ -86,7 +88,9 @@ function optionValue(opt: FormFieldOption): string | number | boolean {
 
 const selectModelValue = computed(() => {
   const v = fieldValue.value
-  return v === undefined || v === null ? undefined : (v as string | number | boolean)
+  return v === undefined || v === null
+    ? undefined
+    : (v as string | number | boolean)
 })
 
 /** 合并 schema.ui.props，并保证 readonly/disabled 由 ProForm 控制，不被 schema 覆盖 */

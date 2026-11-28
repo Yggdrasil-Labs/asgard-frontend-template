@@ -35,8 +35,18 @@ async function mountSider(options: { tree?: MenuNode[], collapsed?: boolean, mob
 
   const onToggleCollapse = vi.fn()
   const tree = options.tree ?? [
-    { key: 'Home', path: '/', title: '首页', icon: 'menu-dashboard' },
-    { key: 'ProFormDemo', path: '/pro-form-demo', title: 'ProForm 示例', icon: 'edit' },
+    {
+      key: 'Home',
+      path: '/',
+      title: '首页',
+      icon: 'menu-dashboard',
+    },
+    {
+      key: 'ProFormDemo',
+      path: '/pro-form-demo',
+      title: 'ProForm 示例',
+      icon: 'edit',
+    },
   ]
 
   const Host = defineComponent({

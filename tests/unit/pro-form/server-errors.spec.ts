@@ -13,13 +13,25 @@ afterEach(() => {
 
 function field(key: string, group: string, runtime?: FormFieldSchema['runtime']): FormFieldSchema {
   return {
-    meta: { field: key, label: key, valueType: 'string', required: false },
-    ui: { component: 'Input', props: { 'aria-label': key }, layout: { group } },
+    meta: {
+      field: key,
+      label: key,
+      valueType: 'string',
+      required: false,
+    },
+    ui: {
+      component: 'Input',
+      props: { 'aria-label': key },
+      layout: { group },
+    },
     runtime,
   }
 }
 
-function mountForm(schema = [field('name', '基本信息'), field('email', '联系方式')]) {
+function mountForm(schema = [
+  field('name', '基本信息'),
+  field('email', '联系方式'),
+]) {
   registerDefaultFieldComponents()
   const model = ref<Record<string, unknown>>({ name: 'Ada', email: 'ada@example.test' })
   const fields = ref(schema)
@@ -65,7 +77,17 @@ function mountForm(schema = [field('name', '基本信息'), field('email', '联�
     await flush()
   }
 
-  return { model, fields, formRef, container, input, errors, flush, change, onSubmit }
+  return {
+    model,
+    fields,
+    formRef,
+    container,
+    input,
+    errors,
+    flush,
+    change,
+    onSubmit,
+  }
 }
 
 describe('pro-form server errors', () => {
@@ -76,7 +98,9 @@ describe('pro-form server errors', () => {
       field('hidden', '隐藏', { visible: false }),
     ])
     await form.flush()
-    const header = [...form.container.querySelectorAll<HTMLElement>('[role="button"]')]
+    const header = [
+      ...form.container.querySelectorAll<HTMLElement>('[role="button"]'),
+    ]
       .find(button => button.textContent?.includes('联系方式'))!
     header.click()
     await form.flush()
@@ -100,7 +124,9 @@ describe('pro-form server errors', () => {
     expect(form.model.value).toEqual(values)
     expect({}).not.toHaveProperty('polluted')
 
-    form.formRef.value!.setFieldErrors({ email: ['新错误'] })
+    form.formRef.value!.setFieldErrors({
+      email: ['新错误'],
+    })
     await form.flush()
     expect(form.errors('name')).toBeUndefined()
     expect(form.errors('email')).toBe('新错误')
@@ -111,12 +137,18 @@ describe('pro-form server errors', () => {
     const form = mountForm([
       field('name', '基本信息', {
         dependencies: ['email'],
-        validation: { rules: [{ validator, message: '本地姓名错误', trigger: 'blur' }] },
+        validation: {
+          rules: [
+            { validator, message: '本地姓名错误', trigger: 'blur' },
+          ],
+        },
       }),
       field('email', '联系方式'),
     ])
     await form.flush()
-    form.formRef.value!.setFieldErrors({ name: ['服务端姓名错误'] })
+    form.formRef.value!.setFieldErrors({
+      name: ['服务端姓名错误'],
+    })
     await form.flush()
 
     form.input('name').focus()
@@ -133,14 +165,18 @@ describe('pro-form server errors', () => {
     await expect(form.formRef.value!.validateField('name')).resolves.toBe(true)
     await form.flush()
     expect(form.errors('name')).toBe('服务端姓名错误')
-    form.formRef.value!.setFieldErrors({ name: ['服务端姓名错误'] })
+    form.formRef.value!.setFieldErrors({
+      name: ['服务端姓名错误'],
+    })
     await form.flush()
     expect(form.errors('name')).toBe('服务端姓名错误')
 
     form.formRef.value!.clearFieldErrors()
     await form.flush()
     expect(form.errors('name')).toBeUndefined()
-    form.formRef.value!.setFieldErrors({ name: ['服务端姓名错误'] })
+    form.formRef.value!.setFieldErrors({
+      name: ['服务端姓名错误'],
+    })
     await form.flush()
     expect(form.errors('name')).toBe('服务端姓名错误')
   })
@@ -148,7 +184,10 @@ describe('pro-form server errors', () => {
   it('clears only the edited field and keeps errors when an input event leaves the value unchanged', async () => {
     const form = mountForm()
     await form.flush()
-    form.formRef.value!.setFieldErrors({ name: ['姓名错误'], email: ['邮箱错误'] })
+    form.formRef.value!.setFieldErrors({
+      name: ['姓名错误'],
+      email: ['邮箱错误'],
+    })
     await form.flush()
 
     await form.change('name', 'Ada')
@@ -161,7 +200,10 @@ describe('pro-form server errors', () => {
   it('clears service errors by exact field scope through both clearing APIs', async () => {
     const form = mountForm()
     await form.flush()
-    const errors = { name: ['姓名错误'], email: ['邮箱错误'] }
+    const errors = {
+      name: ['姓名错误'],
+      email: ['邮箱错误'],
+    }
     form.formRef.value!.setFieldErrors(errors)
     form.formRef.value!.clearFieldErrors(['name', 'unknown'])
     await form.flush()
@@ -187,12 +229,20 @@ describe('pro-form server errors', () => {
     expect(form.errors('email')).toBeUndefined()
   })
 
-  it.each(['setFieldsValue', 'resetFields', 'clearValidate', 'submit'] as const)(
+  it.each([
+    'setFieldsValue',
+    'resetFields',
+    'clearValidate',
+    'submit',
+  ] as const)(
     'clears every previous service error when %s starts',
     async (action) => {
       const form = mountForm()
       await form.flush()
-      form.formRef.value!.setFieldErrors({ name: ['姓名错误'], email: ['邮箱错误'] })
+      form.formRef.value!.setFieldErrors({
+        name: ['姓名错误'],
+        email: ['邮箱错误'],
+      })
       await form.flush()
 
       const methods = form.formRef.value!
@@ -211,7 +261,10 @@ describe('pro-form server errors', () => {
   it.each(['replace', 'mutate'] as const)('clears only changed v-model fields when the parent uses %s', async (update) => {
     const form = mountForm()
     await form.flush()
-    form.formRef.value!.setFieldErrors({ name: ['姓名错误'], email: ['邮箱错误'] })
+    form.formRef.value!.setFieldErrors({
+      name: ['姓名错误'],
+      email: ['邮箱错误'],
+    })
     await form.flush()
 
     if (update === 'replace')
@@ -225,7 +278,9 @@ describe('pro-form server errors', () => {
   it('discards service errors for fields removed from the visible schema', async () => {
     const form = mountForm()
     await form.flush()
-    form.formRef.value!.setFieldErrors({ email: ['旧邮箱错误'] })
+    form.formRef.value!.setFieldErrors({
+      email: ['旧邮箱错误'],
+    })
     await form.flush()
     form.fields.value[1]!.runtime = { visible: false }
     await form.flush()
@@ -238,12 +293,18 @@ describe('pro-form server errors', () => {
   it('preserves local required validation before and after service errors, submission and reset', async () => {
     const nameField = field('name', '基本信息')
     nameField.meta.required = true
-    const form = mountForm([nameField, field('email', '联系方式')])
+    const form = mountForm([
+      nameField,
+      field('email', '联系方式'),
+    ])
     await form.flush()
     await form.change('name', '')
     await vi.waitFor(() => expect(form.errors('name')).toBe('name为必填项'))
 
-    form.formRef.value!.setFieldErrors({ name: ['服务端姓名错误'], email: ['邮箱错误'] })
+    form.formRef.value!.setFieldErrors({
+      name: ['服务端姓名错误'],
+      email: ['邮箱错误'],
+    })
     await form.flush()
     await expect(form.formRef.value!.validateField('name')).rejects.toHaveProperty('name')
     expect(form.errors('name')).toBe('服务端姓名错误')
@@ -265,9 +326,13 @@ describe('pro-form server errors', () => {
   })
 
   it('treats declared dotted keys literally and renders messages as plain text', async () => {
-    const form = mountForm([field('contact.email', '联系方式')])
+    const form = mountForm([
+      field('contact.email', '联系方式'),
+    ])
     await form.flush()
-    form.formRef.value!.setFieldErrors({ 'contact.email': ['<b>邮箱错误</b>'] })
+    form.formRef.value!.setFieldErrors({
+      'contact.email': ['<b>邮箱错误</b>'],
+    })
     await form.flush()
     expect(form.errors('contact.email')).toBe('<b>邮箱错误</b>')
     expect(form.container.querySelector('b')).toBeNull()
@@ -279,7 +344,10 @@ describe('pro-form server errors', () => {
     const form = mountForm()
     form.model.value.name = ['Ada']
     await form.flush()
-    form.formRef.value!.setFieldErrors({ name: ['姓名错误'], email: ['邮箱错误'] })
+    form.formRef.value!.setFieldErrors({
+      name: ['姓名错误'],
+      email: ['邮箱错误'],
+    })
     await form.flush()
     ;(form.model.value.name as string[]).push('Grace')
     await form.flush()

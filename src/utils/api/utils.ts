@@ -9,7 +9,9 @@ export function extractData<T>(response: AxiosResponse<R<T>>): T | null {
 
 /** 只对显式 null 使用默认值，保留 false、0 及空字符串。 */
 export function extractDataOrDefault<T>(response: AxiosResponse<R<T>>, defaultValue: T): T {
-  return response.data.data === null ? defaultValue : response.data.data
+  return response.data.data === null
+    ? defaultValue
+    : response.data.data
 }
 
 export function extractPaginatedData<T>(response: AxiosResponse<R<PageResult<T>>>): PageResult<T> {

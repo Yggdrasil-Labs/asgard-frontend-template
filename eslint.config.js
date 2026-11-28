@@ -30,9 +30,12 @@ export default antfu({
     },
   },
   rules: {
-    'no-console': ['warn', {
-      allow: ['warn', 'error'],
-    }],
+    'no-console': [
+      'warn',
+      {
+        allow: ['warn', 'error'],
+      },
+    ],
   },
   // 为测试文件添加特殊配置
   test: true,
@@ -42,4 +45,10 @@ export default antfu({
     '@typescript-eslint/no-explicit-any': 'off', // 测试文件中允许 any
     'vue/multi-word-component-names': 'off', // 测试文件中允许单单词组件名
   },
-}, ...sonar, { files: ['**/*.vue'], rules: sonarRules }, { files: ['tests/engineering/**/*.test.mjs'], rules: { 'test/no-import-node-test': 'off' } })
+}, ...sonar, {
+  files: ['**/*.vue'],
+  rules: sonarRules,
+}, {
+  files: ['tests/engineering/**/*.test.mjs'],
+  rules: { 'test/no-import-node-test': 'off' },
+})

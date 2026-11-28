@@ -16,7 +16,9 @@ function formatDisplay(
       const out = fmt(raw, row, context)
       if (out == null)
         return '—'
-      return typeof out === 'string' ? out : String(out)
+      return typeof out === 'string'
+        ? out
+        : String(out)
     }
     catch (error) {
       if (import.meta.env.DEV)

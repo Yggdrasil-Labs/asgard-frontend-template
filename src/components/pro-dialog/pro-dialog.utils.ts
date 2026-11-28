@@ -36,9 +36,13 @@ export function resolveDialogWidth(
 ) {
   if (width !== undefined)
     return width
-  return mode === 'confirm' ? 480 : undefined
+  return mode === 'confirm'
+    ? 480
+    : undefined
 }
 
 export function resolveConfirmButtonType(confirmType?: ProDialogConfirmType): ProDialogConfirmType {
-  return confirmType === 'danger' ? 'danger' : 'primary'
+  return confirmType === 'danger'
+    ? 'danger'
+    : 'primary'
 }

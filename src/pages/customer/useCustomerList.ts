@@ -10,7 +10,9 @@ export function reportCustomerError(error: unknown, fallback: string) {
   if (axios.isCancel(error) || (error && typeof error === 'object' && 'code' in error && error.code === 'ERR_CANCELED'))
     return
   if (error instanceof ApiError) {
-    showError(error.httpStatus === 404 ? '接口路径不存在，请联系管理员' : error.message)
+    showError(error.httpStatus === 404
+      ? '接口路径不存在，请联系管理员'
+      : error.message)
     return
   }
   showError(fallback)
@@ -35,7 +37,12 @@ export function useCustomerList() {
     try {
       const keyword = String(searchValues.value.keyword ?? '').trim()
       const status = String(searchValues.value.status ?? '').trim()
-      const response = await listCustomers({ pageIndex: pagination.value.page, pageSize: pagination.value.pageSize, keyword: keyword || undefined, status: status || undefined })
+      const response = await listCustomers({
+        pageIndex: pagination.value.page,
+        pageSize: pagination.value.pageSize,
+        keyword: keyword || undefined,
+        status: status || undefined,
+      })
       if (!alive || request !== sequence)
         return
       const result = extractPaginatedData(response)
@@ -71,5 +78,12 @@ export function useCustomerList() {
       void fetchData()
   }, { flush: 'sync' })
   void fetchData()
-  return { loading, tableData, pagination, searchValues, fetchData, fetchFromFirstPage }
+  return {
+    loading,
+    tableData,
+    pagination,
+    searchValues,
+    fetchData,
+    fetchFromFirstPage,
+  }
 }

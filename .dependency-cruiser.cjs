@@ -8,7 +8,9 @@ function boundary(name, from, allowed) {
   return {
     name: `layer-${name}`,
     severity: 'error',
-    from: typeof from === 'string' ? { path: from } : from,
+    from: typeof from === 'string'
+      ? { path: from }
+      : from,
     to: { path: '^src/', pathNot: `^(?:${allowed})` },
   }
 }
@@ -60,7 +62,10 @@ module.exports = {
       name: 'layer-icon-type-only',
       severity: 'error',
       from: { path: iconCallers },
-      to: { path: `^${iconType}`, dependencyTypesNot: ['type-only'] },
+      to: {
+        path: `^${iconType}`,
+        dependencyTypesNot: ['type-only'],
+      },
     },
     {
       name: 'layer-shared-route-type-callers',
@@ -72,13 +77,19 @@ module.exports = {
       name: 'layer-shared-route-type-only',
       severity: 'error',
       from: { path: routeTypeCallers },
-      to: { path: '^src/router/types\\.ts$', dependencyTypesNot: ['type-only'] },
+      to: {
+        path: '^src/router/types\\.ts$',
+        dependencyTypesNot: ['type-only'],
+      },
     },
     {
       name: 'layer-utils-locale-type-only',
       severity: 'error',
       from: { path: '^src/utils/' },
-      to: { path: '^src/locales/(types|config)\\.ts$', dependencyTypesNot: ['type-only'] },
+      to: {
+        path: '^src/locales/(types|config)\\.ts$',
+        dependencyTypesNot: ['type-only'],
+      },
     },
   ],
   options: {
@@ -88,7 +99,12 @@ module.exports = {
     exclude: { path: '^src/types/(auto-imports|components)\\.d\\.ts$' },
     enhancedResolveOptions: {
       exportsFields: ['exports'],
-      conditionNames: ['import', 'types', 'browser', 'default'],
+      conditionNames: [
+        'import',
+        'types',
+        'browser',
+        'default',
+      ],
     },
   },
 }

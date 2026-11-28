@@ -61,7 +61,9 @@ class Http {
     onProgress?: (event: AxiosProgressEvent) => void,
     config?: JsonConfig,
   ): JsonResponse<T> {
-    const formData = file instanceof FormData ? file : new FormData()
+    const formData = file instanceof FormData
+      ? file
+      : new FormData()
     if (file instanceof File)
       formData.append('file', file)
     return request.post(url, formData, {

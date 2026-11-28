@@ -12,7 +12,10 @@ const request: AxiosInstance = axios.create({
 
 request.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   if (config.method === 'get') {
-    config.params = { ...config.params, _t: Date.now() }
+    config.params = {
+      ...config.params,
+      _t: Date.now(),
+    }
   }
   return config
 })
@@ -21,13 +24,17 @@ request.interceptors.response.use(
   (response: AxiosResponse<unknown>) => normalizeResponse(response),
   (error: unknown) => {
     // 主动取消保留同一错误对象，调用方可使用 axios.isCancel。
-    const code = error && typeof error === 'object' && 'code' in error ? error.code : undefined
+    const code = error && typeof error === 'object' && 'code' in error
+      ? error.code
+      : undefined
     if (axios.isCancel(error) || code === 'ERR_CANCELED')
       return Promise.reject(error)
     if (error instanceof ApiError)
       return Promise.reject(error)
 
-    const axiosError = axios.isAxiosError(error) ? error : undefined
+    const axiosError = axios.isAxiosError(error)
+      ? error
+      : undefined
     if (axiosError?.code === 'ECONNABORTED' || axiosError?.code === 'ETIMEDOUT') {
       return Promise.reject(new ApiError('请求超时', {
         code: 'TIMEOUT',

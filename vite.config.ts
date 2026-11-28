@@ -36,10 +36,14 @@ export default defineConfig(({ mode, command }) => {
       }),
       // https://github.com/antfu/unplugin-vue-components
       Components({
-        dts: process.env.GENERATE_TYPES === 'true' ? 'src/types/components.d.ts' : false,
+        dts: process.env.GENERATE_TYPES === 'true'
+          ? 'src/types/components.d.ts'
+          : false,
         dirs: ['src/components'],
         // 自动导入组件（Element Plus 按需）
-        resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
+        resolvers: [
+          ElementPlusResolver({ importStyle: 'sass' }),
+        ],
         // 包含的文件类型
         include: [VUE_FILE_RE, VUE_QUERY_RE],
         // 排除的文件
@@ -56,7 +60,9 @@ export default defineConfig(({ mode, command }) => {
           '@vueuse/core',
           VueRouterAutoImports,
         ],
-        dts: process.env.GENERATE_TYPES === 'true' ? 'src/types/auto-imports.d.ts' : false,
+        dts: process.env.GENERATE_TYPES === 'true'
+          ? 'src/types/auto-imports.d.ts'
+          : false,
         vueTemplate: true, // 允许在 <template> 直接使用自动导入的 API
       }),
       Icons(),
@@ -70,8 +76,10 @@ export default defineConfig(({ mode, command }) => {
           sourceMap: isDev,
         },
       },
-      // 启用 CSS 代码分割
-      devSourcemap: isDev,
+    },
+    dev: {
+      // 开发环境启用 CSS 源映射
+      sourcemap: { css: isDev },
     },
     resolve: {
       alias: {
@@ -110,7 +118,12 @@ export default defineConfig(({ mode, command }) => {
       },
     },
     build: {
-      target: ['es2022', 'chrome100', 'firefox100', 'safari15'],
+      target: [
+        'es2022',
+        'chrome100',
+        'firefox100',
+        'safari15',
+      ],
       outDir: 'dist',
       assetsDir: 'static',
       sourcemap: isDev,

@@ -25,7 +25,9 @@ function sortTabs(items: TabRecord[]) {
   return [...items].sort((a, b) => {
     if (a.pinned === b.pinned)
       return (a.activeTime ?? 0) - (b.activeTime ?? 0)
-    return a.pinned ? -1 : 1
+    return a.pinned
+      ? -1
+      : 1
   })
 }
 
@@ -38,7 +40,9 @@ export const useTabsStore = defineStore('tabs', () => {
     const existingTab = items.value.find(item => item.key === tab.key)
     const nextTab: TabRecord = {
       ...tab,
-      closable: tab.pinned ? false : tab.closable ?? true,
+      closable: tab.pinned
+        ? false
+        : tab.closable ?? true,
       pinned: tab.pinned ?? false,
       activeTime: existingTab?.activeTime ?? Date.now(),
     }

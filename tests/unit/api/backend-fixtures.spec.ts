@@ -32,7 +32,9 @@ describe('backend standalone fixtures through Axios', () => {
     ['delete', deleted],
   ])('consumes the %s success envelope intact', async (_scenario, fixture) => {
     expect(isR(fixture)).toBe(true)
-    const response = await http.get('/fixture', undefined, { adapter: responseAdapter(fixture) })
+    const response = await http.get('/fixture', undefined, {
+      adapter: responseAdapter(fixture),
+    })
     expect(response.data).toEqual(fixture)
   })
 
@@ -41,7 +43,9 @@ describe('backend standalone fixtures through Axios', () => {
     ['empty', emptyPage],
     ['large total', largePage],
   ])('consumes the %s nested pagination without truncating numbers', async (_scenario, fixture) => {
-    const response = await http.get<PageResult<CustomerCO>>('/fixture', undefined, { adapter: responseAdapter(fixture) })
+    const response = await http.get<PageResult<CustomerCO>>('/fixture', undefined, {
+      adapter: responseAdapter(fixture),
+    })
     expect(extractPaginatedData(response)).toEqual(fixture.data)
     expect(Array.isArray(extractPaginatedData(response).data)).toBe(true)
   })
@@ -57,12 +61,16 @@ describe('backend standalone fixtures through Axios', () => {
     ['system failure', systemFailure, 500],
     ['malformed request JSON', malformedJson, 400],
   ] as const)('preserves %s metadata', async (_scenario, fixture, status) => {
-    await expect(http.get('/fixture', undefined, { adapter: responseAdapter(fixture, status) })).rejects.toMatchObject({
+    await expect(http.get('/fixture', undefined, {
+      adapter: responseAdapter(fixture, status),
+    })).rejects.toMatchObject({
       code: fixture.code,
       message: fixture.message,
       httpStatus: status,
       traceId: fixture.traceId,
-      details: isValidationErrorData(fixture.data) ? fixture.data : undefined,
+      details: isValidationErrorData(fixture.data)
+        ? fixture.data
+        : undefined,
     })
   })
 })

@@ -28,7 +28,9 @@ export function normalizeAppRoutes(routes: AppRouteRecord[]): AppRouteRecord[] {
           strategy: route.meta.keepAlive?.strategy ?? 'routeName',
         },
       },
-      children: route.children ? normalizeAppRoutes(route.children) : undefined,
+      children: route.children
+        ? normalizeAppRoutes(route.children)
+        : undefined,
     }
   })
 }

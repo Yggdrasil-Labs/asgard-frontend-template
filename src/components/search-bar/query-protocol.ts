@@ -1,5 +1,7 @@
 export function buildRouteQueryKey(routeKey: string, field: string) {
-  return routeKey ? `${routeKey}.${field}` : field
+  return routeKey
+    ? `${routeKey}.${field}`
+    : field
 }
 
 export function stripRouteQueryNamespace(
@@ -13,6 +15,9 @@ export function stripRouteQueryNamespace(
   return Object.fromEntries(
     Object.entries(query)
       .filter(([key]) => key.startsWith(prefix))
-      .map(([key, value]) => [key.slice(prefix.length), value]),
+      .map(([key, value]) => [
+        key.slice(prefix.length),
+        value,
+      ]),
   )
 }

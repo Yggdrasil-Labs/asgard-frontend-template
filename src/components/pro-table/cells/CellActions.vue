@@ -19,14 +19,18 @@ function isVisible(a: TableRowAction): boolean {
   const v = a.visible
   if (v === undefined)
     return true
-  return typeof v === 'function' ? v(props.row) : v
+  return typeof v === 'function'
+    ? v(props.row)
+    : v
 }
 
 function isDisabled(a: TableRowAction): boolean {
   const d = a.disabled
   if (d === undefined)
     return false
-  return typeof d === 'function' ? d(props.row) : d
+  return typeof d === 'function'
+    ? d(props.row)
+    : d
 }
 
 const visibleActions = computed(() =>

@@ -10,7 +10,9 @@ function isRawRequest(config: AxiosRequestConfig): boolean {
 
 function headerTraceId(response: AxiosResponse<unknown>): string | null {
   const value = Object.entries(response.headers).find(([key]) => key.toLowerCase() === 'x-trace-id')?.[1]
-  return typeof value === 'string' ? value : null
+  return typeof value === 'string'
+    ? value
+    : null
 }
 
 function httpFailure(status: number): { code: string, message: string } {
@@ -30,7 +32,9 @@ function httpFailure(status: number): { code: string, message: string } {
 export function normalizeResponse(response: AxiosResponse<unknown>, cause?: unknown): AxiosResponse<unknown> {
   const successfulHttp = response.status >= 200 && response.status < 300
   const raw = isRawRequest(response.config)
-  const body = !raw && isR(response.data) ? response.data : undefined
+  const body = !raw && isR(response.data)
+    ? response.data
+    : undefined
   if (successfulHttp && (raw || body?.code === '00000'))
     return response
 
@@ -41,7 +45,9 @@ export function normalizeResponse(response: AxiosResponse<unknown>, cause?: unkn
     code: body?.code ?? fallback.code,
     httpStatus: response.status,
     traceId: body?.traceId ?? headerTraceId(response),
-    details: body && isValidationErrorData(body.data) ? body.data : undefined,
+    details: body && isValidationErrorData(body.data)
+      ? body.data
+      : undefined,
     response,
     cause,
   })

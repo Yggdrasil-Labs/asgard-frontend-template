@@ -65,7 +65,10 @@ function buildDefaultValues() {
 
 function changedValues(prev: Record<string, unknown>, nextValue: Record<string, unknown>) {
   const changed: Record<string, unknown> = {}
-  const keys = new Set([...Object.keys(prev), ...Object.keys(nextValue)])
+  const keys = new Set([
+    ...Object.keys(prev),
+    ...Object.keys(nextValue),
+  ])
   for (const key of keys) {
     if (prev[key] !== nextValue[key])
       changed[key] = nextValue[key]
@@ -168,7 +171,9 @@ async function reset() {
 }
 
 function toggleExpand(force?: boolean) {
-  expanded.value = typeof force === 'boolean' ? force : !expanded.value
+  expanded.value = typeof force === 'boolean'
+    ? force
+    : !expanded.value
   emit('toggleExpand', expanded.value)
 }
 
@@ -235,7 +240,10 @@ watch(
 
     // 当追踪过的 query 被外部导航清空时，需要回退到默认值，而不是保留旧筛选结果。
     const nextValue = Object.keys(routeValues).length > 0 || stillContainsTrackedKeys
-      ? { ...buildDefaultValues(), ...routeValues }
+      ? {
+          ...buildDefaultValues(),
+          ...routeValues,
+        }
       : buildDefaultValues()
 
     lastRouteKeys.value = collectSearchRouteQueryKeys(

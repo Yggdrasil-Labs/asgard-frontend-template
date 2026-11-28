@@ -61,7 +61,9 @@
 
 ## 独立交付
 
-暂无。
+| 交付 | 范围 | 状态 |
+|------|------|------|
+| dependency-refresh | [七批依赖升级计划](dependency-refresh/plan.md)：21 个直接依赖定点升级；适配 antfu 换行规则与 Vite 源映射配置 | 本地门禁、构建、冻结安装及模拟接口浏览器冒烟通过；远端 CI 待验证 |
 
 ## 最终验证摘要
 
@@ -119,6 +121,16 @@
 - 最终 Node 22.23.5 / pnpm 10.34.7 下 pnpm check:full、pnpm build 退出0；**38 个单测文件 / 217 项测试、18 项工程测试全部通过**。行覆盖率 **52.03%（1089/2093）**、分支 **48.36%（723/1495）**、函数 **43.83%（359/819）**，通过既有31/28/24阈值；门禁与构建执行期间全部输入哈希一致；随后四份收尾文档单独更新并做文档校验，源码/测试/声明仍与成功验收快照匹配。types:check 与生产配置声明匹配，不需修改两份受控声明。无新增依赖或锁文件变更。
 - 真实 Element Plus 校验测试暴露外部 async-validator 默认导出互操作问题，Vitest 最小配置 inline 两依赖，使真实校验器执行，未 mock 校验行为。首轮全并发 coverage 中路由冷导入超时，单测独跑成功；实测限制 maxWorkers=4 后全部在原5000ms阈值内通过，未提高timeout。types:check 在沙箱 spawnSync EPERM，获准沙箱外运行最终门禁通过，不把环境拒绝当通过。
 - 本地127.0.0.1:8080未运行后端，未启动服务、部署或迁移数据库；真实 HTTP、数据库/自动装配、浏览器/Bifrost E2E、远端CI及消费者验收未验证。前端错误契约债与后端TD-009继续开放；这里只声明本地实现与隔离消费测试完成，不声明联调完成。原始本地日志位于 /tmp/asgard-api-r，未入库。
+
+### dependency-refresh（2026-11-28）
+
+- 在起始干净 HEAD `18b0f56` 上按[七批计划](dependency-refresh/plan.md)升级 21 个直接依赖，实际版本与各批目标一致；Vue 三包、Vitest/coverage-v8 及 Stylelint/SCSS 预设分别保持配套。TypeScript 6.0.3、`@types/node` 26.6.6、两个安全 override 及覆盖率阈值均保持不变。
+- antfu 10 新增 `reasonable-newline` 触发 308 项存量换行违规，自动修复后重新验收，未禁用规则。53 份源码/测试/配置文件涉及格式适配；只读差异核对未发现业务语义变化，Vue template/style 块逐字一致；词法核对不等于完整 AST 等价证明。两份受控生成声明无漂移、未修改。
+- Vite 8.4 将 `css.devSourcemap` 弃用，迁移为 `dev.sourcemap.css`；真实配置解析确认开发 CSS=true、生产 CSS=false、JS 默认值仍为 true，弃用警告消除。开发浏览器冒烟仍观察到 10 条 Element Plus SCSS 源映射跨包警告，涉及全局注入的项目 SCSS，未通过关闭源映射掩盖；生产构建无该警告。
+- 每批最终 `pnpm check:full` 与 `pnpm build` 均退出 0，安装无 peer 冲突。最终 Node 22.23.5 / pnpm 10.34.7 下 **38 文件 / 217 项单测、18 项工程测试全部通过**；行覆盖率 **52.05%（1091/2096）**、分支 **48.42%（722/1491）**、函数 **43.83%（359/819）**。最终 manifest/锁文件在无 node_modules 的临时普通目录完成离线 frozen-lockfile 安装，退出 0；pnpm 保持默认阻止未批准的依赖安装脚本，未扩大批准范围。
+- 第七批首次与浏览器冷构建并行时，路由壳层测试触及原 5000ms 超时；单独执行该测试通过，定向 coverage 命令因只覆盖单文件、不满足全局覆盖率阈值退出 1。随后停止并行浏览器构建、串行重跑全量门禁与构建均退出 0，未提高超时或降低覆盖率阈值；资源争用是推断，未将首次失败记录为通过。
+- 使用已有 Playwright/Chromium 串行执行本地开发服务冒烟：首页/桌面壳层、ProForm 示例、Customer 表格与编辑弹窗/真实表单、带 version=3 的保存、中英文语言菜单、移动端菜单均通过，pageerror 为 0。接口使用 mock R；初轮脚本因重复“编辑”按钮定位歧义失败，限定 tbody 后通过，未为定位问题修改产品代码。未运行 Bifrost 完整套件或连接真实后端。
+- 各批有效审计报告均为 **1 moderate、0 high/critical**，剩余 minimatch 风险仍由[依赖技术债](../tech-debt-tracker.md#dependency-overrides)追踪；未限制等级的 `pnpm audit` 退出 1，不能写作零漏洞。验收仅覆盖本地；未推送、发布或验证远端 CI。原始版本元数据、各批备份与日志分别位于 `/tmp/asgard-dependency-candidates`、`/tmp/asgard-deps-upgrade`，不入库。
 
 ## 风险与遗留债务
 

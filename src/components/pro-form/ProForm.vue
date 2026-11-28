@@ -77,7 +77,12 @@ watch(
   groupedSchema,
   (groups) => {
     const keys = groups.map(g => g.key)
-    expandedGroupKeys.value = [...new Set([...expandedGroupKeys.value, ...keys])]
+    expandedGroupKeys.value = [
+      ...new Set([
+        ...expandedGroupKeys.value,
+        ...keys,
+      ]),
+    ]
     for (const field of serverErrors.value.keys()) {
       if (!visibleFieldKeys.value.has(field))
         serverErrors.value.delete(field)
@@ -134,7 +139,10 @@ function mergeDefaultsWithModelValue(): Record<string, unknown> {
       base[key] = field.meta.defaultValue
     }
   }
-  return { ...props.modelValue, ...base }
+  return {
+    ...props.modelValue,
+    ...base,
+  }
 }
 
 function ensureInitialValuesAndEmitIfNeeded() {
@@ -168,7 +176,10 @@ function setFieldErrors(errors: Record<string, string[]>) {
   serverErrors.value = new Map(
     Object.entries(errors)
       .filter(([key, messages]) => visibleFieldKeys.value.has(key) && messages.length > 0)
-      .map(([key, messages]) => [key, messages.join('\n')]),
+      .map(([key, messages]) => [
+        key,
+        messages.join('\n'),
+      ]),
   )
   expandGroupsContainingInvalidFields(Object.fromEntries(serverErrors.value))
 }
@@ -181,7 +192,10 @@ function clearFieldErrors(fields?: string[]) {
 
 function setFieldsValue(values: Record<string, unknown>) {
   clearFieldErrors()
-  emit('update:modelValue', { ...props.modelValue, ...values })
+  emit('update:modelValue', {
+    ...props.modelValue,
+    ...values,
+  })
 }
 
 function getFieldsValue(): Record<string, unknown> {
@@ -227,7 +241,9 @@ function validateField(field?: string | string[]) {
 }
 
 function clearValidate(field?: string | string[]) {
-  const fields = typeof field === 'string' ? [field] : field
+  const fields = typeof field === 'string'
+    ? [field]
+    : field
   clearFieldErrors(fields?.length ? fields : undefined)
   formRef.value?.clearValidate(field)
 }
@@ -275,7 +291,10 @@ watch(
     if (!oldVal || isResetting)
       return
     const changedKeys = new Set<string>()
-    for (const key of Object.keys({ ...newVal, ...oldVal })) {
+    for (const key of Object.keys({
+      ...newVal,
+      ...oldVal,
+    })) {
       if (newVal[key] !== oldVal[key])
         changedKeys.add(key)
     }

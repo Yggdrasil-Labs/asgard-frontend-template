@@ -43,12 +43,19 @@ watch(
   groupedSchema,
   (groups) => {
     const keys = groups.map(g => g.key)
-    expandedGroupKeys.value = [...new Set([...expandedGroupKeys.value, ...keys])]
+    expandedGroupKeys.value = [
+      ...new Set([
+        ...expandedGroupKeys.value,
+        ...keys,
+      ]),
+    ]
   },
   { immediate: true },
 )
 
-const column = computed(() => isMobile.value ? 1 : (props.layout?.column ?? 3))
+const column = computed(() => isMobile.value
+  ? 1
+  : (props.layout?.column ?? 3))
 const size = computed(() => props.layout?.size ?? 'default')
 const border = computed(() => props.layout?.border ?? true)
 const labelWidth = computed(() => props.layout?.labelWidth ?? 120)

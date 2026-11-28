@@ -26,5 +26,12 @@ export function responseAdapter(
 
 /** 手工构造的格式错误及边界输入，不作为后端生成样例。 */
 export function envelope(data: unknown = null, code = '00000') {
-  return { code, message: '契约消息', data, timestamp: 1, traceId: null, success: code === '00000' }
+  return {
+    code,
+    message: '契约消息',
+    data,
+    timestamp: 1,
+    traceId: null,
+    success: code === '00000',
+  }
 }

@@ -40,13 +40,21 @@ export function useCustomerEditor(afterSave: () => Promise<void>) {
   function open(customer?: Record<string, unknown>) {
     invalidate()
     formKey.value++
-    editingId.value = customer ? Number(customer.id) : null
-    version.value = customer && validVersion(customer.version) ? customer.version : null
-    formValues.value = customer ? { name: customer.name, email: customer.email, phone: customer.phone } : {}
+    editingId.value = customer
+      ? Number(customer.id)
+      : null
+    version.value = customer && validVersion(customer.version)
+      ? customer.version
+      : null
+    formValues.value = customer
+      ? { name: customer.name, email: customer.email, phone: customer.phone }
+      : {}
     dialogTitle.value = customer ? '编辑客户' : '新建客户'
     conflict.value = false
     deleted.value = false
-    notice.value = customer && !writable.value ? '数据版本不可用于更新，请重新加载客户数据或联系管理员' : ''
+    notice.value = customer && !writable.value
+      ? '数据版本不可用于更新，请重新加载客户数据或联系管理员'
+      : ''
     dialogVisible.value = true
   }
 
@@ -60,7 +68,9 @@ export function useCustomerEditor(afterSave: () => Promise<void>) {
       notice.value = '数据已被修改，请刷新并重新编辑；未保存输入已保留'
     }
     else if (error.httpStatus === 200 && error.code === '21001') {
-      formRef.value?.setFieldErrors({ email: [error.message] })
+      formRef.value?.setFieldErrors({
+        email: [error.message],
+      })
     }
     else if (error.code === '00004') {
       const mapped = mapCustomerValidation(error.details, ['name', 'email', 'phone'])
@@ -85,9 +95,15 @@ export function useCustomerEditor(afterSave: () => Promise<void>) {
     formRef.value?.clearFieldErrors()
     try {
       const fields = {
-        name: values.name != null ? String(values.name) : undefined,
-        email: values.email != null ? String(values.email) : undefined,
-        phone: values.phone == null ? null : String(values.phone),
+        name: values.name != null
+          ? String(values.name)
+          : undefined,
+        email: values.email != null
+          ? String(values.email)
+          : undefined,
+        phone: values.phone == null
+          ? null
+          : String(values.phone),
       }
       if (editingId.value !== null) {
         const payload: UpdateCustomerRequest = { ...fields, version: version.value! }
@@ -99,7 +115,9 @@ export function useCustomerEditor(afterSave: () => Promise<void>) {
       }
       if (!current(token))
         return
-      showSuccess(editingId.value === null ? '创建成功' : '更新成功')
+      showSuccess(editingId.value === null
+        ? '创建成功'
+        : '更新成功')
       dialogVisible.value = false
       await afterSave()
     }
@@ -130,7 +148,12 @@ export function useCustomerEditor(afterSave: () => Promise<void>) {
     busy.value = true
     try {
       try {
-        await confirm({ title: '刷新客户', message: '刷新将放弃未保存的输入，是否继续？', confirmText: '刷新', cancelText: '保留输入' })
+        await confirm({
+          title: '刷新客户',
+          message: '刷新将放弃未保存的输入，是否继续？',
+          confirmText: '刷新',
+          cancelText: '保留输入',
+        })
       }
       catch { return }
       if (!current(token))
@@ -163,5 +186,21 @@ export function useCustomerEditor(afterSave: () => Promise<void>) {
         busy.value = false
     }
   }
-  return { dialogVisible, dialogTitle, formRef, formValues, formKey, busy, conflict, deleted, notice, saveDisabled, openCreate: () => open(), openEdit: (customer: Record<string, unknown>) => open(customer), handleFormConfirm, handleFormSubmit, refreshConflict }
+  return {
+    dialogVisible,
+    dialogTitle,
+    formRef,
+    formValues,
+    formKey,
+    busy,
+    conflict,
+    deleted,
+    notice,
+    saveDisabled,
+    openCreate: () => open(),
+    openEdit: (customer: Record<string, unknown>) => open(customer),
+    handleFormConfirm,
+    handleFormSubmit,
+    refreshConflict,
+  }
 }

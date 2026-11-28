@@ -10,12 +10,25 @@ const targets = ['src/types/auto-imports.d.ts', 'src/types/components.d.ts']
 const temporary = await mkdtemp(path.join(os.tmpdir(), 'asgard-types-'))
 const write = process.argv.includes('--write')
 try {
-  for (const name of ['src', 'vite.config.ts', 'package.json', 'index.html', 'tsconfig.json', 'tsconfig.app.json', 'tsconfig.node.json']) {
+  for (const name of [
+    'src',
+    'vite.config.ts',
+    'package.json',
+    'index.html',
+    'tsconfig.json',
+    'tsconfig.app.json',
+    'tsconfig.node.json',
+  ]) {
     await cp(path.join(root, name), path.join(temporary, name), { recursive: true })
   }
   for (const name of targets) await rm(path.join(temporary, name), { force: true })
-  await symlink(path.join(root, 'node_modules'), path.join(temporary, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir')
-  const result = spawnSync(process.execPath, [path.join(root, 'node_modules/vite/bin/vite.js'), 'build'], {
+  await symlink(path.join(root, 'node_modules'), path.join(temporary, 'node_modules'), process.platform === 'win32'
+    ? 'junction'
+    : 'dir')
+  const result = spawnSync(process.execPath, [
+    path.join(root, 'node_modules/vite/bin/vite.js'),
+    'build',
+  ], {
     cwd: temporary,
     env: { ...process.env, GENERATE_TYPES: 'true' },
     encoding: 'utf8',

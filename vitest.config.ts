@@ -30,7 +30,11 @@ export default defineConfig({
     // 限制本地和 CI 同时转换 Element Plus 模块的数量。
     maxWorkers: 4,
     // 经 Vite 处理 async-validator 的 CJS default，保证 ElFormItem 执行真实校验。
-    server: { deps: { inline: ['element-plus', 'async-validator'] } },
+    server: {
+      deps: {
+        inline: ['element-plus', 'async-validator'],
+      },
+    },
     // 默认仍以 Playwright E2E 为主；仅开启 unit spec 以支持局部验证
     include: ['tests/unit/**/*.spec.ts'],
     exclude: ['**/node_modules/**', '**/dist/**', '**/.{git,cache,output,temp}/**'],

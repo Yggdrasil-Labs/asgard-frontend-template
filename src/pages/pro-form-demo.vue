@@ -141,7 +141,12 @@ const schema = computed<FormFieldSchema[]>(() => {
       },
       ui: {
         component: 'InputNumber',
-        props: { min: 0, max: 9999, step: 1, placeholder: '数量' },
+        props: {
+          min: 0,
+          max: 9999,
+          step: 1,
+          placeholder: '数量',
+        },
         layout: { group: '扩展信息', span: 8 },
       },
       runtime: {
@@ -295,10 +300,18 @@ const schema = computed<FormFieldSchema[]>(() => {
         },
         options: (formValues: Record<string, unknown>) => {
           const s = formValues.status as string | undefined
-          if (s === 'draft')
-            return [{ label: '待提交', value: 'pending' }, { label: '已归档', value: 'archived' }]
-          if (s === 'published')
-            return [{ label: '正常', value: 'normal' }, { label: '已下架', value: 'offline' }]
+          if (s === 'draft') {
+            return [
+              { label: '待提交', value: 'pending' },
+              { label: '已归档', value: 'archived' },
+            ]
+          }
+          if (s === 'published') {
+            return [
+              { label: '正常', value: 'normal' },
+              { label: '已下架', value: 'offline' },
+            ]
+          }
           return []
         },
       },

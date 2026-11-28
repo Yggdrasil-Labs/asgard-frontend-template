@@ -27,7 +27,9 @@ const iconUrl = computed(() => {
   if (!fullKey)
     return ''
   const mod = iconModules[fullKey]
-  return (typeof mod === 'string' ? mod : (mod as { default?: string })?.default) ?? ''
+  return (typeof mod === 'string'
+    ? mod
+    : (mod as { default?: string })?.default) ?? ''
 })
 </script>
 

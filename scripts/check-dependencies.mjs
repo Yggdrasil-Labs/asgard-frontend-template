@@ -59,7 +59,9 @@ function expandPattern(from, pattern) {
 
 function globPatterns(node) {
   const argument = node.arguments[0]
-  const patterns = argument && ts.isArrayLiteralExpression(argument) ? argument.elements : [argument]
+  const patterns = argument && ts.isArrayLiteralExpression(argument)
+    ? argument.elements
+    : [argument]
   if (!patterns.length || patterns.some(pattern => !pattern || !ts.isStringLiteralLike(pattern)))
     throw new Error('import.meta.glob requires literal strings or a literal string array')
   return patterns.map(pattern => pattern.text)
@@ -79,12 +81,20 @@ function addGlob(from, node, source) {
   const excluded = new Set()
   for (const pattern of globPatterns(node)) {
     const negative = pattern.startsWith('!')
-    for (const file of expandPattern(from, negative ? pattern.slice(1) : pattern))
+    for (const file of expandPattern(from, negative
+      ? pattern.slice(1)
+      : pattern))
       (negative ? excluded : included).add(file)
   }
   for (const to of included) {
-    if (!excluded.has(to))
-      extraEdges.push({ from, to, kind: 'glob', dependencyTypes: ['local', 'import'] })
+    if (!excluded.has(to)) {
+      extraEdges.push({
+        from,
+        to,
+        kind: 'glob',
+        dependencyTypes: ['local', 'import'],
+      })
+    }
   }
 }
 
@@ -109,12 +119,20 @@ function scanCall(from, node, source) {
   // This existing locale loader can only reach JSON resource leaves.
   if (requireCall || !isLocaleResource(from, argument, source))
     throw new Error(`unsupported dynamic module load: ${argument.getText(source)}`)
-  for (const to of expandPattern(from, './*/common.json'))
-    extraEdges.push({ from, to, kind: 'locale-resource', dependencyTypes: ['local', 'import'] })
+  for (const to of expandPattern(from, './*/common.json')) {
+    extraEdges.push({
+      from,
+      to,
+      kind: 'locale-resource',
+      dependencyTypes: ['local', 'import'],
+    })
+  }
 }
 
 function scanScript(from, content) {
-  const source = ts.createSourceFile(from, content, ts.ScriptTarget.Latest, true, /\.[jt]sx$/.test(from) ? ts.ScriptKind.TSX : ts.ScriptKind.TS)
+  const source = ts.createSourceFile(from, content, ts.ScriptTarget.Latest, true, /\.[jt]sx$/.test(from)
+    ? ts.ScriptKind.TSX
+    : ts.ScriptKind.TS)
   function visit(node) {
     if (ts.isCallExpression(node)) {
       const line = source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1
@@ -135,7 +153,9 @@ for (const { source } of modules) {
   if (!source.startsWith('src/components/') || !source.endsWith('.vue'))
     continue
   const base = path.posix.basename(source, '.vue')
-  const name = pascalCase(base === 'index' ? path.posix.basename(path.posix.dirname(source)) : base)
+  const name = pascalCase(base === 'index'
+    ? path.posix.basename(path.posix.dirname(source))
+    : base)
   if (components.has(name))
     violations.push(`ambiguous-auto-component: ${name}: ${components.get(name)}, ${source}`)
   components.set(name, source)
@@ -149,7 +169,9 @@ for (const { source } of modules) {
     scanScript(source, content)
     continue
   }
-  const { descriptor, errors } = parse(content, { filename: path.resolve(source) })
+  const { descriptor, errors } = parse(content, {
+    filename: path.resolve(source),
+  })
   if (errors.length)
     violations.push(`vue-parse-error: ${source}: ${errors.join(', ')}`)
   for (const block of [descriptor.script, descriptor.scriptSetup].filter(Boolean))
@@ -176,8 +198,14 @@ for (const { source } of modules) {
     // Compiler bindings preserve explicit imports, local variables and template scopes.
     for (const match of compiled.code.matchAll(/_resolveComponent\d*\("(.+?)"\)/g)) {
       const to = components.get(pascalCase(match[1]))
-      if (to && to !== source)
-        extraEdges.push({ from: source, to, kind: 'auto-component', dependencyTypes: ['local', 'import'] })
+      if (to && to !== source) {
+        extraEdges.push({
+          from: source,
+          to,
+          kind: 'auto-component',
+          dependencyTypes: ['local', 'import'],
+        })
+      }
     }
   }
   catch (error) {
@@ -206,7 +234,10 @@ for (const edge of extraEdges) {
 // File graph including type-only edges, glob expansion and auto-components.
 // A directory-level cycle is not evidence of a file dependency cycle.
 const adjacency = new Map()
-for (const { from, to } of [...edges, ...extraEdges]) {
+for (const { from, to } of [
+  ...edges,
+  ...extraEdges,
+]) {
   if (!adjacency.has(from))
     adjacency.set(from, new Set())
   adjacency.get(from).add(to)
@@ -216,7 +247,10 @@ const active = new Set()
 const stack = []
 function visit(file) {
   if (active.has(file)) {
-    violations.push(`no-merged-file-cycles: ${[...stack.slice(stack.indexOf(file)), file].join(' -> ')}`)
+    violations.push(`no-merged-file-cycles: ${[
+      ...stack.slice(stack.indexOf(file)),
+      file,
+    ].join(' -> ')}`)
     return
   }
   if (done.has(file))

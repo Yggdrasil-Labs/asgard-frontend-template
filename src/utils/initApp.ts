@@ -35,5 +35,7 @@ export function updateLanguageAttribute(locale: Locale) {
 export function updatePageTitle(title?: string) {
   const baseTitle = env.APP_NAME
   const documentTitle = useTitle()
-  documentTitle.value = title ? `${title} - ${baseTitle}` : baseTitle
+  documentTitle.value = title
+    ? `${title} - ${baseTitle}`
+    : baseTitle
 }

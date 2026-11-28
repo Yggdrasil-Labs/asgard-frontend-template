@@ -3,7 +3,19 @@ import { describe, expect, it } from 'vitest'
 import { groupVisibleFields } from '@/utils/group-fields'
 
 function field(name: string, group?: string, visible = true): FormFieldSchema {
-  return { meta: { field: name, label: name, valueType: 'string', required: false }, ui: { component: 'Input', layout: { group } }, runtime: { visible } }
+  return {
+    meta: {
+      field: name,
+      label: name,
+      valueType: 'string',
+      required: false,
+    },
+    ui: {
+      component: 'Input',
+      layout: { group },
+    },
+    runtime: { visible },
+  }
 }
 
 describe('groupVisibleFields', () => {
@@ -11,10 +23,23 @@ describe('groupVisibleFields', () => {
     const hidden = field('hidden', 'second', false)
     const visible = field('visible', 'second')
     const defaultField = field('default')
-    const input = [hidden, defaultField, visible, field('empty', 'empty', false)]
+    const input = [
+      hidden,
+      defaultField,
+      visible,
+      field('empty', 'empty', false),
+    ]
     expect(groupVisibleFields(input)).toEqual([
-      { key: 'second', label: 'second', fields: [visible] },
-      { key: '__default__', label: undefined, fields: [defaultField] },
+      {
+        key: 'second',
+        label: 'second',
+        fields: [visible],
+      },
+      {
+        key: '__default__',
+        label: undefined,
+        fields: [defaultField],
+      },
     ])
     expect(input).toHaveLength(4)
   })
