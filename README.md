@@ -299,6 +299,16 @@ VITE_API_BASE_URL=https://api.example.com
 - 只有以 `VITE_` 开头的变量才能在客户端使用。
 - **生产构建必须显式设置 `VITE_API_BASE_URL`**：缺失时构建产物会在加载期抛错（fail-closed），`pnpm preview` 会看到空白页；开发/测试模式有 localhost 默认值，可省略。
 
+### HTTP 响应与 Customer 消费
+
+常规 JSON 请求返回完整的 `AxiosResponse<R<T>>`，只有 HTTP 2xx 且 `code === '00000'` 才成功；业务错误可能仍为 HTTP 200。`success` 不作为判定依据，不兼容旧 COLA 信封。线字段、错误码、分页和版本范围见[后端统一契约](../midgard-backend-template/docs/design-docs/arch-api-contract.md)。
+
+`ApiError` 保留 `code`、`httpStatus`、`traceId`、`details`、原响应及原因；旧 `status` 为只读兼容别名。取消原样透传，超时与断网区分；拦截器不弹全局消息，页面消费并显示安全消息。缺少合法信封的 JSON 2xx 是协议错误；显式 blob/arraybuffer、HEAD/OPTIONS 使用原始响应语义，不强制套信封。
+
+Customer 列表发送 `pageIndex/pageSize`，从 `response.data.data` 获取分页对象，回填后端纠正值；编辑保存列表读取时的 version，缺失不默认成 0。`21001` 定位邮箱，`00004` 映射可见字段并汇总对象/未知/截断错误，`21002` 保留输入且禁止旧版本重提。选择“刷新并重新编辑”并确认放弃输入后，成功读到新详情才替换表单；失败或取消保留输入。处理中的字段/保存/刷新按钮禁用，关闭会使旧会话响应失效。
+
+ProForm 的通用 `setFieldErrors` / `clearFieldErrors` 及清理规则见[组件契约](docs/components/pro-form.md)，组件本身不识别业务码。后端生成样例和复现命令见[契约 fixtures](tests/fixtures/api-contract-r/README.md)；standalone 响应消费测试不等同运行中服务、数据库并发或浏览器验证。
+
 ## 📚 相关文档
 
 - 架构与分层约束：[`ARCHITECTURE.md`](./ARCHITECTURE.md)

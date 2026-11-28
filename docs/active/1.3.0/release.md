@@ -3,7 +3,7 @@
 ## 版本摘要
 
 - **版本**：1.3.0
-- **状态**：实施中（governance-alignment 与 local-quality-system 已本地完成；其余需求未开始，远端 CI 待验证）
+- **状态**：实施中（governance-alignment、local-quality-system 与 api-contract-r 已本地实现；真实 HTTP 与远端 CI 待验证，release-hardening 未开始）
 - **目标**：围绕消除技术债提升项目质量：文档治理与后端对齐、建立参考 Mimir 分层设计的本地质检体系、对接后端统一的 `R` 响应契约、核查发布链路。
 - **跨项目协同**：`api-contract-r` 依赖 Midgard 1.3.0 的 `error-contract-r` 与 `data-consistency`。契约规则以后端 [HTTP API 响应与错误契约](../../../../midgard-backend-template/docs/design-docs/arch-api-contract.md) 为唯一来源，本仓库不复制。
 
@@ -15,7 +15,7 @@
 |------|------|------|------|------|
 | governance-alignment | [实施计划](governance-alignment/plan.md) | 核验并归档 3 项无版本需求；文档改为版本化结构；修正技术债清单与后端交叉引用 | 无 | 已完成（文档范围；历史运行验收边界见下文） |
 | local-quality-system | [实施计划](local-quality-system/plan.md) | 引入 sonarjs、jscpd、dependency-cruiser、stylelint、knip；`check`/`check:full` 两级入口；覆盖率阈值生效；恢复 husky；`type-check` 与 build 解耦；复核 `pnpm.overrides` | 无 | 已实现，本地全量门禁通过；远端 CI 待验证 |
-| api-contract-r | `1.3.0/api-contract-r/` | 拦截器按 `R` 判定；类型重写；分页与字段级校验错误；编辑回传 `version`；领域错误码交互；后端真实样例驱动测试 | Midgard error-contract-r、data-consistency | 未开始 |
+| api-contract-r | [需求](api-contract-r/spec.md) · [设计](api-contract-r/design.md) · [计划](api-contract-r/plan.md) | 拦截器按 `R` 判定；类型重写；分页与字段级校验错误；编辑回传 `version`；领域错误码交互；后端来源明确的契约样例驱动测试 | Midgard error-contract-r、data-consistency（本地已实现） | 已实现，本地全量门禁通过；真实 HTTP 待验收 |
 | release-hardening | `1.3.0/release-hardening/` | 按后端同等标准核查发布流程的凭据、版本单调与并发 | 无 | 未开始 |
 
 推荐顺序：governance-alignment 与 local-quality-system 先行（与后端并行），使 api-contract-r 的新代码从一开始即受门禁约束；release-hardening 可随时插入。
@@ -52,7 +52,7 @@
 - 重写 `src/utils/api/request.ts`：先判定 HTTP 状态与 `R.code`，统一抛出 `ApiError{code, message, httpStatus, traceId, details?}`；保留超时、取消、网络错误的既有判序。
 - 重写 `src/types/api/response.ts`：`R<T>`、`PageResult<T>`、`ValidationErrorData`。
 - Customer 页面：分页参数改为 `pageIndex`/`pageSize`；编辑回传 `version`；`00004` 的字段错误映射到 ProForm 字段；`21001` 高亮邮箱字段；`21002` 提示数据已被修改并提供刷新操作。
-- 验收：以后端集成测试导出的真实 JSON 样例驱动拦截器与 Customer API 单元测试，覆盖成功、`20001`、`21001`、`21002`、`00004`、400、500、超时、取消、网络错误。
+- 验收：以后端受管序列化/standalone 输出的 JSON fixture 驱动拦截器与 Customer API 单元测试，覆盖成功、`20001`、`21001`、`21002`、`00004`、400、500、超时、取消、网络错误。
 
 **release-hardening**
 
@@ -109,9 +109,20 @@
 - 提交前补充修复：lint-staged 的 ESLint 命令增加 --no-warn-ignored，避免已配置忽略的文档提示被零警告策略误拦截；显式文档检查返回 0，console.log 警告夹具仍返回非零。真实代码 warning 继续阻断提交。
 - CI 配置已核对命令链、触发范围与只读权限；本地提交不代表远端 CI、发布或消费者验收已完成。
 
+### api-contract-r（2026-11-28）
+
+- 按[方案](api-contract-r/plan.md)完成 R/PageResult/校验详情与运行时 guard，统一 HTTP/code 成功判定及 ApiError；普通 JSON 不接受旧信封，完整 AxiosResponse 边界保留。HEAD/OPTIONS/blob/arraybuffer 明确使用 raw；取消、超时、网络、协议与业务错误分层，无自动写重试。
+- Customer API 五接口同步分页和整数 version；页面新增列表时序与回包纠正、删除末页单次退页、保存防重、冲突保留输入、确认刷新、失败/删除/取消恢复及弹窗会话隔离。缺失/耗尽版本禁止保存，后端 404 与 HTTP200/20001 不混淆。
+- ProForm 新增 setFieldErrors/clearFieldErrors，只匹配 schema 可见精确字段；服务端消息独立持有，未改值失焦/本地依赖校验成功不会隐藏，相同消息可重复显示。支持字段变化、reset/setFieldsValue/submit/clearValidate 范围清理，组件不依赖业务 API；公开文档已同步。
+- 从干净后端 af03830 的现有 CustomerHttpContractTest/CustomerResponseSerializationTest 在临时副本重新编译并执行，93 项隔离测试通过，捕获 76 个响应，选取 16 份 JSON。复放的 16 份规范化样例逐字节一致，仅规范化 timestamp、traceId 保留 null。来源、HTTP状态、场景和复现命令见 [fixtures](../../../tests/fixtures/api-contract-r/README.md)；原后端工作区未改，21002 样例仅验证错误映射，不代表真实并发。
+- TDD 观察到旧 success 判定误放行、旧二层分页消费、页面无版本/冲突恢复、字段错误 API 与清理遗漏的失败；独立审查发现取消仅按 code 识别会误报，已用 axios.isCancel 同步并取得新增 Red/Green。API 85 项、Customer 21 项、服务端字段错误 14 项新增定向回归与原有测试合并执行。
+- 最终 Node 22.23.5 / pnpm 10.34.7 下 pnpm check:full、pnpm build 退出0；**38 个单测文件 / 217 项测试、18 项工程测试全部通过**。行覆盖率 **52.03%（1089/2093）**、分支 **48.36%（723/1495）**、函数 **43.83%（359/819）**，通过既有31/28/24阈值；门禁与构建执行期间全部输入哈希一致；随后四份收尾文档单独更新并做文档校验，源码/测试/声明仍与成功验收快照匹配。types:check 与生产配置声明匹配，不需修改两份受控声明。无新增依赖或锁文件变更。
+- 真实 Element Plus 校验测试暴露外部 async-validator 默认导出互操作问题，Vitest 最小配置 inline 两依赖，使真实校验器执行，未 mock 校验行为。首轮全并发 coverage 中路由冷导入超时，单测独跑成功；实测限制 maxWorkers=4 后全部在原5000ms阈值内通过，未提高timeout。types:check 在沙箱 spawnSync EPERM，获准沙箱外运行最终门禁通过，不把环境拒绝当通过。
+- 本地127.0.0.1:8080未运行后端，未启动服务、部署或迁移数据库；真实 HTTP、数据库/自动装配、浏览器/Bifrost E2E、远端CI及消费者验收未验证。前端错误契约债与后端TD-009继续开放；这里只声明本地实现与隔离消费测试完成，不声明联调完成。原始本地日志位于 /tmp/asgard-api-r，未入库。
+
 ## 风险与遗留债务
 
-- **外部依赖**：api-contract-r 需等待 Midgard 1.3.0 契约落地并导出真实样例。
+- **外部依赖**：Midgard error-contract-r/data-consistency 已本地实现；api-contract-r 实施时采集来源明确的受管序列化/standalone fixture，真实应用/V2迁移与HTTP消费验收单独记录。
 - **已接受的跨项目破坏**：契约变更后，Bifrost E2E 现有 Customer CRUD spec 将失败；1.3.0 不修改 Bifrost，验收不包含 E2E 通过（用户于 2026-11-11 规划时确认）。
 - **规则覆盖边界**：本批现有存量已清理；新的动态模块表达式或组件解析方式需要扩展明确的图分析支持，不能以本轮零违规推断未来语法均已覆盖。
 - **本版本不处理**：动态路由源、示例页职责拆分、前端规则共享包。
