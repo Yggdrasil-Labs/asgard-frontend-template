@@ -145,13 +145,28 @@ const schema: FormFieldSchema[] = [
 
 | 方法 | 说明 |
 |------|------|
-| `setFieldsValue(values)` | 批量设置字段值，与当前 model 合并 |
+| `setFieldsValue(values)` | 批量设置字段值，与当前 model 合并；清空全部旧服务端错误 |
+| `setFieldErrors(errors: Record<string, string[]>): void` | 全量替换服务端字段错误；仅接受当前可见 schema 字段的精确 key，同字段消息按数组顺序换行合并，并展开所在分组 |
+| `clearFieldErrors(fields?: string[]): void` | 只清指定字段的服务端错误；不传时清全部，空数组不清任何字段；保留本地校验结果 |
 | `getFieldsValue()` | 获取当前表单值副本 |
-| `resetFields()` | 恢复为初始值（首次合并 schema 默认值时的快照）并清空校验、触发 `reset` 事件 |
-| `validate()` | 执行全表校验，通过返回 `true`，失败返回 `false` 并滚动到首个错误 |
-| `validateField(field?)` | 校验指定字段（不传则校验全部） |
-| `clearValidate(field?)` | 清除校验结果 |
-| `submit()` | 先 `validate()`，通过后 `emit('submit', getFieldsValue())` |
+| `resetFields()` | 恢复为初始值（首次合并 schema 默认值时的快照）并清空本地校验、服务端错误，触发 `reset` 事件 |
+| `validate()` | 执行全表本地校验，通过返回 `true`，失败返回 `false` 并滚动到首个错误；保留服务端错误 |
+| `validateField(field?)` | 执行指定字段的本地校验（不传则校验全部）；保留服务端错误 |
+| `clearValidate(field?)` | 清除指定字段的本地校验及服务端错误；不传或空数组时清全部 |
+| `submit()` | 开始时清空旧服务端错误，再 `validate()`，通过后 `emit('submit', getFieldsValue())` |
+
+### 服务端字段错误
+
+ProForm 独立保存服务端消息。未改值的聚焦、失焦或成功的依赖校验不会隐藏消息，相同消息再次注入仍可显示；本地规则继续执行，服务端消息优先呈现。字段值发生变化时只清对应字段的服务端错误，其他字段保留。
+
+`setFieldErrors` 只匹配 `schema.meta.field` 已声明且 `runtime.visible !== false` 的字段；未知或隐藏 key 被忽略，字段随后隐藏或移出 schema 时也会清理旧错误。匹配不会拆分点号路径或写入 model。未定位明细的汇总与业务错误码映射由调用方处理，组件只接收纯文本消息。
+
+```ts
+formRef.value?.setFieldErrors({
+  email: ['邮箱已被占用', '请使用其他邮箱'],
+})
+formRef.value?.clearFieldErrors(['email'])
+```
 
 ---
 

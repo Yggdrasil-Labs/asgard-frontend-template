@@ -43,6 +43,12 @@ const formRules = computed(() =>
 )
 
 const groupedSchema = computed(() => groupVisibleFields(props.schema))
+const visibleFieldKeys = computed(() => new Set(
+  groupedSchema.value.flatMap(group => group.fields.map(field => field.meta.field)),
+))
+
+/** 与本地校验状态独立，避免 blur 或依赖校验成功时隐藏服务端错误。 */
+const serverErrors = ref(new Map<string, string>())
 
 /** 折叠面板当前展开项，默认全部展开；随分组变化自动包含新分组 */
 const expandedGroupKeys = ref<string[]>([])
@@ -72,6 +78,10 @@ watch(
   (groups) => {
     const keys = groups.map(g => g.key)
     expandedGroupKeys.value = [...new Set([...expandedGroupKeys.value, ...keys])]
+    for (const field of serverErrors.value.keys()) {
+      if (!visibleFieldKeys.value.has(field))
+        serverErrors.value.delete(field)
+    }
   },
   { immediate: true },
 )
@@ -154,7 +164,23 @@ function handleFieldModelUpdate(nextValue: Record<string, unknown>) {
 
 // ---------- 暴露方法 ----------
 
+function setFieldErrors(errors: Record<string, string[]>) {
+  serverErrors.value = new Map(
+    Object.entries(errors)
+      .filter(([key, messages]) => visibleFieldKeys.value.has(key) && messages.length > 0)
+      .map(([key, messages]) => [key, messages.join('\n')]),
+  )
+  expandGroupsContainingInvalidFields(Object.fromEntries(serverErrors.value))
+}
+
+function clearFieldErrors(fields?: string[]) {
+  if (fields === undefined)
+    serverErrors.value.clear()
+  else fields.forEach(field => serverErrors.value.delete(field))
+}
+
 function setFieldsValue(values: Record<string, unknown>) {
+  clearFieldErrors()
   emit('update:modelValue', { ...props.modelValue, ...values })
 }
 
@@ -164,6 +190,7 @@ function getFieldsValue(): Record<string, unknown> {
 
 function resetFields() {
   isResetting = true
+  clearFieldErrors()
   const values = { ...initialValues.value }
   emit('update:modelValue', values)
   formRef.value?.clearValidate()
@@ -200,11 +227,14 @@ function validateField(field?: string | string[]) {
 }
 
 function clearValidate(field?: string | string[]) {
+  const fields = typeof field === 'string' ? [field] : field
+  clearFieldErrors(fields?.length ? fields : undefined)
   formRef.value?.clearValidate(field)
 }
 
 /** 先校验，通过后 emit('submit', getFieldsValue())，失败则滚动到首个错误 */
 async function submit() {
+  clearFieldErrors()
   const ok = await validate()
   if (ok) {
     emit('submit', getFieldsValue())
@@ -213,6 +243,8 @@ async function submit() {
 
 defineExpose({
   setFieldsValue,
+  setFieldErrors,
+  clearFieldErrors,
   getFieldsValue,
   resetFields,
   validate,
@@ -329,7 +361,9 @@ watch(
                 :disabled="isDisabled"
                 :readonly="isReadonly"
                 :context="context"
+                :server-error="serverErrors.get(field.meta.field)"
                 @update:model-value="handleFieldModelUpdate"
+                @value-change="clearFieldErrors([field.meta.field])"
               >
                 <template
                   v-if="slots['field-prefix']"

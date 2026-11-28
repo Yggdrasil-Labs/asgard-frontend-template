@@ -216,6 +216,10 @@ export interface ProFormProps {
 /** ProForm 暴露的方法 */
 export interface ProFormExpose {
   setFieldsValue: (values: Record<string, unknown>) => void
+  /** 全量替换服务端错误；仅接收当前可见 schema 字段的精确 key */
+  setFieldErrors: (errors: Record<string, string[]>) => void
+  /** 清除指定字段的服务端错误；不传时清空全部 */
+  clearFieldErrors: (fields?: string[]) => void
   getFieldsValue: () => Record<string, unknown>
   resetFields: () => void
   validate: () => Promise<boolean>

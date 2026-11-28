@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormFieldOption, FormFieldSchema, ProFormContext } from '@/types/pro-form'
 import { ElFormItem, ElOption, ElSelect, ElTooltip } from 'element-plus'
-import { computed, useSlots } from 'vue'
+import { computed, useSlots, watch } from 'vue'
 import { getFieldComponent } from './form-registry'
 
 defineOptions({ name: 'ProFormField' })
@@ -10,6 +10,7 @@ const props = defineProps<ProFormFieldProps>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: Record<string, unknown>): void
+  (e: 'valueChange'): void
 }>()
 
 interface ProFormFieldProps {
@@ -18,6 +19,7 @@ interface ProFormFieldProps {
   disabled?: boolean
   readonly?: boolean
   context?: ProFormContext
+  serverError?: string
 }
 
 const slots = useSlots()
@@ -55,6 +57,9 @@ const fieldValue = computed({
     emit('update:modelValue', nextValue)
   },
 })
+
+// 深度观察当前字段，包含数组/对象的原地编辑；相同值的 blur 不触发清理。
+watch(fieldValue, () => emit('valueChange'), { deep: true })
 
 function handleValueUpdate(value: unknown) {
   fieldValue.value = value
@@ -98,6 +103,8 @@ const mergedFieldProps = computed(() => ({
     :prop="schema.meta.field"
     :required="fieldRequired"
     :label-width="fieldLabelWidth"
+    :class="{ 'is-error': serverError }"
+    :show-message="!serverError"
   >
     <template #label>
       <span class="pro-form-field__label-inner">
@@ -183,6 +190,15 @@ const mergedFieldProps = computed(() => ({
         未找到字段组件：{{ schema.ui.component }}
       </span>
     </template>
+
+    <!-- 不使用 ElFormItem 的 error watch/slot；本地校验成功不能清除服务端提示。 -->
+    <div
+      v-if="serverError"
+      class="el-form-item__error pro-form-field__server-error"
+      role="alert"
+    >
+      {{ serverError }}
+    </div>
   </ElFormItem>
 </template>
 
@@ -201,5 +217,11 @@ const mergedFieldProps = computed(() => ({
 .pro-form-field__missing-component {
   color: var(--el-color-danger, #dc2626);
   font-size: var(--shell-text-xs);
+}
+
+.pro-form-field__server-error {
+  position: static;
+  width: 100%;
+  white-space: pre-line;
 }
 </style>
