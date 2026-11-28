@@ -1,0 +1,27 @@
+{
+  "code": "00004",
+  "message": "参数无效",
+  "data": {
+    "errors": [
+      {
+        "source": "FIELD",
+        "path": "email",
+        "parameterIndex": 0,
+        "constraint": "Email",
+        "message": "格式不符合约束"
+      },
+      {
+        "source": "FIELD",
+        "path": "email",
+        "parameterIndex": 0,
+        "constraint": "Pattern",
+        "message": "格式不符合约束"
+      }
+    ],
+    "totalCount": 2,
+    "truncated": false
+  },
+  "timestamp": 1700000000000,
+  "traceId": null,
+  "success": false
+}

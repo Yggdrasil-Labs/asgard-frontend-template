@@ -1,33 +1,36 @@
 import type { AxiosResponse } from 'axios'
+import type { ValidationErrorData } from '@/types/api'
 
-/**
- * API 错误类型
- * 统一业务错误与 HTTP/网络错误的对象形状：
- * - code：业务错误码或 HTTP 错误码（如 UNAUTHORIZED / NETWORK_ERROR）
- * - status：HTTP 状态码（业务错误为响应状态码）
- * - response：原始 AxiosResponse（仅请求已到达服务端时存在）
- * - cause：原始错误（HTTP/网络错误时保留原始 AxiosError）
- */
 export interface ApiErrorOptions {
   code: string
-  status?: number
-  response?: AxiosResponse
+  httpStatus?: number
+  traceId?: string | null
+  details?: ValidationErrorData
+  response?: AxiosResponse<unknown>
   cause?: unknown
 }
 
 export class ApiError extends Error {
   readonly code: string
-  readonly status?: number
-  readonly response?: AxiosResponse
+  readonly httpStatus?: number
+  readonly traceId?: string | null
+  readonly details?: ValidationErrorData
+  readonly response?: AxiosResponse<unknown>
+  override readonly cause?: unknown
 
   constructor(message: string, options: ApiErrorOptions) {
-    super(message)
+    super(message, { cause: options.cause })
     this.name = 'ApiError'
     this.code = options.code
-    this.status = options.status
+    this.httpStatus = options.httpStatus
+    this.traceId = options.traceId
+    this.details = options.details
     this.response = options.response
-    if (options.cause !== undefined) {
-      this.cause = options.cause
-    }
+    this.cause = options.cause
+  }
+
+  /** @deprecated 业务消费使用 httpStatus。 */
+  get status(): number | undefined {
+    return this.httpStatus
   }
 }

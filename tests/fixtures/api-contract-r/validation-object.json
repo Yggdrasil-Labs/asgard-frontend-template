@@ -1,0 +1,20 @@
+{
+  "code": "00004",
+  "message": "参数无效",
+  "data": {
+    "errors": [
+      {
+        "source": "OBJECT",
+        "path": "$",
+        "parameterIndex": 1,
+        "constraint": "ValidCustomerUpdate",
+        "message": "参数不符合约束"
+      }
+    ],
+    "totalCount": 1,
+    "truncated": false
+  },
+  "timestamp": 1700000000000,
+  "traceId": null,
+  "success": false
+}

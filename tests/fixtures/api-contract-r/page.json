@@ -1,0 +1,25 @@
+{
+  "code": "00000",
+  "message": "操作成功",
+  "data": {
+    "data": [
+      {
+        "id": 42,
+        "name": "张三",
+        "email": "zhangsan@example.com",
+        "phone": null,
+        "status": "ACTIVE",
+        "version": 0
+      }
+    ],
+    "totalCount": 23,
+    "pageIndex": 2,
+    "pageSize": 10,
+    "totalPages": 3,
+    "hasNext": true,
+    "hasPrevious": true
+  },
+  "timestamp": 1700000000000,
+  "traceId": null,
+  "success": true
+}

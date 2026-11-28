@@ -80,17 +80,17 @@ updated: 2026-11-27
 
 ### 5. 前后端响应与错误契约不一致
 
-状态：开放（后端已有隔离合同实现，前端未对接）
+状态：开放（前后端已本地实现并通过隔离消费测试，真实 HTTP 链路待验收）
 
 原因：
 
-- 当前 src/utils/api/request.ts 仍按 success、errCode、errMessage 消费 COLA 信封；src/types/api/response.ts 仍是旧响应/分页结构
-- Customer 请求仍使用 page/size，编辑请求未携带 version；与后端统一 R、pageIndex/pageSize 及后续版本控制约定不一致
+- 历史问题：前端曾消费 COLA 信封和旧分页参数，编辑缺少 version。2026-11-28 已统一为 R、二层分页、pageIndex/pageSize 和所读版本；补齐字段校验、邮箱重复与版本冲突刷新交互
+- 16 份后端 standalone/受管序列化样例已接入实际 Axios 消费测试；217 项前端单测与 18 项工程测试通过。样例和隔离结果不证明运行环境的装配、MySQL 并发或真实消费者链路
 - 这是 [Midgard TD-009](../../../midgard-backend-template/docs/active/tech-debt-tracker.md#td-009前后端错误响应契约不一致) 的前端对应项；[公共 HTTP API 契约](../../../midgard-backend-template/docs/design-docs/arch-api-contract.md) 为规则唯一来源，本清单不复制字段定义
 
 目标状态与关闭条件：
 
-- 由 [1.3.0 api-contract-r](1.3.0/release.md#api-contract-r) 对接信封、分页、字段错误和版本冲突；后端 data-consistency 的 version/真实冲突仍是前置依赖
+- 由 [1.3.0 api-contract-r](1.3.0/release.md#api-contract-r) 已对接信封、分页、字段错误和版本冲突；后端 data-consistency 已本地实现，实际 V2 迁移和运行环境能力另验
 - 使用来源明确的后端受管序列化/standalone fixture 验证前端消费，覆盖成功、20001、21001、21002、校验、404 协议及 500 系统错误，保留业务码与安全消息；取消、超时、网络错误回归同时保留
 - 至少一次真实 HTTP 消费链路验证后再与 TD-009 协同关闭；不把隔离 fixture、错误映射或本地单测等同真实并发、数据库或自动装配验证
 - 真实 HTTP 可人工验证，不要求新增集成测试或修改 Bifrost E2E；证据不齐时保持开放

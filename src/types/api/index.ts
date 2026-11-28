@@ -1,5 +1,3 @@
-/**
- * API 相关类型统一导出
- */
-
+/** API 相关类型及边界形状判定。 */
+export * from './guards'
 export * from './response'

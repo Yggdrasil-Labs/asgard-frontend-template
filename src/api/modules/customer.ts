@@ -1,5 +1,4 @@
-import type { AxiosResponse } from 'axios'
-import type { PaginatedResponse } from '@/types/api'
+import type { PageResult } from '@/types/api'
 import http from '@/utils/api/http'
 
 export interface CustomerCO {
@@ -8,6 +7,7 @@ export interface CustomerCO {
   email: string
   phone: string | null
   status: string
+  version: number
 }
 
 export interface CreateCustomerRequest {
@@ -17,34 +17,36 @@ export interface CreateCustomerRequest {
 }
 
 export interface UpdateCustomerRequest {
-  name?: string
-  email?: string
-  phone?: string
+  /** 所读整数版本，写入范围 0..2147483646；不提供默认值。 */
+  version: number
+  name?: string | null
+  email?: string | null
+  phone?: string | null
 }
 
 export interface CustomerListParams {
-  page: number
-  size: number
+  pageIndex: number
+  pageSize: number
   keyword?: string
   status?: string
 }
 
 export function createCustomer(data: CreateCustomerRequest) {
-  return http.post('/api/customers', data)
+  return http.post<CustomerCO>('/api/customers', data)
 }
 
 export function getCustomer(id: number) {
-  return http.get(`/api/customers/${id}`)
+  return http.get<CustomerCO>(`/api/customers/${id}`)
 }
 
-export function listCustomers(params: CustomerListParams): Promise<AxiosResponse<PaginatedResponse<CustomerCO>>> {
-  return http.get<CustomerCO[]>('/api/customers', params)
+export function listCustomers(params: CustomerListParams) {
+  return http.get<PageResult<CustomerCO>>('/api/customers', { ...params })
 }
 
 export function updateCustomer(id: number, data: UpdateCustomerRequest) {
-  return http.put(`/api/customers/${id}`, data)
+  return http.put<CustomerCO>(`/api/customers/${id}`, data)
 }
 
 export function deleteCustomer(id: number) {
-  return http.delete(`/api/customers/${id}`)
+  return http.delete<null>(`/api/customers/${id}`)
 }

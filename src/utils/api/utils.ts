@@ -1,100 +1,47 @@
-/**
- * API 工具函数
- * 提供通用的响应数据提取和处理功能
- */
-
 import type { AxiosResponse } from 'axios'
-import type { ApiResponse, PaginatedResponse } from '@/types/api'
+import type { PageResult, R } from '@/types/api'
+import { isPageResult } from '@/types/api'
 import { ApiError } from './error'
 
-/**
- * 从 Axios 响应中提取 data 字段
- * @param response - Axios 响应对象
- * @returns 响应数据
- */
-export function extractData<T>(response: AxiosResponse<ApiResponse<T>>): T | undefined {
+export function extractData<T>(response: AxiosResponse<R<T>>): T | null {
   return response.data.data
 }
 
-/**
- * 从 Axios 响应中提取 data 字段（非空）
- * @param response - Axios 响应对象
- * @param defaultValue - 默认值（当 data 为空时返回）
- * @returns 响应数据
- */
-export function extractDataOrDefault<T>(
-  response: AxiosResponse<ApiResponse<T>>,
-  defaultValue: T,
-): T {
-  return response.data.data ?? defaultValue
+/** 只对显式 null 使用默认值，保留 false、0 及空字符串。 */
+export function extractDataOrDefault<T>(response: AxiosResponse<R<T>>, defaultValue: T): T {
+  return response.data.data === null ? defaultValue : response.data.data
 }
 
-/**
- * 从分页响应中提取数据
- * 契约：后端分页信封须符合 COLA 5.0 PageResponse 字段名
- * （data / totalCount / pageSize / pageIndex）。
- * 若接入其他分页格式（如 Spring Data 的 content/totalElements），
- * 请在接入层做字段映射后再调用本函数。
- * @param response - 分页响应对象
- * @returns 分页数据对象
- */
-export function extractPaginatedData<T>(response: AxiosResponse<PaginatedResponse<T>>) {
-  const { data, totalCount, pageSize, pageIndex, totalPages, notEmpty, empty } = response.data
-
-  return {
-    /** 列表数据 */
-    data: data ?? [],
-    /** 总记录数 */
-    totalCount: totalCount ?? 0,
-    /** 每页数量 */
-    pageSize: pageSize ?? 10,
-    /** 当前页码 */
-    pageIndex: pageIndex ?? 1,
-    /** 总页数 */
-    totalPages: totalPages ?? 0,
-    /** 是否非空 */
-    notEmpty: notEmpty ?? false,
-    /** 是否为空 */
-    empty: empty ?? true,
+export function extractPaginatedData<T>(response: AxiosResponse<R<PageResult<T>>>): PageResult<T> {
+  const page = response.data.data
+  if (!isPageResult(page)) {
+    throw new ApiError('分页响应格式不符合接口契约', {
+      code: 'PROTOCOL_ERROR',
+      httpStatus: response.status,
+      traceId: response.data.traceId,
+      response,
+    })
   }
+  return page
 }
 
-/**
- * 检查响应是否成功
- * @param response - API 响应对象
- * @returns 是否成功
- */
-export function isSuccess(response: ApiResponse): boolean {
-  return response.success === true
+/** HTTP 状态由请求拦截器保证；此处仅判定业务结果。 */
+export function isSuccess(response: R): boolean {
+  return response.code === '00000'
 }
 
-/**
- * 获取错误信息
- * @param error - 错误对象
- * @returns 错误信息
- */
 export function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
+  if (error instanceof Error)
     return error.message
-  }
-  if (typeof error === 'string') {
+  if (typeof error === 'string')
     return error
-  }
   return '未知错误'
 }
 
-/**
- * 获取错误码
- * @param error - 错误对象
- * @returns 错误码
- */
 export function getErrorCode(error: unknown): string {
-  if (error instanceof ApiError) {
+  if (error instanceof ApiError)
     return error.code
-  }
-  // 鸭子类型回退：兼容原生 Error / AxiosError 上携带的 code 字段
-  if (error && typeof error === 'object' && 'code' in error) {
-    return String((error as { code: unknown }).code)
-  }
+  if (error && typeof error === 'object' && 'code' in error)
+    return String(error.code)
   return 'UNKNOWN_ERROR'
 }

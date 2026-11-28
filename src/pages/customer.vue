@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import type { CreateCustomerRequest, CustomerCO, UpdateCustomerRequest } from '@/api/modules/customer'
 import type { FormFieldSchema } from '@/types/pro-form'
-import type { ProTablePaginationState, TableColumnSchema } from '@/types/pro-table'
+import type { TableColumnSchema } from '@/types/pro-table'
 import type { SearchFieldSchema } from '@/types/search-bar'
-import { ref } from 'vue'
-import { createCustomer, deleteCustomer, listCustomers, updateCustomer } from '@/api/modules/customer'
+import { ElButton } from 'element-plus'
+import { deleteCustomer } from '@/api/modules/customer'
 import { ProDialog } from '@/components/pro-dialog'
 import { ProForm, registerDefaultFieldComponents } from '@/components/pro-form'
 import { ProTable, registerDefaultColumnComponents } from '@/components/pro-table'
 import { registerDefaultSearchFieldComponents, SearchBar } from '@/components/search-bar'
-import { extractPaginatedData } from '@/utils/api/utils'
-import { confirm, showError, showSuccess } from '@/utils/message'
+import { confirm, showSuccess } from '@/utils/message'
+
+import { useCustomerEditor } from './customer/useCustomerEditor'
+import { reportCustomerError, useCustomerList } from './customer/useCustomerList'
 
 registerDefaultColumnComponents()
 registerDefaultFieldComponents()
@@ -21,30 +22,24 @@ definePage({
   meta: { title: '客户管理' },
 })
 
-const loading = ref(false)
-const tableData = ref<Record<string, unknown>[]>([])
-const pagination = ref<ProTablePaginationState>({ page: 1, pageSize: 10, total: 0 })
-
-const searchValues = ref<Record<string, unknown>>({})
-
-const dialogVisible = ref(false)
-const dialogTitle = ref('新建客户')
-const editingId = ref<number | null>(null)
-const formRef = ref<InstanceType<typeof ProForm> | null>(null)
-const formValues = ref<Record<string, unknown>>({})
+const { loading, tableData, pagination, searchValues, fetchData, fetchFromFirstPage } = useCustomerList()
+const { dialogVisible, dialogTitle, formRef, formValues, formKey, busy, conflict, deleted, notice, saveDisabled, openCreate, openEdit, handleFormConfirm, handleFormSubmit, refreshConflict } = useCustomerEditor(fetchData)
 
 const formSchema: FormFieldSchema[] = [
   {
     meta: { field: 'name', label: '姓名', valueType: 'string', required: true, defaultValue: '' },
-    ui: { component: 'Input', props: { placeholder: '请输入姓名', clearable: true }, layout: { span: 24 } },
+    ui: { component: 'Input', props: { placeholder: '请输入姓名', clearable: true, maxlength: 50 }, layout: { span: 24 } },
+    runtime: { validation: { rules: [{ validator: (value: unknown) => typeof value === 'string' && value.trim().length >= 2 && value.length <= 50, message: '姓名长度为2至50个字符' }] } },
   },
   {
     meta: { field: 'email', label: '邮箱', valueType: 'string', required: true, defaultValue: '' },
-    ui: { component: 'Input', props: { placeholder: '请输入邮箱', clearable: true }, layout: { span: 24 } },
+    runtime: { validation: { rules: [{ validator: (value: unknown) => typeof value === 'string' && value.length <= 100 && /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/.test(value), message: '请输入100个字符以内的合法邮箱' }] } },
+    ui: { component: 'Input', props: { placeholder: '请输入邮箱', clearable: true, maxlength: 100 }, layout: { span: 24 } },
   },
   {
     meta: { field: 'phone', label: '电话', valueType: 'string', required: false, defaultValue: '' },
-    ui: { component: 'Input', props: { placeholder: '请输入电话', clearable: true }, layout: { span: 24 } },
+    runtime: { validation: { rules: [{ validator: (value: unknown) => value == null || String(value).length <= 20, message: '电话不能超过20个字符' }] } },
+    ui: { component: 'Input', props: { placeholder: '请输入电话', clearable: true, maxlength: 20 }, layout: { span: 24 } },
   },
 ]
 
@@ -99,63 +94,6 @@ const columns: TableColumnSchema[] = [
   },
 ]
 
-async function fetchData() {
-  loading.value = true
-  try {
-    const keyword = String(searchValues.value.keyword ?? '').trim()
-    const status = String(searchValues.value.status ?? '').trim()
-    const resp = await listCustomers({
-      page: pagination.value.page,
-      size: pagination.value.pageSize,
-      keyword: keyword || undefined,
-      status: status || undefined,
-    })
-    const page = extractPaginatedData<CustomerCO>(resp)
-    // TODO(E4): ProTable data 泛型化后移除该强转，tableData 直接用 CustomerCO[]
-    tableData.value = page.data as unknown as Record<string, unknown>[]
-    pagination.value.total = page.totalCount
-  }
-  finally {
-    loading.value = false
-  }
-}
-
-function handleSearch() {
-  fetchFromFirstPage()
-}
-
-function handleReset() {
-  fetchFromFirstPage()
-}
-
-/**
- * 从第一页重新获取数据。
- * 如果当前已在第一页，直接请求；否则重置页码（watch 会触发请求）。
- */
-function fetchFromFirstPage() {
-  if (pagination.value.page === 1) {
-    fetchData()
-  }
-  else {
-    pagination.value = { ...pagination.value, page: 1 }
-    // watch 会自动触发 fetchData
-  }
-}
-
-function openCreate() {
-  editingId.value = null
-  dialogTitle.value = '新建客户'
-  formValues.value = {}
-  dialogVisible.value = true
-}
-
-function openEdit(row: Record<string, unknown>) {
-  editingId.value = row.id as number
-  dialogTitle.value = '编辑客户'
-  formValues.value = { name: row.name, email: row.email, phone: row.phone }
-  dialogVisible.value = true
-}
-
 async function handleDelete(row: Record<string, unknown>) {
   try {
     await confirm({ message: '确认删除该客户？', title: '提示' })
@@ -167,51 +105,14 @@ async function handleDelete(row: Record<string, unknown>) {
   try {
     await deleteCustomer(row.id as number)
   }
-  catch {
-    showError('删除失败，请稍后重试')
+  catch (error) {
+    reportCustomerError(error, '删除失败，请稍后重试')
     return
   }
 
   showSuccess('删除成功')
-  fetchData()
+  void fetchData()
 }
-
-function handleFormConfirm() {
-  formRef.value?.submit()
-}
-
-async function handleFormSubmit(values: Record<string, unknown>) {
-  if (editingId.value) {
-    const payload: UpdateCustomerRequest = {
-      name: values.name != null ? String(values.name) : undefined,
-      email: values.email != null ? String(values.email) : undefined,
-      phone: values.phone != null ? String(values.phone) : undefined,
-    }
-    await updateCustomer(editingId.value, payload)
-    showSuccess('更新成功')
-  }
-  else {
-    const payload: CreateCustomerRequest = {
-      name: String(values.name ?? ''),
-      email: String(values.email ?? ''),
-      phone: values.phone != null ? String(values.phone) : undefined,
-    }
-    await createCustomer(payload)
-    showSuccess('创建成功')
-  }
-  dialogVisible.value = false
-  fetchData()
-}
-
-fetchData()
-
-watch(
-  [
-    () => pagination.value.page,
-    () => pagination.value.pageSize,
-  ],
-  () => fetchData(),
-)
 </script>
 
 <template>
@@ -221,8 +122,8 @@ watch(
       :schema="searchSchema"
       :loading="loading"
       :default-visible-count="2"
-      @search="handleSearch"
-      @reset="handleReset"
+      @search="fetchFromFirstPage"
+      @reset="fetchFromFirstPage"
     />
 
     <ProTable
@@ -233,9 +134,9 @@ watch(
       :loading="loading"
     >
       <template #toolbar-prefix>
-        <el-button type="primary" @click="openCreate">
+        <ElButton type="primary" @click="openCreate">
           新建客户
-        </el-button>
+        </ElButton>
       </template>
     </ProTable>
 
@@ -245,12 +146,22 @@ watch(
       :width="520"
       confirm-text="保存"
       :close-on-confirm="false"
+      :confirm-loading="busy"
+      :confirm-disabled="saveDisabled"
       @confirm="handleFormConfirm"
     >
+      <p v-if="notice" role="alert">
+        {{ notice }}
+      </p>
+      <ElButton v-if="conflict && !deleted" :disabled="busy" @click="refreshConflict">
+        刷新并重新编辑
+      </ElButton>
       <ProForm
+        :key="formKey"
         ref="formRef"
         v-model="formValues"
         :schema="formSchema"
+        :loading="busy"
         mode="edit"
         :layout="{ labelWidth: '80px' }"
         @submit="handleFormSubmit"

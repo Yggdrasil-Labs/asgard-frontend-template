@@ -1,0 +1,16 @@
+{
+  "code": "00000",
+  "message": "操作成功",
+  "data": {
+    "data": [],
+    "totalCount": 0,
+    "pageIndex": 1,
+    "pageSize": 10,
+    "totalPages": 0,
+    "hasNext": false,
+    "hasPrevious": false
+  },
+  "timestamp": 1700000000000,
+  "traceId": null,
+  "success": true
+}

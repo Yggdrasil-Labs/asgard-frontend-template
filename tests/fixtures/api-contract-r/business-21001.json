@@ -1,0 +1,8 @@
+{
+  "code": "21001",
+  "message": "邮箱已被占用",
+  "data": null,
+  "timestamp": 1700000000000,
+  "traceId": null,
+  "success": false
+}
